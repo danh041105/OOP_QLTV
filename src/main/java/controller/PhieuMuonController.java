@@ -32,48 +32,38 @@ public class PhieuMuonController {
 
     public boolean addPhieuMuon(String maSach, String soLuongStr, String ngayMuonStr, Date ngayTra) {
         try {
-
             int soLuong = Integer.parseInt(soLuongStr);
             if (soLuong <= 0) {
                 return false;
             }
-
             int soLuongTon = sachDAO.getSoLuongTon(maSach);
             if (soLuong > soLuongTon) {
                 return false;
             }
-
             SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
             Date ngayMuon = sdf.parse(ngayMuonStr);
-
             if (ngayTra == null || ngayTra.before(ngayMuon)) {
                 return false;
             }
-
             boolean tru = sachDAO.truSoLuong(maSach, soLuong);
             if (!tru) {
                 return false;
             }
-
             PhieuMuon pm = new PhieuMuon();
-            pm.setMaPm("PM" + System.currentTimeMillis());
-            pm.setMaSv(maSv);
+            pm.setMaPM("PM" + System.currentTimeMillis());
+            pm.setMaSV(maSv);
             pm.setMaSach(maSach);
             pm.setSoLuong(soLuong);
-            pm.setNgayMuon(ngayMuon);
-            pm.setNgayTra(ngayTra);
             pm.setTinhTrang("Đang mượn");
+            String strNgayMuon = sdf.format(pm.getNgayMuon());
+            String strNgayTra = sdf.format(pm.getNgayTra());
 
-            boolean themPM = dao.insert(pm);
-
-            sachDAO.capNhatTinhTrang(maSach);
-
+            boolean themPM = dao.insertPhieuMuon(pm.getMaPM(), pm.getMaSV(), pm.getMaSach(),
+                    pm.getSoLuong(), strNgayMuon, strNgayTra);
             return themPM;
-
         } catch (Exception e) {
             e.printStackTrace();
             return false;
         }
     }
-
 }

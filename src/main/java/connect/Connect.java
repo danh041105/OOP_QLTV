@@ -18,13 +18,10 @@ public class Connect {
     private static final String port="3306";
     private static final String dbName ="java_qltv";
     private static final String url ="jdbc:mysql://"+host+":"+port+"/"+dbName;
-    private static Connection conn =null;
     public static Connection getConnection(){
+        Connection conn = null;
         try{
             Class.forName("com.mysql.cj.jdbc.Driver");
-            if(conn != null){
-                return conn;
-            }
             conn = DriverManager.getConnection(url, user, password);
         } catch(Exception e){
             logger.log(Level.SEVERE, "Lỗi khi kết nối database", e);

@@ -58,7 +58,7 @@ public class TacGiaDetailView extends JFrame {
 
         textInfo.add(createInfoLabel("Họ và tên: ", tacGia.getTenTg()));
         textInfo.add(createInfoLabel("Ngày sinh: ", tacGia.getNgaySinh()));
-        textInfo.add(createInfoLabel("Giới tính: ", tacGia.isGioiTinh()));
+        textInfo.add(createInfoLabel("Giới tính: ", tacGia.getGioiTinh()));
         textInfo.add(createInfoLabel("Quê quán: ", tacGia.getQue()));
 
         infoPanel.add(textInfo, BorderLayout.CENTER);

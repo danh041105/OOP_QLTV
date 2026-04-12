@@ -1,13 +1,11 @@
 package qltv;
-
-import admin_book.sachGUI;
-import admin_book.tacgiaGUI;
-import admin_book.theloaiGUI;
+import view.SachListView;
+import view.TacGiaListView;
+import view.LoaiSachView;
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 
 import dao.UserDAO;
-import dao.SachDAO;
 import quanlymuontra.QuanLyHinhPhatGUI;
 import quanlymuontra.QuanLyPhieuMuonGUI;
 import quanlytaikhoan.QuanLyTaiKhoanGUI;
@@ -152,44 +150,52 @@ public class AdminGUI extends JFrame {
 
             item.setHorizontalAlignment(SwingConstants.LEFT); 
  
-            item.setBorder(new EmptyBorder(0, 30, 0, 0)); 
+            item.setBorder(new EmptyBorder(0, 30, 0, 0));
             // ------------------------------------------
-
             item.addActionListener(e -> {
                 switch (itemText) {
                     // --- NHÓM SÁCH ---
                     case "Danh mục sách":
                         this.dispose();
-                        new sachGUI();
-                        break;
-                    case "Thể loại":
-                        this.dispose();
-                        new theloaiGUI();
-                        break;
-                    case "Tác giả":
-                        this.dispose();
-                        new tacgiaGUI();
+                        // Truyền tham số maSvDangNhap là "Admin" (hoặc biến lưu mã Admin)
+                        view.SachListView sachView = new view.SachListView("Admin");
+                        // Mặc định truyền rỗng mã loại để load toàn bộ sách, tránh lỗi tiêu đề Null
+                        sachView.setLoaiSach("", "Tất cả");
+                        sachView.doShow(); // doShow() đã bao gồm khởi tạo Controller và setVisible
                         break;
 
+                    case "Thể loại":
+                        this.dispose();
+                        // Truyền tham số title vào theo yêu cầu của constructor
+                        new view.LoaiSachView("Quản lý Thể loại").doShow();
+                        break;
+
+                    case "Tác giả":
+                        this.dispose();
+                        // Truyền tham số title vào theo yêu cầu của constructor
+                        new view.TacGiaListView("Quản lý Tác giả").doShow();
+                        break;
+
+                    // --- CÁC CHỨC NĂNG KHÁC (Giữ nguyên) ---
                     case "Quản lý phiếu mượn":
                         this.dispose();
-                        new QuanLyPhieuMuonGUI().setVisible(true);
+                        new quanlymuontra.QuanLyPhieuMuonGUI().setVisible(true);
                         break;
                     case "Xem lịch sử hình phạt":
                         this.dispose();
-                        new QuanLyHinhPhatGUI().setVisible(true);
+                        new quanlymuontra.QuanLyHinhPhatGUI().setVisible(true);
                         break;
 
                     case "Tài khoản Sinh viên":
                         this.dispose();
-                        QuanLyTaiKhoanGUI guiSV = new QuanLyTaiKhoanGUI();
+                        quanlytaikhoan.QuanLyTaiKhoanGUI guiSV = new quanlytaikhoan.QuanLyTaiKhoanGUI();
                         guiSV.doShow();
                         guiSV.showSinhVien();
                         break;
 
                     case "Tài khoản Admin":
                         this.dispose();
-                        QuanLyTaiKhoanGUI guiAdmin = new QuanLyTaiKhoanGUI();
+                        quanlytaikhoan.QuanLyTaiKhoanGUI guiAdmin = new quanlytaikhoan.QuanLyTaiKhoanGUI();
                         guiAdmin.doShow();
                         guiAdmin.showAdmin();
                         break;

@@ -1,6 +1,6 @@
 package view;
 
-import admin_book.Sach;
+import model.Sach;
 import controller.SachListController;
 import java.awt.*;
 import java.awt.event.WindowAdapter;
@@ -10,12 +10,11 @@ import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 
 public class SachListView extends JFrame {
-
     private JTable table;
-    private JButton btnSearch, btnRefresh;
-    private JTextField txtSearch;
+    private JButton btnSearch, btnRefresh, btnThem, btnSua, btnXoa;
+    private JTextField txtSearch, txtMaSach, txtTenSach, txtNhaXb, txtNamXb, txtSoLuong, txtMoTa;
     private DefaultTableModel tableModel;
-
+    private JComboBox<String> cbLoaiSach, cbTacGia;
     private String maSvDangNhap;
 
     private SachListController controller;
@@ -29,7 +28,6 @@ public class SachListView extends JFrame {
 
     public SachListView() {
     }
-
     public SachListView(String maSvDangNhap) {
         this.maSvDangNhap = maSvDangNhap;
     }
@@ -38,7 +36,6 @@ public class SachListView extends JFrame {
         this.maLoaiSach = maLoaiSach;
         this.tenLoaiSach = tenLoaiSach;
     }
-
     public void doShow() {
         addControl();
         controller = new SachListController(this, maSvDangNhap);
@@ -180,6 +177,10 @@ public class SachListView extends JFrame {
     public void clearSearch() {
         txtSearch.setText("");
     }
+    // Button cho thêm sửa xóa
+    public JButton getBtnThem() { return btnThem; }
+    public JButton getBtnSua() { return btnSua; }
+    public JButton getBtnXoa() { return btnXoa; }
 
     public String getSelectedMaSach() {
         int row = table.getSelectedRow();
