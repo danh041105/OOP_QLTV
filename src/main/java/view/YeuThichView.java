@@ -21,7 +21,7 @@ import java.util.List;
 import javax.swing.*;
 
 import model.YeuThich;
-import qltv.SinhVienGUI;
+import gui.SinhVienGUI;
 import dao.UserDAO;
 
 /**

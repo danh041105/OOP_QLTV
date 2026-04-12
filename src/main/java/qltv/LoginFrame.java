@@ -1,6 +1,9 @@
 package qltv;
 
 import dao.UserDAO;
+import gui.AdminGUI;
+import gui.RegisterGUI;
+import gui.SinhVienGUI;
 import model.User;
 
 import javax.swing.*;

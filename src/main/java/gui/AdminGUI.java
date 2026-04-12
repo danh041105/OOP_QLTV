@@ -1,14 +1,11 @@
-package qltv;
-import view.SachListView;
-import view.TacGiaListView;
-import view.LoaiSachView;
+package gui;
+import qltv.LichSuMuonTra;
+import qltv.LoginFrame;
+
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 
 import dao.UserDAO;
-import quanlymuontra.QuanLyHinhPhatGUI;
-import quanlymuontra.QuanLyPhieuMuonGUI;
-import quanlytaikhoan.QuanLyTaiKhoanGUI;
 
 import java.awt.*;
 import java.awt.event.MouseAdapter;
@@ -179,23 +176,23 @@ public class AdminGUI extends JFrame {
                     // --- CÁC CHỨC NĂNG KHÁC (Giữ nguyên) ---
                     case "Quản lý phiếu mượn":
                         this.dispose();
-                        new quanlymuontra.QuanLyPhieuMuonGUI().setVisible(true);
+                        new QuanLyPhieuMuonGUI().setVisible(true);
                         break;
                     case "Xem lịch sử hình phạt":
                         this.dispose();
-                        new quanlymuontra.QuanLyHinhPhatGUI().setVisible(true);
+                        new QuanLyHinhPhatGUI().setVisible(true);
                         break;
 
                     case "Tài khoản Sinh viên":
                         this.dispose();
-                        quanlytaikhoan.QuanLyTaiKhoanGUI guiSV = new quanlytaikhoan.QuanLyTaiKhoanGUI();
+                        QuanLyTaiKhoanGUI guiSV = new QuanLyTaiKhoanGUI();
                         guiSV.doShow();
                         guiSV.showSinhVien();
                         break;
 
                     case "Tài khoản Admin":
                         this.dispose();
-                        quanlytaikhoan.QuanLyTaiKhoanGUI guiAdmin = new quanlytaikhoan.QuanLyTaiKhoanGUI();
+                        QuanLyTaiKhoanGUI guiAdmin = new QuanLyTaiKhoanGUI();
                         guiAdmin.doShow();
                         guiAdmin.showAdmin();
                         break;

@@ -4,6 +4,9 @@
  */
 package quanlymuontra;
 
+import gui.QuanLyHinhPhatGUI;
+import gui.QuanLyPhieuMuonGUI;
+
 import java.awt.*;
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;

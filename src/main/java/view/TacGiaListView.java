@@ -10,7 +10,7 @@ import java.net.URL;
 import java.util.List;
 import javax.swing.*;
 import model.TacGia;
-import qltv.SinhVienGUI;
+import gui.SinhVienGUI;
 import dao.UserDAO;
 
 public class TacGiaListView extends JFrame {

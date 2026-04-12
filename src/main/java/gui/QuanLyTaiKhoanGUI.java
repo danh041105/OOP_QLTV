@@ -1,11 +1,13 @@
-package quanlytaikhoan;
+package gui;
 
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
-import qltv.AdminGUI;
+
 import dao.UserDAO;
+import quanlytaikhoan.AdminPanel;
+import quanlytaikhoan.SinhVienPanel;
 
 public class QuanLyTaiKhoanGUI extends JFrame {
 

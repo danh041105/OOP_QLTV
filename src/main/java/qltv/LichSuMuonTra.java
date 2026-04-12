@@ -1,6 +1,8 @@
 package qltv;
 
 import dao.UserDAO;
+import gui.AdminGUI;
+import gui.SinhVienGUI;
 import model.PhieuMuon;
 import dao.PhieuMuonDAO;
 import javax.swing.*;

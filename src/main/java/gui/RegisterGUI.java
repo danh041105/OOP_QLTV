@@ -1,6 +1,7 @@
-package qltv;
+package gui;
 
 import dao.UserDAO;
+import qltv.LoginFrame;
 
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;

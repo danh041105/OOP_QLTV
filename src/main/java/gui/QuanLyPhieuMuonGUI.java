@@ -2,16 +2,20 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
-package quanlymuontra;
+package gui;
 
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 
 import dao.HinhPhatDAO;
-import qltv.AdminGUI;
 import dao.UserDAO;
 import model.PhieuMuon;
 import dao.PhieuMuonDAO;
+import quanlymuontra.FormSuaPhieuMuon;
+import quanlymuontra.FormThemHinhPhat;
+import quanlymuontra.FormThemPhieuMuon;
+import quanlymuontra.QuanLyMuonTra_Main;
+
 import java.awt.*;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
@@ -232,13 +236,13 @@ public class QuanLyPhieuMuonGUI extends JFrame {
                 rowData[i] = tblPhieuMuon.getValueAt(row, i);
             }
 
-            FormThemHinhPhat formPhat = new FormThemHinhPhat(this, rowData); 
+            FormThemHinhPhat formPhat = new FormThemHinhPhat(this, rowData);
             formPhat.setVisible(true); 
 
             if (formPhat.isSuccess()) {
                 this.dispose(); 
                 JOptionPane.showMessageDialog(null, "Hệ thống sẽ chuyển đến trang Hình Phạt!");
-                QuanLyHinhPhatGUI qlhp = new QuanLyHinhPhatGUI(); 
+                QuanLyHinhPhatGUI qlhp = new QuanLyHinhPhatGUI();
                 qlhp.setVisible(true);
             }
         });

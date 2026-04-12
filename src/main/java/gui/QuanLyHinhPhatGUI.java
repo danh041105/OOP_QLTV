@@ -2,7 +2,7 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
-package quanlymuontra;
+package gui;
 
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
@@ -11,8 +11,9 @@ import javax.swing.table.DefaultTableModel;
 
 import dao.HinhPhatDAO;
 import model.HinhPhat;
-import qltv.AdminGUI;
 import dao.UserDAO;
+import quanlymuontra.FormSuaHinhPhat;
+import quanlymuontra.QuanLyMuonTra_Main;
 
 import java.awt.*;
 import java.awt.event.WindowAdapter;
@@ -37,7 +38,7 @@ public class QuanLyHinhPhatGUI extends JFrame {
     public QuanLyHinhPhatGUI(Frame parent) {
         super("Quản lý hình phạt");
         initGUI();
-        QuanLyMuonTra_Main.setupMenuBar(this); 
+        QuanLyMuonTra_Main.setupMenuBar(this);
         addAction();
         loadDataHinhPhat(""); 
         this.setSize(1400, 800);
