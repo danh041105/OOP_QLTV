@@ -10,8 +10,8 @@ import java.net.URL;
 import java.util.List;
 import javax.swing.*;
 import model.TacGia;
-import qltv.giaodiensv;
-import qltv.userDAO;
+import qltv.SinhVienGUI;
+import dao.UserDAO;
 
 public class TacGiaListView extends JFrame {
 
@@ -39,8 +39,8 @@ public class TacGiaListView extends JFrame {
         addWindowListener(new WindowAdapter() {
             @Override
             public void windowClosing(WindowEvent e) {
-                userDAO dao = new userDAO();
-                new giaodiensv(dao.getMSV_isLogin()).setVisible(true);
+                UserDAO dao = new UserDAO();
+                new SinhVienGUI(dao.getMSV_isLogin()).setVisible(true);
             }
         });
         setVisible(true);

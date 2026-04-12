@@ -23,8 +23,10 @@ import javax.swing.SwingConstants;
 import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
 
-import qltv.giaodienadmin;
-import qltv.userDAO;
+import dao.TheLoaiDAO;
+import model.TheLoai;
+import qltv.AdminGUI;
+import dao.UserDAO;
 
 public class theloaiGUI extends JFrame implements ActionListener {
     private JTable tbltheloai;
@@ -40,8 +42,8 @@ public class theloaiGUI extends JFrame implements ActionListener {
             @Override
             public void windowClosing(WindowEvent e) {
                 dispose();
-                userDAO dao = new userDAO();
-                new giaodienadmin(dao.getMaADMIN_isLogin()).setVisible(true);
+                UserDAO dao = new UserDAO();
+                new AdminGUI(dao.getMaADMIN_isLogin()).setVisible(true);
             }
         });
         this.setVisible(true);
@@ -96,8 +98,8 @@ public class theloaiGUI extends JFrame implements ActionListener {
 
     private void loadDataToTable() {
         model.setRowCount(0);
-        List<theloai> list = theloaiDAO.getAll();
-        for (theloai tl : list) {
+        List<TheLoai> list = TheLoaiDAO.getAll();
+        for (TheLoai tl : list) {
             model.addRow(new Object[] {
                     tl.getMa_loai_sach(),
                     tl.getTen_loai_sach()
@@ -118,9 +120,9 @@ public class theloaiGUI extends JFrame implements ActionListener {
                     loadDataToTable();
                     return;
                 }
-                List<theloai> list = theloaiDAO.searchByName(keyword);
+                List<TheLoai> list = TheLoaiDAO.searchByName(keyword);
                 model.setRowCount(0);
-                for (theloai tl : list) {
+                for (TheLoai tl : list) {
                     model.addRow(new Object[] {
                             tl.getMa_loai_sach(),
                             tl.getTen_loai_sach()
@@ -153,7 +155,7 @@ public class theloaiGUI extends JFrame implements ActionListener {
                     "Bạn có chắc chắn muốn xóa thể loại này?", "Xác nhận",
                     JOptionPane.YES_NO_OPTION);
             if (confirm == JOptionPane.YES_OPTION) {
-                if (theloaiDAO.remove(maLoai)) {
+                if (TheLoaiDAO.remove(maLoai)) {
                     loadDataToTable();
                     JOptionPane.showMessageDialog(null, "Xóa thành công");
                 } else {
@@ -205,8 +207,8 @@ public class theloaiGUI extends JFrame implements ActionListener {
                     JOptionPane.showMessageDialog(null, "Không được để trống");
                     return;
                 }
-                theloai tl = new theloai(ma, ten);
-                if (theloaiDAO.insert(tl)) {
+                TheLoai tl = new TheLoai(ma, ten);
+                if (TheLoaiDAO.insert(tl)) {
                     JOptionPane.showMessageDialog(null, "Thêm thành công!");
                     loadDataToTable();
                     formthem.dispose();
@@ -220,7 +222,7 @@ public class theloaiGUI extends JFrame implements ActionListener {
     }
 
     private void formsuatheloai(String maLoai, int row) {
-        theloai tl = theloaiDAO.findById(maLoai);
+        TheLoai tl = TheLoaiDAO.findById(maLoai);
         if (tl == null) {
             JOptionPane.showMessageDialog(null, "Không tìm thấy thể loại trong CSDL!");
             return;
@@ -264,9 +266,9 @@ public class theloaiGUI extends JFrame implements ActionListener {
                 String ma = txtma.getText().trim();
                 String ten = txtten.getText().trim();
 
-                theloai tlUpdate = new theloai(ma, ten);
+                TheLoai tlUpdate = new TheLoai(ma, ten);
 
-                if (theloaiDAO.update(tlUpdate)) {
+                if (TheLoaiDAO.update(tlUpdate)) {
                     model.setValueAt(ma, row, 0);
                     model.setValueAt(ten, row, 1);
 

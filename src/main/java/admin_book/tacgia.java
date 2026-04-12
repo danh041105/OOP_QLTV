@@ -12,8 +12,7 @@ public class tacgia {
     private String tieu_su;
     private String hinh;
 
-    public tacgia() {
-    }
+    public tacgia() {}
 
     public tacgia(int ma_tg, String ten_tg, String ngay_sinh, String gioi_tinh, String que, String tieu_su, String hinh) {
         this.ma_tg = ma_tg;
@@ -24,9 +23,6 @@ public class tacgia {
         this.tieu_su = tieu_su;
         this.hinh = hinh;
     }
-    
-    
-
     public tacgia(String ten_tg, String ngay_sinh, String gioi_tinh, String que, String tieu_su, String hinh) {
         this.ten_tg = ten_tg;
         this.ngay_sinh = ngay_sinh;

@@ -1,6 +1,5 @@
 package controller;
 
-import admin_book.sachDAO;
 import dao.PhieuMuonDAO;
 import dao.SachDAO;
 import java.text.SimpleDateFormat;
@@ -8,15 +7,15 @@ import model.PhieuMuon;
 import view.PhieuMuonView;
 
 import java.util.Date;
-import java.util.List;
-import qltv.userDAO;
+
+import dao.UserDAO;
 
 public class PhieuMuonController {
 
     private PhieuMuonDAO dao;
     private PhieuMuonView view;
     private SachDAO sachDAO;
-    private userDAO uDAO;
+    private UserDAO uDAO;
 
     private String maSv;
 
@@ -26,7 +25,7 @@ public class PhieuMuonController {
     public PhieuMuonController(PhieuMuonDAO dao) {
         this.dao = dao;
         sachDAO = new SachDAO();
-        uDAO = new userDAO();
+        uDAO = new UserDAO();
         this.maSv = uDAO.getMSV_isLogin();
 
     }

@@ -38,8 +38,10 @@ import javax.swing.border.TitledBorder;
 import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
 
-import qltv.giaodienadmin;
-import qltv.userDAO;
+import dao.TheLoaiDAO;
+import model.TheLoai;
+import qltv.AdminGUI;
+import dao.UserDAO;
 
 /**
  *
@@ -63,8 +65,8 @@ public class sachGUI extends JFrame implements ActionListener {
             @Override
             public void windowClosing(WindowEvent e) {
                 dispose();
-                userDAO dao = new userDAO();
-                new giaodienadmin(dao.getMaADMIN_isLogin()).setVisible(true);
+                UserDAO dao = new UserDAO();
+                new AdminGUI(dao.getMaADMIN_isLogin()).setVisible(true);
             }
         });
         this.setVisible(true);
@@ -96,8 +98,8 @@ public class sachGUI extends JFrame implements ActionListener {
         scrollList.setPreferredSize(new Dimension(150, 400));
         west.add(scrollList);
         
-        List<theloai> list =theloaiDAO.getAll();
-        for (theloai tl : list) {
+        List<TheLoai> list = TheLoaiDAO.getAll();
+        for (TheLoai tl : list) {
             listmodel.addElement(tl);
         }
 
@@ -137,8 +139,8 @@ public class sachGUI extends JFrame implements ActionListener {
     }
     private void loadDataTable() {
         model.setRowCount(0);
-        List<sach> listSach = sachDAO.getAll();
-        for (sach s : listSach) {
+        List<Sach> listSach = sachDAO.getAll();
+        for (Sach s : listSach) {
             String tinhTrangText = s.isTinh_trang() ? "Còn" : "Hết";
             Object imageCell;
             String imageName = s.getImage();
@@ -192,7 +194,7 @@ public class sachGUI extends JFrame implements ActionListener {
         txttimkiem.addActionListener(this);
         listdanhmuc.addListSelectionListener(e -> {
         if (!e.getValueIsAdjusting()) {
-            theloai selected = (theloai) listdanhmuc.getSelectedValue();
+            TheLoai selected = (TheLoai) listdanhmuc.getSelectedValue();
         if (selected != null) {
             loadDataByTheLoai(selected.getMa_loai_sach());
         }
@@ -203,8 +205,8 @@ public class sachGUI extends JFrame implements ActionListener {
     private void loadDataByTheLoai(String ma_loai) {
     model.setRowCount(0); 
 
-    List<sach> listSach = sachDAO.getByTheLoai(ma_loai);
-    for (sach s : listSach) {
+    List<Sach> listSach = sachDAO.getByTheLoai(ma_loai);
+    for (Sach s : listSach) {
         String tinhTrangText = s.isTinh_trang() ? "Còn" : "Hết";
 
         Object imageCell;
@@ -275,9 +277,9 @@ public class sachGUI extends JFrame implements ActionListener {
         }
         }else if(e.getSource() == txttimkiem){
             String keyword = txttimkiem.getText().trim();
-            List<sach> listSearch = sachDAO.search(keyword);
+            List<Sach> listSearch = sachDAO.search(keyword);
             model.setRowCount(0);
-            for(sach s : listSearch){
+            for(Sach s : listSearch){
                 String tinhTrangText = s.isTinh_trang() ? "Còn" : "Hết";
                 Object[] row = {
                     s.getMa_sach(),
@@ -326,7 +328,7 @@ public class sachGUI extends JFrame implements ActionListener {
         cboloai.setEditable(true); 
         cboloai.setSelectedItem("Chọn loại sách");
         cboloai.setEditable(false);
-        for (theloai ls : theloaiDAO.getAll()) {
+        for (TheLoai ls : TheLoaiDAO.getAll()) {
             cboloai.addItem(ls.getTen_loai_sach());
         }
         pnloai.add(lblloai); 
@@ -433,10 +435,10 @@ public class sachGUI extends JFrame implements ActionListener {
             String hinh = txtanh.getText().trim();
             String mota = txtmota.getText().trim();
 
-            String ma_loai = theloaiDAO.getMaByTen(loaiTen); 
+            String ma_loai = TheLoaiDAO.getMaByTen(loaiTen);
             int ma_tg = tacgiaDAO.getMaByTen(tgTen);         
 
-            sach s = new sach(ma, ten, ma_loai, ma_tg, nxb, nam, sl, tinhtrang, mota, hinh, loaiTen, tgTen);
+            Sach s = new Sach(ma, ten, ma_loai, ma_tg, nxb, nam, sl, tinhtrang, mota, hinh, loaiTen, tgTen);
 
             if (sachDAO.insert(s)) {
                 JOptionPane.showMessageDialog(null, "Thêm sách thành công!");
@@ -450,7 +452,7 @@ public class sachGUI extends JFrame implements ActionListener {
         formthem.setVisible(true);
 }
     private void formsuasach(String masach, int row) {
-        sach s = sachDAO.findById(masach);
+        Sach s = sachDAO.findById(masach);
         if (s == null) {
             JOptionPane.showMessageDialog(null, "Không tìm thấy sách trong CSDL!");
             return;
@@ -485,7 +487,7 @@ public class sachGUI extends JFrame implements ActionListener {
         lblloai.setPreferredSize(labelsize);
         JComboBox<String> cboloai = new JComboBox<>();
         cboloai.setPreferredSize(new Dimension(225, 25));
-        for (theloai ls : theloaiDAO.getAll()) {
+        for (TheLoai ls : TheLoaiDAO.getAll()) {
             cboloai.addItem(ls.getTen_loai_sach());
         }
         cboloai.setSelectedItem(s.getTen_loai_sach());
@@ -585,10 +587,10 @@ public class sachGUI extends JFrame implements ActionListener {
             boolean tinhtrangMoi = cbotinhtrang.getSelectedItem().toString().equals("Còn");
             String hinhMoi = txtanh.getText().trim();
             String motaMoi = txtmota.getText().trim();
-            String ma_loai = theloaiDAO.getMaByTen(loaiTenMoi);
+            String ma_loai = TheLoaiDAO.getMaByTen(loaiTenMoi);
             int ma_tg = tacgiaDAO.getMaByTen(tgTenMoi);
 
-            sach suaSach = new sach( masach, tenMoi, ma_loai, ma_tg, nxbMoi, namMoi, slMoi, tinhtrangMoi, motaMoi, hinhMoi, loaiTenMoi, tgTenMoi );
+            Sach suaSach = new Sach( masach, tenMoi, ma_loai, ma_tg, nxbMoi, namMoi, slMoi, tinhtrangMoi, motaMoi, hinhMoi, loaiTenMoi, tgTenMoi );
 
             if (sachDAO.update(suaSach)) {
                 JOptionPane.showMessageDialog(null, "Cập nhật sách thành công!");

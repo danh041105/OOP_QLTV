@@ -1,114 +1,90 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
 package model;
-
-import java.time.LocalDate;
 import java.util.Date;
-
-/**
- *
- * @author ADMIN
- */
 public class PhieuMuon {
-    private String maPm;
-    private String maSv;
-    private String maSach;
-    private Date ngayMuon;
-    private Date ngayTra;
+    private String maPM, maSV, hoTen, maSach, tenSach, tentg, tinhTrang, nhaxb;
     private int soLuong;
-    private String tinhTrang;
-    
-    private String hoTen;
-    private String tenSach;
+    private Date ngayMuon, ngayTra;
 
-    public PhieuMuon() {
-    }
-
-    public PhieuMuon(String maPm, String maSv, String maSach, Date ngayMuon, Date ngayTra, int soLuong, String tinhTrang, String hoTen, String tenSach) {
-        this.maPm = maPm;
-        this.maSv = maSv;
-        this.maSach = maSach;
-        this.ngayMuon = ngayMuon;
-        this.ngayTra = ngayTra;
-        this.soLuong = soLuong;
-        this.tinhTrang = tinhTrang;
+    public PhieuMuon() {}
+    public PhieuMuon(String maPM, String maSV, String hoTen, String maSach, String tenSach, String tentg, String tinhTrang, String nhaxb, int soLuong, Date ngayMuon, Date ngayTra) {
+        this.maPM = maPM;
+        this.maSV = maSV;
         this.hoTen = hoTen;
-        this.tenSach = tenSach;
-    }
-
-    public String getMaPm() {
-        return maPm;
-    }
-
-    public void setMaPm(String maPm) {
-        this.maPm = maPm;
-    }
-
-    public String getMaSv() {
-        return maSv;
-    }
-
-    public void setMaSv(String maSv) {
-        this.maSv = maSv;
-    }
-
-    public String getMaSach() {
-        return maSach;
-    }
-
-    public void setMaSach(String maSach) {
         this.maSach = maSach;
-    }
-
-    public Date getNgayMuon() {
-        return ngayMuon;
-    }
-
-    public void setNgayMuon(Date ngayMuon) {
+        this.tenSach = tenSach;
+        this.tentg = tentg;
+        this.tinhTrang = tinhTrang;
+        this.nhaxb = nhaxb;
+        this.soLuong = soLuong;
         this.ngayMuon = ngayMuon;
-    }
-
-    public Date getNgayTra() {
-        return ngayTra;
-    }
-
-    public void setNgayTra(Date ngayTra) {
         this.ngayTra = ngayTra;
     }
 
-    public int getSoLuong() {
-        return soLuong;
+    public String getMaPM() {
+        return maPM;
     }
-
-    public void setSoLuong(int soLuong) {
-        this.soLuong = soLuong;
+    public String getMaSV() {
+        return maSV;
     }
-
-    public String getTinhTrang() {
-        return tinhTrang;
-    }
-
-    public void setTinhTrang(String tinhTrang) {
-        this.tinhTrang = tinhTrang;
-    }
-
     public String getHoTen() {
         return hoTen;
     }
-
-    public void setHoTen(String hoTen) {
-        this.hoTen = hoTen;
+    public String getMaSach() {
+        return maSach;
     }
-
     public String getTenSach() {
         return tenSach;
     }
 
+    public String getTentg() {
+        return tentg;
+    }
+    public String getTinhTrang() {
+        return tinhTrang;
+    }
+    public String getNhaxb() {
+        return nhaxb;
+    }
+    public int getSoLuong() {
+        return soLuong;
+    }
+    public Date getNgayMuon() {
+        return ngayMuon;
+    }
+    public Date getNgayTra() {
+        return ngayTra;
+    }
+    public void setMaPM(String maPM) {
+        this.maPM = maPM;
+    }
+    public void setMaSV(String maSV) {
+        this.maSV = maSV;
+    }
+    public void setHoTen(String hoTen) {
+        this.hoTen = hoTen;
+    }
+    public void setMaSach(String maSach) {
+        this.maSach = maSach;
+    }
     public void setTenSach(String tenSach) {
         this.tenSach = tenSach;
     }
-
-    
+    public void setTentg(String tentg) {
+        this.tentg = tentg;
+    }
+    public void setTinhTrang(String tinhTrang) {
+        this.tinhTrang = tinhTrang;
+    }
+    public void setNhaxb(String nhaxb) {
+        this.nhaxb = nhaxb;
+    }
+    public void setSoLuong(int soLuong) {
+        this.soLuong = soLuong;
+    }
+    public void setNgayMuon(Date ngayMuon) {
+        this.ngayMuon = ngayMuon;
+    }
+    public void setNgayTra(Date ngayTra) {
+        this.ngayTra = ngayTra;
+    }
 }

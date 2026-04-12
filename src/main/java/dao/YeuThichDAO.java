@@ -4,7 +4,7 @@
  */
 package dao;
 
-import com.mycompany.java_qltv.connect.DBconnect;
+import connect.Connect;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -26,8 +26,8 @@ public class YeuThichDAO {
                 + " join sach s on s.ma_sach =yt.ma_sach"
                 + " join tac_gia tg on tg.ma_tg=s.ma_tg"
                 + " where yt.ma_sv=?";
-        try (Connection conn = DBconnect.getConnection();
-         PreparedStatement ps = conn.prepareStatement(sql)) {
+        try (Connection conn = Connect.getConnection();
+             PreparedStatement ps = conn.prepareStatement(sql)) {
 
         ps.setString(1, maSv);
         ResultSet rs = ps.executeQuery();
@@ -45,8 +45,8 @@ public class YeuThichDAO {
     
     public boolean checkExists(String maSv, String maSach) {
         String sql = "select 1 from yeu_thich where ma_sv=? and ma_sach =?";
-        try (Connection c = DBconnect.getConnection();
-         PreparedStatement ps = c.prepareStatement(sql)) {
+        try (Connection c = Connect.getConnection();
+             PreparedStatement ps = c.prepareStatement(sql)) {
            ps.setString(1, maSv);
            ps.setString(2, maSach);
            
@@ -59,7 +59,7 @@ public class YeuThichDAO {
     
     public boolean insert(String maSv, String maSach) {
         String sql = "insert into yeu_thich(ma_sach, ma_sv) values (?,?)";
-        try (Connection conn = DBconnect.getConnection();
+        try (Connection conn = Connect.getConnection();
              PreparedStatement ps = conn.prepareStatement(sql)) {
             
             ps.setString(1, maSach);
@@ -74,7 +74,7 @@ public class YeuThichDAO {
     
     public boolean delete(String maSv, String maSach) {
         String sql = "delete from yeu_thich where ma_sv = ? AND ma_sach = ?";
-        try (Connection conn = DBconnect.getConnection();
+        try (Connection conn = Connect.getConnection();
              PreparedStatement ps = conn.prepareStatement(sql)) {
             ps.setString(1, maSv);
             ps.setString(2, maSach);

@@ -1,6 +1,6 @@
 package view;
 
-import admin_book.sach;
+import admin_book.Sach;
 import controller.SachListController;
 import java.awt.*;
 import java.awt.event.WindowAdapter;
@@ -8,9 +8,6 @@ import java.awt.event.WindowEvent;
 import java.util.List;
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
-import model.Sach;
-import qltv.giaodiensv;
-import qltv.userDAO;
 
 public class SachListView extends JFrame {
 
@@ -146,12 +143,10 @@ public class SachListView extends JFrame {
 
     public void displaySach(List<Sach> danhSach) {
         tableModel.setRowCount(0);
-
         if (danhSach.isEmpty()) {
             tableModel.addRow(new Object[]{"", "Không tìm thấy sách nào", "", "", "", "", "", ""});
             return;
         }
-
         for (Sach s : danhSach) {
             tableModel.addRow(new Object[]{
                 s.getMaSach(),

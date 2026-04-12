@@ -1,6 +1,6 @@
 package admin_book;
 
-import connect.connect;
+import connect.DBconnect;
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.Statement;
@@ -9,9 +9,9 @@ import java.util.List;
 
 public class sachDAO {
 
-    public static List<sach> getAll() {
-        List<sach> list = new ArrayList<>();
-        connect db = new connect();
+    public static List<Sach> getAll() {
+        List<Sach> list = new ArrayList<>();
+        connect db = new DBconnect();
         Connection conn = db.getConnection();
 
         String sql = "SELECT s.ma_sach, s.ten_sach, s.ma_loai_sach, s.ma_tg, " +
@@ -26,7 +26,7 @@ public class sachDAO {
                 Statement stmt = conn.createStatement();
                 ResultSet rs = stmt.executeQuery(sql);
                 while (rs.next()) {
-                    sach s = new sach(
+                    Sach s = new Sach(
                         rs.getString("ma_sach"),
                         rs.getString("ten_sach"),
                         rs.getString("ma_loai_sach"),
@@ -51,7 +51,7 @@ public class sachDAO {
         return list;
     }
 
-    public static boolean insert(sach s) {
+    public static boolean insert(Sach s) {
         connect db = new connect();
         Connection conn = db.getConnection();
         String sql = "INSERT INTO sach(ma_sach, ten_sach, ma_loai_sach, ma_tg, nha_xb, nam_xb, so_luong, tinh_trang, mo_ta, image) VALUES ('"
@@ -79,7 +79,7 @@ public class sachDAO {
         return false;
     }
 
-    public static boolean update(sach s) {
+    public static boolean update(Sach s) {
         connect db = new connect();
         Connection conn = db.getConnection();
 
@@ -150,8 +150,8 @@ public class sachDAO {
     }
     
     // Tìm kiếm sách theo nhiều tiêu chí
-public static List<sach> search(String keyword) {
-    List<sach> list = new ArrayList<>();
+public static List<Sach> search(String keyword) {
+    List<Sach> list = new ArrayList<>();
     connect db = new connect();
     Connection conn = db.getConnection();
 
@@ -173,7 +173,7 @@ public static List<sach> search(String keyword) {
             Statement stmt = conn.createStatement();
             ResultSet rs = stmt.executeQuery(sql);
             while (rs.next()) {
-                sach s = new sach(
+                Sach s = new Sach(
                     rs.getString("ma_sach"),
                     rs.getString("ten_sach"),
                     rs.getString("ma_loai_sach"),
@@ -199,8 +199,8 @@ public static List<sach> search(String keyword) {
 }
 
 
-    public static sach findById(String maSach) {
-        sach s = null;
+    public static Sach findById(String maSach) {
+        Sach s = null;
         String sql = "SELECT s.ma_sach, s.ten_sach, s.ma_loai_sach, s.ma_tg, " +
                      "s.nha_xb, s.nam_xb, s.so_luong, s.tinh_trang, s.mo_ta, s.image, " +
                      "ls.ten_loai_sach, tg.ten_tg " +
@@ -215,7 +215,7 @@ public static List<sach> search(String keyword) {
              ResultSet rs = st.executeQuery(sql)) {
 
             if (rs.next()) {
-                s = new sach(
+                s = new Sach(
                     rs.getString("ma_sach"),
                     rs.getString("ten_sach"),
                     rs.getString("ma_loai_sach"),
@@ -236,8 +236,8 @@ public static List<sach> search(String keyword) {
         }
         return s;
 }
-    public static List<sach> getByTheLoai(String ma_loai_sach) {
-    List<sach> list = new ArrayList<>();
+    public static List<Sach> getByTheLoai(String ma_loai_sach) {
+    List<Sach> list = new ArrayList<>();
     connect db = new connect();
     Connection conn = db.getConnection();
 
@@ -253,7 +253,7 @@ public static List<sach> search(String keyword) {
         Statement stmt = conn.createStatement();
         ResultSet rs = stmt.executeQuery(sql);
         while (rs.next()) {
-            sach s = new sach(
+            Sach s = new Sach(
                 rs.getString("ma_sach"),
                 rs.getString("ten_sach"),
                 rs.getString("ma_loai_sach"),

@@ -2,21 +2,16 @@ package view;
 
 import com.toedter.calendar.JDateChooser;
 import controller.PhieuMuonController;
-import dao.PhieuMuonDAO;
 import dao.SachDAO;
-import model.PhieuMuon;
 
 import javax.swing.*;
-import javax.swing.table.DefaultTableModel;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.text.SimpleDateFormat;
 import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
 import java.util.Date;
-import java.util.List;
-import qltv.userDAO;
+
+import dao.UserDAO;
 
 public class PhieuMuonView extends JFrame {
 
@@ -25,7 +20,7 @@ public class PhieuMuonView extends JFrame {
     private JButton btnXacNhan;
     private PhieuMuonController controller;
     private String maSach;
-    private userDAO uDAO;
+    private UserDAO uDAO;
     private SachDAO sachDAO;
     JDateChooser dt_ngaytra;
 
@@ -34,7 +29,7 @@ public class PhieuMuonView extends JFrame {
     public PhieuMuonView(String maSach, String maSv, PhieuMuonController controller) {
         super("Form mượn sách");
         this.maSach = maSach;
-        uDAO = new userDAO();
+        uDAO = new UserDAO();
         sachDAO = new SachDAO();
         this.controller = controller;
     }

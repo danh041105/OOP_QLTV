@@ -1,69 +1,140 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
 package dao;
 
-import com.mycompany.java_qltv.connect.DBconnect;
-import java.sql.Array;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.sql.Date; // Import thư viện SQL Date
 import java.util.ArrayList;
 import java.util.List;
 import model.TacGia;
+import connect.Connect;
 
-/**
- *
- * @author ADMIN
- */
 public class TacGiaDAO {
+
+    // 1. Lấy toàn bộ danh sách
     public List<TacGia> getAll() {
         List<TacGia> list = new ArrayList<>();
-        String sql = "select * from tac_gia order by ten_tg";
-        try(Connection conn = DBconnect.getConnection();
-            PreparedStatement ps = conn.prepareStatement(sql);
-                ResultSet rs = ps.executeQuery()) {
+        String sql = "SELECT * FROM tac_gia ORDER BY ten_tac_gia";
+        try (Connection conn = Connect.getConnection();
+             PreparedStatement ps = conn.prepareStatement(sql);
+             ResultSet rs = ps.executeQuery()) {
             while (rs.next()) {
                 TacGia tg = new TacGia();
-                tg.setMaTg(rs.getInt("ma_tg"));
-                tg.setTenTg(rs.getString("ten_tg"));
-                tg.setNgaySinh(rs.getString("ngay_sinh"));
+                tg.setMaTg(rs.getInt("ma_tac_gia"));
+                tg.setTenTg(rs.getString("ten_tac_gia"));
+                tg.setNgaySinh(rs.getString("ngay_sinh")); // Lấy ngày từ DB
                 tg.setGioiTinh(rs.getString("gioi_tinh"));
-                tg.setQue(rs.getString("que"));
-                tg.setTieuSu(rs.getString("tieu_su"));
-                tg.setHinh(rs.getString("hinh"));
+                tg.setQuocTich(rs.getString("quoc_tich"));
                 list.add(tg);
             }
-            
         } catch (Exception e) {
             e.printStackTrace();
         }
         return list;
     }
-    
+
+    // 2. Lấy 1 Tác giả theo Mã
     public TacGia getById(int maTg) {
-        String sql = "select * from tac_gia where ma_tg= ?";
-        
-       try(Connection conn = DBconnect.getConnection();
-            PreparedStatement ps = conn.prepareStatement(sql)){
-           ps.setInt(1, maTg);
-           
-           ResultSet rs = ps.executeQuery();
-            while (rs.next()) {
+        String sql = "SELECT * FROM tac_gia WHERE ma_tac_gia = ?";
+        try (Connection conn = Connect.getConnection();
+             PreparedStatement ps = conn.prepareStatement(sql)) {
+            ps.setInt(1, maTg);
+            ResultSet rs = ps.executeQuery();
+            if (rs.next()) {
                 TacGia tg = new TacGia();
-                tg.setMaTg(rs.getInt(1));
-                tg.setTenTg(rs.getString(2));
-                tg.setNgaySinh(rs.getString(3));
-                tg.setGioiTinh(rs.getString(4));
-                tg.setQue(rs.getString(5));
-                tg.setTieuSu(rs.getString(6));
-                tg.setHinh(rs.getString(7));
+                tg.setMaTg(rs.getInt("ma_tac_gia"));
+                tg.setTenTg(rs.getString("ten_tac_gia"));
+                tg.setNgaySinh(rs.getString("ngay_sinh"));
+                tg.setGioiTinh(rs.getString("gioi_tinh"));
+                tg.setQuocTich(rs.getString("quoc_tich"));
                 return tg;
             }
         } catch (Exception e) {
             e.printStackTrace();
         }
-       return null;
+        return null;
+    }
+
+    // 3. Thêm mới Tác giả (Xử lý ép kiểu Ngày tháng)
+    public boolean insert(TacGia tg) {
+        String sql = "INSERT INTO tac_gia(ma_tac_gia, ten_tac_gia, ngay_sinh, gioi_tinh, quoc_tich) VALUES (?, ?, ?, ?, ?)";
+        try (Connection conn = Connect.getConnection();
+             PreparedStatement ps = conn.prepareStatement(sql)) {
+            ps.setInt(1, tg.getMaTg());
+            ps.setString(2, tg.getTenTg());
+            ps.setString(3, tg.getNgaySinh());
+            ps.setString(4, tg.getGioiTinh());
+            ps.setString(5, tg.getQuocTich());
+            return ps.executeUpdate() > 0;
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return false;
+    }
+
+    // 4. Cập nhật Tác giả
+    public boolean update(TacGia tg) {
+        String sql = "UPDATE tac_gia SET ten_tac_gia=?, ngay_sinh=?, gioi_tinh=?, quoc_tich=? WHERE ma_tac_gia=?";
+        try (Connection conn = Connect.getConnection();
+             PreparedStatement ps = conn.prepareStatement(sql)) {
+            ps.setString(1, tg.getTenTg());
+            ps.setString(3, tg.getNgaySinh());
+            ps.setString(3, tg.getGioiTinh());
+            ps.setString(4, tg.getQuocTich());
+            ps.setInt(5, tg.getMaTg());
+            return ps.executeUpdate() > 0;
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return false;
+    }
+
+    // 5. Xóa Tác giả (Có kiểm tra ràng buộc sách)
+    public boolean remove(int maTg) {
+        String checkSql = "SELECT COUNT(*) AS kiemtra FROM sach WHERE ma_tac_gia = ?";
+        try (Connection conn = Connect.getConnection();
+             PreparedStatement psCheck = conn.prepareStatement(checkSql)) {
+
+            psCheck.setInt(1, maTg);
+            ResultSet rs = psCheck.executeQuery();
+            if (rs.next() && rs.getInt("kiemtra") > 0) {
+                System.out.println("Tác giả này đang có sách trong thư viện, không thể xóa!");
+                return false;
+            }
+
+            String deleteSql = "DELETE FROM tac_gia WHERE ma_tac_gia = ?";
+            try (PreparedStatement psDelete = conn.prepareStatement(deleteSql)) {
+                psDelete.setInt(1, maTg);
+                return psDelete.executeUpdate() > 0;
+            }
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return false;
+    }
+
+    // 6. Tìm kiếm theo Tên
+    public List<TacGia> searchByName(String name) {
+        List<TacGia> list = new ArrayList<>();
+        String sql = "SELECT * FROM tac_gia WHERE ten_tac_gia LIKE ?";
+        try (Connection conn = Connect.getConnection();
+             PreparedStatement ps = conn.prepareStatement(sql)) {
+
+            ps.setString(1, "%" + name + "%");
+            ResultSet rs = ps.executeQuery();
+            while (rs.next()) {
+                TacGia tg = new TacGia();
+                tg.setMaTg(rs.getInt("ma_tac_gia"));
+                tg.setTenTg(rs.getString("ten_tac_gia"));
+                tg.setNgaySinh(rs.getString("ngay_sinh"));
+                tg.setGioiTinh(rs.getString("gioi_tinh"));
+                tg.setQuocTich(rs.getString("quoc_tich"));
+                list.add(tg);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return list;
     }
 }

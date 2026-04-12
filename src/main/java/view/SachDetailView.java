@@ -12,11 +12,9 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.io.File;
 import java.net.URL;
-import javax.imageio.ImageIO;
-import model.YeuThich;
-import qltv.userDAO;
+
+import dao.UserDAO;
 
 public class SachDetailView extends JFrame {
 
@@ -26,7 +24,7 @@ public class SachDetailView extends JFrame {
     JButton btnYeuThich, btnMuon;
     YeuThichDAO dao = new YeuThichDAO();
     PhieuMuonDAO pmdao = new PhieuMuonDAO();
-    userDAO uDAO = new userDAO();
+    UserDAO uDAO = new UserDAO();
     PhieuMuonController controller;
     
     private String maSvDangNhap;

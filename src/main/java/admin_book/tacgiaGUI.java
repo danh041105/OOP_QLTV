@@ -31,8 +31,8 @@ import javax.swing.SwingConstants;
 import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
 
-import qltv.giaodienadmin;
-import qltv.userDAO;
+import qltv.AdminGUI;
+import dao.UserDAO;
 
 public class tacgiaGUI extends JFrame implements ActionListener {
     private JTable tbltacgia;
@@ -48,8 +48,8 @@ public class tacgiaGUI extends JFrame implements ActionListener {
             @Override
             public void windowClosing(WindowEvent e) {
                 dispose();
-                userDAO dao = new userDAO();
-                new giaodienadmin(dao.getMaADMIN_isLogin()).setVisible(true);
+                UserDAO dao = new UserDAO();
+                new AdminGUI(dao.getMaADMIN_isLogin()).setVisible(true);
             }
         });
         this.setVisible(true);

@@ -1,10 +1,6 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
 package dao;
 
-import com.mycompany.java_qltv.connect.DBconnect;
+import connect.Connect;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -25,8 +21,8 @@ public class SachDAO {
                 + "WHERE s.ma_loai_sach = ? "
                 + "ORDER BY s.ten_sach";
 
-        try (Connection conn = DBconnect.getConnection(); PreparedStatement ps = conn.prepareStatement(sql)) {
-
+        try (Connection conn = Connect.getConnection();
+             PreparedStatement ps = conn.prepareStatement(sql)) {
             ps.setString(1, maLoaiSach);
             ResultSet rs = ps.executeQuery();
 
@@ -69,7 +65,8 @@ public class SachDAO {
                 + "or cast(s.nam_xb as char) like ? )"
                 + "order by s.ten_sach";
 
-        try (Connection conn = DBconnect.getConnection(); PreparedStatement ps = conn.prepareStatement(sql)) {
+        try (Connection conn = Connect.getConnection();
+             PreparedStatement ps = conn.prepareStatement(sql)) {
 
             String kw = "%" + keyword + "%";
             ps.setString(1, maLoaiSach);
@@ -114,7 +111,7 @@ public class SachDAO {
                 + "JOIN tac_gia tg ON s.ma_tg = tg.ma_tg "
                 + "WHERE s.ma_sach = ?";
 
-        try (Connection conn = DBconnect.getConnection(); PreparedStatement ps = conn.prepareStatement(sql)) {
+        try (Connection conn = Connect.getConnection(); PreparedStatement ps = conn.prepareStatement(sql)) {
 
             ps.setString(1, maSach);
             ResultSet rs = ps.executeQuery();
@@ -148,7 +145,8 @@ public class SachDAO {
         List<Sach> ds = new ArrayList<>();
         String sql = "select * from sach where ma_tg=?";
 
-        try (Connection conn = DBconnect.getConnection(); PreparedStatement ps = conn.prepareStatement(sql)) {
+        try (Connection conn = Connect.getConnection();
+             PreparedStatement ps = conn.prepareStatement(sql)) {
 
             ps.setInt(1, maTg);
             ResultSet rs = ps.executeQuery();
@@ -167,12 +165,10 @@ public class SachDAO {
 
         return ds;
     }
-
-    
     public int getSoLuongTon(String maSach) {
         int sl = 0;
         String sql = "select so_luong from sach where ma_sach=?";
-        try (Connection conn = DBconnect.getConnection(); PreparedStatement ps = conn.prepareStatement(sql)) {
+        try (Connection conn = Connect.getConnection(); PreparedStatement ps = conn.prepareStatement(sql)) {
 
             ps.setString(1, maSach);
             ResultSet rs = ps.executeQuery();
@@ -188,7 +184,8 @@ public class SachDAO {
     
     public boolean truSoLuong(String maSach, int soLuongMuon) {
         String sql = "update sach set so_luong = so_luong - ? where ma_sach = ? and so_luong >= ?";
-        try (Connection conn = DBconnect.getConnection(); PreparedStatement ps = conn.prepareStatement(sql)) {
+        try (Connection conn = Connect.getConnection();
+             PreparedStatement ps = conn.prepareStatement(sql)) {
             ps.setInt(1, soLuongMuon);
             ps.setString(2, maSach);
             ps.setInt(3, soLuongMuon);
@@ -206,10 +203,78 @@ public class SachDAO {
                 + "ELSE 1 "
                 + "END "
                 + "WHERE ma_sach = ?";
-        try (Connection conn = DBconnect.getConnection();
+        try (Connection conn = Connect.getConnection();
              PreparedStatement ps = conn.prepareStatement(sql)) {
             ps.setString(1, maSach);
             return ps.executeUpdate() > 0;
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return false;
+    }
+
+    // Thêm mới Sách
+    public boolean insert(Sach s) {
+        String sql = "INSERT INTO sach(ma_sach, ten_sach, ma_loai_sach, ma_tg, nha_xb, nam_xb, so_luong, tinh_trang, mo_ta, image) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+        try (Connection conn = Connect.getConnection();
+             PreparedStatement ps = conn.prepareStatement(sql)) {
+            ps.setString(1, s.getMaSach());
+            ps.setString(2, s.getTenSach());
+            ps.setString(3, s.getMaLoaiSach());
+            ps.setInt(4, s.getMa_Tg());
+            ps.setString(5, s.getNhaXb());
+            ps.setInt(6, s.getNamXb());
+            ps.setInt(7, s.getSoLuong());
+            ps.setBoolean(8, s.isTinhTrang());
+            ps.setString(9, s.getMoTa());
+            ps.setString(10, s.getImage());
+            return ps.executeUpdate() > 0;
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return false;
+    }
+
+    // Cập nhật thông tin Sách
+    public boolean update(Sach s) {
+        String sql = "UPDATE sach SET ten_sach=?, ma_loai_sach=?, ma_tg=?, nha_xb=?, nam_xb=?, so_luong=?, tinh_trang=?, mo_ta=?, image=? WHERE ma_sach=?";
+        try (Connection conn = Connect.getConnection();
+             PreparedStatement ps = conn.prepareStatement(sql)) {
+            ps.setString(1, s.getTenSach());
+            ps.setString(2, s.getMaLoaiSach());
+            ps.setInt(3, s.getMa_Tg());
+            ps.setString(4, s.getNhaXb());
+            ps.setInt(5, s.getNamXb());
+            ps.setInt(6, s.getSoLuong());
+            ps.setBoolean(7, s.isTinhTrang());
+            ps.setString(8, s.getMoTa());
+            ps.setString(9, s.getImage());
+            ps.setString(10, s.getMaSach());
+            return ps.executeUpdate() > 0;
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return false;
+    }
+
+    // Xóa Sách (Có kiểm tra an toàn)
+    public boolean remove(String maSach) {
+        String checkSql = "SELECT COUNT(*) AS kiemtra FROM phieu_muon WHERE ma_sach = ?";
+        try (Connection conn = Connect.getConnection();
+             PreparedStatement psCheck = conn.prepareStatement(checkSql)) {
+
+            psCheck.setString(1, maSach);
+            ResultSet rs = psCheck.executeQuery();
+            if (rs.next() && rs.getInt("kiemtra") > 0) {
+                System.out.println("Sách đang nằm trong phiếu mượn, không thể xóa!");
+                return false;
+            }
+
+            String deleteSql = "DELETE FROM sach WHERE ma_sach = ?";
+            try (PreparedStatement psDelete = conn.prepareStatement(deleteSql)) {
+                psDelete.setString(1, maSach);
+                return psDelete.executeUpdate() > 0;
+            }
         } catch (Exception e) {
             e.printStackTrace();
         }

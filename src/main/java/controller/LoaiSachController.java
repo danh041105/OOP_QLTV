@@ -28,7 +28,6 @@ public class LoaiSachController {
         this.sachDAO = new SachDAO();
     }
 
-
     public void loadData() {
         try {
             List<LoaiSach> danhSach = loaiSachDAO.getAll();
@@ -51,7 +50,7 @@ public class LoaiSachController {
                 gridPanel.add(card);
             }
         }
-        
+
         gridPanel.revalidate();
         gridPanel.repaint();
     }
@@ -67,9 +66,9 @@ public class LoaiSachController {
         try {
             String maLoai = loaiSach.getMaLoaiSach();
             String tenLoai = loaiSach.getTenLoaiSach();
-            
+
             List<Sach> danhSachSach = sachDAO.getByLoaiSach(maLoai);
-            
+
             if (danhSachSach.isEmpty()) {
                 showMessage("Thể loại này chưa có sách nào!");
                 return;
@@ -86,12 +85,10 @@ public class LoaiSachController {
         }
     }
 
-
     private void showMessage(String message) {
         JOptionPane.showMessageDialog(view, message);
     }
 
-  
     private void showError(String message) {
         JOptionPane.showMessageDialog(view, message, "Lỗi", JOptionPane.ERROR_MESSAGE);
     }

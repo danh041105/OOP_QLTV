@@ -17,7 +17,7 @@ import javax.swing.JMenuItem;
 import javax.swing.JPanel;
 import model.Sach;
 import model.YeuThich;
-import qltv.userDAO;
+import dao.UserDAO;
 import view.SachDetailView;
 import view.YeuThichView;
 
@@ -28,7 +28,7 @@ import view.YeuThichView;
 public class YeuThichController {
     private YeuThichView view;
     private YeuThichDAO dao;
-    private userDAO uDAO;
+    private UserDAO uDAO;
     private String maSvDangNhap;
     
     private JMenu menuHome, menuDanhMuc, menuYeuThich, menuMuonSach;
@@ -36,7 +36,7 @@ public class YeuThichController {
 
     public YeuThichController(YeuThichView view) {
         this.dao = new YeuThichDAO();
-        this.uDAO = new userDAO();
+        this.uDAO = new UserDAO();
         this.view = view;
         
         this.maSvDangNhap = uDAO.getMSV_isLogin();

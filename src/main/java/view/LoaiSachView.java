@@ -3,7 +3,6 @@ package view;
 import controller.LoaiSachController;
 import java.awt.BorderLayout;
 import java.awt.Color;
-import java.awt.Component;
 import java.awt.Cursor;
 import java.awt.Dimension;
 import java.awt.Font;
@@ -13,15 +12,14 @@ import java.awt.event.MouseEvent;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import javax.swing.BorderFactory;
-import javax.swing.BoxLayout;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.SwingConstants;
 import model.LoaiSach;
-import qltv.giaodiensv;
-import qltv.userDAO;
+import qltv.SinhVienGUI;
+import dao.UserDAO;
 
 /**
  * @author ADMIN
@@ -52,8 +50,8 @@ public class LoaiSachView extends JFrame {
         addWindowListener(new WindowAdapter() {
             @Override
             public void windowClosing(WindowEvent e) {
-                userDAO dao = new userDAO();
-                new giaodiensv(dao.getMSV_isLogin()).setVisible(true);
+                UserDAO dao = new UserDAO();
+                new SinhVienGUI(dao.getMSV_isLogin()).setVisible(true);
             }
         });
         setVisible(true);
