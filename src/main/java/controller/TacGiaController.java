@@ -83,7 +83,7 @@ public class TacGiaController {
 
             if (index >= 0 && index < danhSach.size()) {
                 TacGia tacGia = danhSach.get(index);
-                viewTacGiaDetail(tacGia.getMaTg());
+                viewTacGiaDetail(tacGia.getMa_tg());
             }
         } catch (Exception e) {
             e.printStackTrace();

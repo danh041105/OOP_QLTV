@@ -117,11 +117,11 @@ public class TacGiaListView extends JFrame {
         JPanel infoPanel = new JPanel(new GridLayout(3, 1, 0, 4));
         infoPanel.setBackground(ThemeUtils.BG_CARD);
 
-        JLabel lblTen = new JLabel(tacGia.getTenTg(), SwingConstants.CENTER);
+        JLabel lblTen = new JLabel(tacGia.getTen_tg(), SwingConstants.CENTER);
         lblTen.setFont(ThemeUtils.FONT_BODY_BOLD);
         lblTen.setForeground(ThemeUtils.TEXT_PRIMARY);
 
-        JLabel lblNgaySinh = new JLabel("📅 " + tacGia.getNgaySinh(), SwingConstants.CENTER);
+        JLabel lblNgaySinh = new JLabel("📅 " + tacGia.getNgay_sinh(), SwingConstants.CENTER);
         lblNgaySinh.setFont(ThemeUtils.FONT_SMALL);
         lblNgaySinh.setForeground(ThemeUtils.TEXT_SECONDARY);
 

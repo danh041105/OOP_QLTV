@@ -69,8 +69,7 @@ public class SachDetailView extends JFrame {
         infoPanel.setBackground(ThemeUtils.BG_CARD);
         infoPanel.setBorder(BorderFactory.createCompoundBorder(
                 BorderFactory.createLineBorder(ThemeUtils.BORDER, 1),
-                new EmptyBorder(20, 20, 20, 20)
-        ));
+                new EmptyBorder(20, 20, 20, 20)));
 
         // Book image with rounded border and shadow
         JLabel lblImage = loadImage();
@@ -114,8 +113,7 @@ public class SachDetailView extends JFrame {
                 TitledBorder.DEFAULT_JUSTIFICATION,
                 TitledBorder.DEFAULT_POSITION,
                 ThemeUtils.FONT_BODY_BOLD,
-                ThemeUtils.TEXT_SECONDARY
-        ));
+                ThemeUtils.TEXT_SECONDARY));
         scrollMoTa.setBackground(ThemeUtils.BG_CARD);
 
         contentPanel.add(scrollMoTa, BorderLayout.SOUTH);
@@ -127,8 +125,7 @@ public class SachDetailView extends JFrame {
         actionBar.setBackground(ThemeUtils.BG_CARD);
         actionBar.setBorder(BorderFactory.createCompoundBorder(
                 BorderFactory.createMatteBorder(1, 0, 0, 0, ThemeUtils.BORDER),
-                new EmptyBorder(15, 25, 15, 25)
-        ));
+                new EmptyBorder(15, 25, 15, 25)));
 
         btnYeuThich = new JButton("♡ Yêu thích") {
             @Override

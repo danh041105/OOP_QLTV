@@ -9,56 +9,54 @@ package model;
  * @author ADMIN
  */
 public class TacGia {
-    private int maTg;
-    private String tenTg;
-    private String ngaySinh;
-    private String gioiTinh;
+    private int ma_tg;
+    private String ten_tg;
+    private String ngay_sinh;
+    private String gioi_tinh;
     private String que;
-    private String QuocTich;
-    private String tieuSu;
+    private String tieu_su;
     private String hinh;
 
     public TacGia() {}
 
-    public TacGia(int maTg, String tenTg, String ngaySinh, String gioiTinh, String que,
-                  String QuocTich, String tieuSu, String hinh) {
-        this.maTg = maTg;
-        this.tenTg = tenTg;
-        this.ngaySinh = ngaySinh;
-        this.gioiTinh = gioiTinh;
+    public TacGia(int ma_tg, String ten_tg, String ngay_sinh, String gioi_tinh,
+                  String que, String tieu_su, String hinh) {
+        this.ma_tg = ma_tg;
+        this.ten_tg = ten_tg;
+        this.ngay_sinh = ngay_sinh;
+        this.gioi_tinh = gioi_tinh;
         this.que = que;
-        this.QuocTich = QuocTich;
-        this.tieuSu = tieuSu;
+        this.tieu_su = tieu_su;
         this.hinh = hinh;
     }
-    public void setMaTg(int maTg) {
-        this.maTg = maTg;
+    public void setMa_tg(int ma_tg) {
+        this.ma_tg = ma_tg;
     }
 
-    public int getMaTg() { return maTg; }
+    public int getMa_tg() { return ma_tg; }
 
-    public String getTenTg() {
-        return tenTg;
+    public String getTen_tg() {
+        return ten_tg;
     }
 
-    public void setTenTg(String tenTg) {
-        this.tenTg = tenTg;
+    public void setTen_tg(String ten_tg) {
+        this.ten_tg = ten_tg;
     }
 
-    public String getNgaySinh() {
-        return ngaySinh;
+    public String getNgay_sinh() {
+        return ngay_sinh;
     }
 
-    public void setNgaySinh(String ngaySinh) {
-        this.ngaySinh = ngaySinh;
+    public void setNgay_sinh(String ngay_sinh) {
+        this.ngay_sinh = ngay_sinh;
     }
 
-    public String getGioiTinh() {
-        return gioiTinh;
+    public String getGioi_tinh() {
+        return gioi_tinh;
     }
 
-    public void setGioiTinh(String gioiTinh) {
-        this.gioiTinh = gioiTinh;
+    public void setGioi_tinh(String gioi_tinh) {
+        this.gioi_tinh = gioi_tinh;
     }
 
     public String getQue() {
@@ -69,16 +67,11 @@ public class TacGia {
         this.que = que;
     }
 
-    public String getQuocTich() { return QuocTich; }
-
-    public void setQuocTich(String quoctich) { QuocTich = quoctich; }
-
-    public String getTieuSu() {
-        return tieuSu;
+    public String getTieu_su() {
+        return tieu_su;
     }
-
-    public void setTieuSu(String tieuSu) {
-        this.tieuSu = tieuSu;
+    public void setTieu_su(String tieu_su) {
+        this.tieu_su = tieu_su;
     }
 
     public String getHinh() {
@@ -91,7 +84,6 @@ public class TacGia {
 
     @Override
     public String toString() {
-        return tenTg;
+        return ten_tg;
     }
- 
 }

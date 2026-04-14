@@ -37,7 +37,7 @@ public class TacGiaDetailView extends JFrame {
         mainPanel.setBackground(ThemeUtils.BG_MAIN);
 
         // Top bar with author name and breadcrumb
-        JPanel topBar = ThemeUtils.createTopBar(tacGia.getTenTg(), "Danh sách tác giả > Chi tiết tác giả");
+        JPanel topBar = ThemeUtils.createTopBar(tacGia.getTen_tg(), "Danh sách tác giả > Chi tiết tác giả");
         mainPanel.add(topBar, BorderLayout.NORTH);
 
         // Scrollable content
@@ -50,8 +50,7 @@ public class TacGiaDetailView extends JFrame {
         infoCard.setBackground(ThemeUtils.BG_CARD);
         infoCard.setBorder(BorderFactory.createCompoundBorder(
                 BorderFactory.createLineBorder(ThemeUtils.BORDER, 1),
-                new EmptyBorder(20, 20, 20, 20)
-        ));
+                new EmptyBorder(20, 20, 20, 20)));
 
         // Author photo
         JLabel lblImage = loadImage();
@@ -66,11 +65,11 @@ public class TacGiaDetailView extends JFrame {
         textInfo.setBackground(ThemeUtils.BG_CARD);
         textInfo.setBorder(new EmptyBorder(10, 10, 10, 10));
 
-        textInfo.add(createInfoLabel("Họ và tên", tacGia.getTenTg()));
+        textInfo.add(createInfoLabel("Họ và tên", tacGia.getTen_tg()));
         textInfo.add(Box.createVerticalStrut(8));
-        textInfo.add(createInfoLabel("Ngày sinh", tacGia.getNgaySinh()));
+        textInfo.add(createInfoLabel("Ngày sinh", tacGia.getNgay_sinh()));
         textInfo.add(Box.createVerticalStrut(8));
-        textInfo.add(createInfoLabel("Giới tính", tacGia.getGioiTinh()));
+        textInfo.add(createInfoLabel("Giới tính", tacGia.getGioi_tinh()));
         textInfo.add(Box.createVerticalStrut(8));
         textInfo.add(createInfoLabel("Quê quán", tacGia.getQue()));
 
@@ -86,8 +85,7 @@ public class TacGiaDetailView extends JFrame {
         tieuSuCard.setBackground(ThemeUtils.BG_CARD);
         tieuSuCard.setBorder(BorderFactory.createCompoundBorder(
                 BorderFactory.createLineBorder(ThemeUtils.BORDER, 1),
-                new EmptyBorder(15, 15, 15, 15)
-        ));
+                new EmptyBorder(15, 15, 15, 15)));
         tieuSuCard.add(createTieuSu(), BorderLayout.CENTER);
 
         // Tác phẩm section
@@ -95,8 +93,7 @@ public class TacGiaDetailView extends JFrame {
         tacPhamCard.setBackground(ThemeUtils.BG_CARD);
         tacPhamCard.setBorder(BorderFactory.createCompoundBorder(
                 BorderFactory.createLineBorder(ThemeUtils.BORDER, 1),
-                new EmptyBorder(15, 15, 15, 15)
-        ));
+                new EmptyBorder(15, 15, 15, 15)));
         tacPhamCard.add(createTacPham(), BorderLayout.CENTER);
 
         twoColumnPanel.add(tieuSuCard);
@@ -114,7 +111,7 @@ public class TacGiaDetailView extends JFrame {
     }
 
     private JScrollPane createTieuSu() {
-        JTextArea txt = new JTextArea(tacGia.getTieuSu());
+        JTextArea txt = new JTextArea(tacGia.getTieu_su());
         txt.setLineWrap(true);
         txt.setWrapStyleWord(true);
         txt.setEditable(false);
@@ -130,8 +127,7 @@ public class TacGiaDetailView extends JFrame {
                 TitledBorder.DEFAULT_JUSTIFICATION,
                 TitledBorder.DEFAULT_POSITION,
                 ThemeUtils.FONT_BODY_BOLD,
-                ThemeUtils.TEXT_SECONDARY
-        ));
+                ThemeUtils.TEXT_SECONDARY));
         scroll.setPreferredSize(new Dimension(380, 200));
         scroll.getViewport().setBackground(ThemeUtils.BG_CARD);
 
@@ -140,7 +136,7 @@ public class TacGiaDetailView extends JFrame {
 
     private JScrollPane createTacPham() {
         SachDAO dao = new SachDAO();
-        List<Sach> dsSach = dao.getSachByTacGia(tacGia.getMaTg());
+        List<Sach> dsSach = dao.getSachByTacGia(tacGia.getMa_tg());
 
         DefaultListModel<String> model = new DefaultListModel<>();
 
@@ -168,8 +164,7 @@ public class TacGiaDetailView extends JFrame {
                 TitledBorder.DEFAULT_JUSTIFICATION,
                 TitledBorder.DEFAULT_POSITION,
                 ThemeUtils.FONT_BODY_BOLD,
-                ThemeUtils.TEXT_SECONDARY
-        ));
+                ThemeUtils.TEXT_SECONDARY));
         scroll.setPreferredSize(new Dimension(380, 200));
         scroll.getViewport().setBackground(ThemeUtils.BG_CARD);
 
@@ -197,7 +192,7 @@ public class TacGiaDetailView extends JFrame {
 
     private JLabel loadImage() {
         try {
-            String path = "/images/" + tacGia.getHinh();
+            String path = "D:\\hoc tap\\ki 6\\OOP\\java_demo\\src\\main\\resources\\images" + tacGia.getHinh();
             URL imgURL = getClass().getResource(path);
 
             if (imgURL != null) {
