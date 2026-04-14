@@ -13,7 +13,7 @@ import java.util.logging.Logger;
 public class Connect {
     private static final Logger logger = Logger.getLogger(Connect.class.getName());
     private static final String user ="root";
-    private static final String password ="";
+    private static final String password ="Khai127@11a3";
     private static final String host ="localhost";
     private static final String port="3306";
     private static final String dbName ="java_qltv";

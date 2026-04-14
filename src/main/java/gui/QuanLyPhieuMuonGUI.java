@@ -19,6 +19,9 @@ import quanlymuontra.QuanLyMuonTra_Main;
 import java.awt.*;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
+import java.io.File;
+import java.io.IOException;
+import javax.imageio.ImageIO;
 
 public class QuanLyPhieuMuonGUI extends JFrame {
     private PhieuMuonDAO PhieuMuonDAO = new PhieuMuonDAO();
@@ -28,11 +31,13 @@ public class QuanLyPhieuMuonGUI extends JFrame {
     private JTextField txtMaSV, txtTenSV, txtTenSach;
     private JButton btnDaTra, btnDangMuon, btnQuaHan, btnTraCham, btnTatCaPM;
     private JButton btnTimKiem, btnThem, btnSua, btnXoa, btnPhat;
+    private Image backgroundImage;
 
     public QuanLyPhieuMuonGUI() {
         super("Quản lý phiếu mượn");
+        loadBackgroundImage();
         initGUI();
-        
+
         QuanLyMuonTra_Main.setupMenuBar(this);
         addEvents();
 
@@ -49,19 +54,51 @@ public class QuanLyPhieuMuonGUI extends JFrame {
             }
         });
     }
-    
+
+    private void loadBackgroundImage() {
+        try {
+            // Thay đường dẫn này thành đường dẫn ảnh background của bạn
+            String imagePath = "D:\\project_java\\src\\main\\resources\\images\\admin_banner.jpg";
+            File file = new File(imagePath);
+            if (file.exists()) {
+                backgroundImage = ImageIO.read(file);
+            } else {
+                System.out.println("Không tìm thấy ảnh background: " + imagePath);
+            }
+        } catch (IOException e) {
+            System.out.println("Lỗi khi tải ảnh background: " + e.getMessage());
+        }
+    }
+
+    // Inner class: JPanel với background image
+    class BackgroundImagePanel extends JPanel {
+        public BackgroundImagePanel(LayoutManager layout) {
+            super(layout);
+            setOpaque(false);
+        }
+
+        @Override
+        protected void paintComponent(Graphics g) {
+            super.paintComponent(g);
+            if (backgroundImage != null) {
+                g.drawImage(backgroundImage, 0, 0, this.getWidth(), this.getHeight(), this);
+            }
+        }
+    }
+
     private void initGUI() {
         this.setLayout(new BorderLayout());
         getContentPane().setBackground(new Color(245, 246, 250));
-        
-        JPanel pnMain = new JPanel(new BorderLayout(10, 10));
-        pnMain.setBackground(Color.WHITE); 
+
+        JPanel pnMain = new BackgroundImagePanel(new BorderLayout(10, 10));
         pnMain.setBorder(BorderFactory.createEmptyBorder(20, 50, 20, 50));
-        
+
         // thống kê tình trạng
         JPanel pnWest = new JPanel();
         pnWest.setLayout(new BoxLayout(pnWest, BoxLayout.Y_AXIS));
         pnWest.setPreferredSize(new Dimension(200, 0));
+        pnWest.setOpaque(true);
+        pnWest.setBackground(new Color(255, 255, 255, 220));
         pnWest.setBorder(BorderFactory.createTitledBorder("Thống kê tình trạng"));
 
         btnDaTra = new JButton("Đã trả: 0");
@@ -78,17 +115,21 @@ public class QuanLyPhieuMuonGUI extends JFrame {
             pnWest.add(b);
         }
 
-        // 
+        //
         JPanel pnlCenter = new JPanel(new BorderLayout(0, 10));
-        
+        pnlCenter.setOpaque(false);
+
         JPanel pnlheader = new JPanel(new BorderLayout());
+        pnlheader.setOpaque(false);
         JLabel lblHeaderTitle = new JLabel("QUẢN LÝ PHIẾU MƯỢN", JLabel.CENTER);
-        lblHeaderTitle.setFont(new Font("Segoe UI", Font.BOLD, 24)); 
-        lblHeaderTitle.setForeground(new Color(0, 51, 153)); 
-        lblHeaderTitle.setBorder(BorderFactory.createEmptyBorder(10, 0, 10, 0)); 
+        lblHeaderTitle.setFont(new Font("Segoe UI", Font.BOLD, 24));
+        lblHeaderTitle.setForeground(new Color(0, 51, 153));
+        lblHeaderTitle.setBorder(BorderFactory.createEmptyBorder(10, 0, 10, 0));
         pnlheader.add(lblHeaderTitle, BorderLayout.NORTH);
-        
+
         JPanel pnlTop = new JPanel(new FlowLayout(FlowLayout.LEFT, 10, 10));
+        pnlTop.setOpaque(true);
+        pnlTop.setBackground(new Color(255, 255, 255, 220));
 
         txtMaSV = new JTextField(6);
         txtTenSV = new JTextField(10);
@@ -101,36 +142,36 @@ public class QuanLyPhieuMuonGUI extends JFrame {
         btnXoa.setBackground(Color.RED); btnXoa.setForeground(Color.WHITE);
         btnPhat = new JButton("Hình phạt");
 
-        pnlTop.add(new JLabel("Mã SV:")); 
+        pnlTop.add(new JLabel("Mã SV:"));
         pnlTop.add(txtMaSV);
-        pnlTop.add(new JLabel("Tên SV:")); 
+        pnlTop.add(new JLabel("Tên SV:"));
         pnlTop.add(txtTenSV);
-        pnlTop.add(new JLabel("Tên sách:")); 
+        pnlTop.add(new JLabel("Tên sách:"));
         pnlTop.add(txtTenSach);
-        
+
         pnlTop.add(btnTimKiem); pnlTop.add(btnThem);
-        pnlTop.add(new JLabel("|")); 
-        pnlTop.add(btnSua); 
-        pnlTop.add(btnXoa); 
+        pnlTop.add(new JLabel("|"));
+        pnlTop.add(btnSua);
+        pnlTop.add(btnXoa);
         pnlTop.add(btnPhat);
-        
+
         pnlheader.add(pnlTop, BorderLayout.CENTER);
 
         // Table
         String[] cols = {"Mã PM", "Mã SV", "Họ Tên", "Mã sách", "Tên sách", "Tác giả", "Nhà XB", "SL", "Ngày mượn", "Ngày trả", "Tình trạng"};
         modelPhieuMuon = new DefaultTableModel(cols, 0) {
-        @Override
-        public boolean isCellEditable(int row, int column) { 
-            return false; 
-        }
-};
+            @Override
+            public boolean isCellEditable(int row, int column) {
+                return false;
+            }
+        };
         tblPhieuMuon = new JTable(modelPhieuMuon);
-        
+
         tblPhieuMuon.getColumnModel().getColumn(4).setPreferredWidth(210); // Tên sách
         tblPhieuMuon.getColumnModel().getColumn(2).setPreferredWidth(130); // Họ tên
         tblPhieuMuon.getColumnModel().getColumn(5).setPreferredWidth(120); // Tác giả
         tblPhieuMuon.getColumnModel().getColumn(10).setPreferredWidth(100); // Tình trạng
-        
+
         pnlCenter.add(pnlheader, BorderLayout.NORTH);
         pnlCenter.add(new JScrollPane(tblPhieuMuon), BorderLayout.CENTER);
 
@@ -177,7 +218,7 @@ public class QuanLyPhieuMuonGUI extends JFrame {
             formSua.setVisible(true);
 
             if (formSua.isSuccess()) {
-                loadDataPhieuMuon(""); 
+                loadDataPhieuMuon("");
             }
         });
 
@@ -189,40 +230,40 @@ public class QuanLyPhieuMuonGUI extends JFrame {
             }
             String maPM = tblPhieuMuon.getValueAt(row, 0).toString();
             int confirm = JOptionPane.showConfirmDialog(this, "Bạn có chắc chắn muốn xóa phiếu mượn " + maPM + "?", "Xác nhận", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
-            
+
             if (confirm == JOptionPane.YES_OPTION) {
                 int result = PhieuMuonDAO.deletePhieuMuon(maPM);
                 switch (result) {
-                    case 1: 
+                    case 1:
                         JOptionPane.showMessageDialog(this, "Xóa phiếu mượn thành công!");
-                        loadDataPhieuMuon(""); 
+                        loadDataPhieuMuon("");
                         break;
 
-                    case 2: 
-                        JOptionPane.showMessageDialog(this, 
-                            "Không thể xóa! Phiếu mượn này chưa ở trạng thái 'Đã trả'.", 
-                            "Cảnh báo", 
-                            JOptionPane.WARNING_MESSAGE);
+                    case 2:
+                        JOptionPane.showMessageDialog(this,
+                                "Không thể xóa! Phiếu mượn này chưa ở trạng thái 'Đã trả'.",
+                                "Cảnh báo",
+                                JOptionPane.WARNING_MESSAGE);
                         break;
 
-                    case 3: 
-                        JOptionPane.showMessageDialog(this, 
-                            "Phiếu mượn này có hình phạt chưa hoàn thành nên không thể xóa!", 
-                            "Vi phạm chưa xử lý", 
-                            JOptionPane.ERROR_MESSAGE);
+                    case 3:
+                        JOptionPane.showMessageDialog(this,
+                                "Phiếu mượn này có hình phạt chưa hoàn thành nên không thể xóa!",
+                                "Vi phạm chưa xử lý",
+                                JOptionPane.ERROR_MESSAGE);
                         break;
 
-                    default: 
-                        JOptionPane.showMessageDialog(this, 
-                            "Lỗi hệ thống hoặc không tìm thấy mã phiếu mượn này!", 
-                            "Lỗi", 
-                            JOptionPane.ERROR_MESSAGE);
+                    default:
+                        JOptionPane.showMessageDialog(this,
+                                "Lỗi hệ thống hoặc không tìm thấy mã phiếu mượn này!",
+                                "Lỗi",
+                                JOptionPane.ERROR_MESSAGE);
                         break;
                 }
             }
         });
 
-        
+
         btnPhat.addActionListener(e -> {
             int row = tblPhieuMuon.getSelectedRow();
             if (row == -1) {
@@ -237,10 +278,10 @@ public class QuanLyPhieuMuonGUI extends JFrame {
             }
 
             FormThemHinhPhat formPhat = new FormThemHinhPhat(this, rowData);
-            formPhat.setVisible(true); 
+            formPhat.setVisible(true);
 
             if (formPhat.isSuccess()) {
-                this.dispose(); 
+                this.dispose();
                 JOptionPane.showMessageDialog(null, "Hệ thống sẽ chuyển đến trang Hình Phạt!");
                 QuanLyHinhPhatGUI qlhp = new QuanLyHinhPhatGUI();
                 qlhp.setVisible(true);
@@ -257,26 +298,26 @@ public class QuanLyPhieuMuonGUI extends JFrame {
         btnQuaHan.setText("Quá hạn trả: " + counts[2]);
         btnTraCham.setText("Trả chậm: " + counts[3]);
     }
-    
+
     private void updateTablePM(java.util.List<PhieuMuon> ds) {
-        modelPhieuMuon.setRowCount(0); 
+        modelPhieuMuon.setRowCount(0);
         for (PhieuMuon pm : ds) {
             modelPhieuMuon.addRow(new Object[]{
-                pm.getMaPM(),      
-                pm.getMaSV(),      
-                pm.getHoTen(),    
-                pm.getMaSach(),   
-                pm.getTenSach(),  
-                pm.getTentg(),     
-                pm.getNhaxb(),    
-                pm.getSoLuong(),   
-                pm.getNgayMuon(),  
-                pm.getNgayTra(),   
-                pm.getTinhTrang()  
+                    pm.getMaPM(),
+                    pm.getMaSV(),
+                    pm.getHoTen(),
+                    pm.getMaSach(),
+                    pm.getTenSach(),
+                    pm.getTentg(),
+                    pm.getNhaxb(),
+                    pm.getSoLuong(),
+                    pm.getNgayMuon(),
+                    pm.getNgayTra(),
+                    pm.getTinhTrang()
             });
         }
     }
-    
+
     public static void main(String[] args) {
         QuanLyPhieuMuonGUI qlpm = new QuanLyPhieuMuonGUI();
         qlpm.setVisible(true);

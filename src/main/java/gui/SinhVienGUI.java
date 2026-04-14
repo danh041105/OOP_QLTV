@@ -20,13 +20,13 @@ import view.YeuThichView;
 
 public class SinhVienGUI extends JFrame {
 
-    private final Color PRIMARY_BLUE = Color.decode("#005a9e"); 
-    private final Color TEXT_BLUE = Color.decode("#005a9e");    
-    private final Color RED_BUTTON = Color.decode("#dc3545");  
+    private final Color PRIMARY_BLUE = Color.decode("#005a9e");
+    private final Color TEXT_BLUE = Color.decode("#005a9e");
+    private final Color RED_BUTTON = Color.decode("#dc3545");
     private final Color MENU_BG_HOVER = Color.decode("#f0f0f0");
 
     private final Font MAIN_FONT = new Font("Arial", Font.PLAIN, 14);
-    private final Font MENU_FONT = new Font("Arial", Font.BOLD, 15); 
+    private final Font MENU_FONT = new Font("Arial", Font.BOLD, 15);
     private final Font TITLE_FONT = new Font("Arial", Font.BOLD, 22);
 
     private String currentUsername;
@@ -49,8 +49,8 @@ public class SinhVienGUI extends JFrame {
         JPanel mainHeader = new JPanel();
         mainHeader.setLayout(new BoxLayout(mainHeader, BoxLayout.Y_AXIS));
 
-        mainHeader.add(createTopBluePanel());   
-        mainHeader.add(createWhiteMenuBar()); 
+        mainHeader.add(createTopBluePanel());
+        mainHeader.add(createWhiteMenuBar());
 
         add(mainHeader, BorderLayout.NORTH);
 
@@ -73,8 +73,8 @@ public class SinhVienGUI extends JFrame {
     private JPanel createTopBluePanel() {
         JPanel panel = new JPanel(new BorderLayout());
         panel.setBackground(PRIMARY_BLUE);
-        panel.setBorder(new EmptyBorder(10, 30, 10, 30)); 
-        panel.setPreferredSize(new Dimension(1200, 60));  
+        panel.setBorder(new EmptyBorder(10, 30, 10, 30));
+        panel.setPreferredSize(new Dimension(1200, 60));
 
         JLabel lblTitle = new JLabel("Thư viện ABC");
         lblTitle.setFont(TITLE_FONT);
@@ -149,7 +149,7 @@ public class SinhVienGUI extends JFrame {
         menuBar.add(menuTaiKhoan);
 
         navPanel.add(menuBar);
-   
+
         menuItemTacgia.addActionListener(e -> {
             new TacGiaListView("Danh sách tác giả").doShow();
             this.dispose();
@@ -164,15 +164,16 @@ public class SinhVienGUI extends JFrame {
         });
 
         menuTaiKhoan.addActionListener(e -> {
-            
-            new QuanLyTaiKhoanGUI(userDAO.getMSV_isLogin()).doShow();
+
+            String msv = userDAO.getMSV_isLogin();
+            new QuanLyTaiKhoanGUI(msv, true).doShow(); // true = sinh vien mode
             this.dispose();
         });
         return navPanel;
     }
 
     private JPanel createBodyPanel() {
-        BackgroundImagePanel body = new BackgroundImagePanel("images/library_banner.jpg"); // Nhớ check đường dẫn ảnh
+        BackgroundImagePanel body = new BackgroundImagePanel("D:\\project_java\\src\\main\\resources\\images\\student_banner.jpg"); // Nhớ check đường dẫn ảnh
         body.setLayout(new GridBagLayout());
 
         JPanel contentOverlay = new JPanel();
@@ -211,9 +212,9 @@ public class SinhVienGUI extends JFrame {
     private JMenu createBlueStyleMenu(String title, String[] subItems) {
         JMenu menu = new JMenu(title);
         menu.setFont(MENU_FONT);
-        menu.setForeground(TEXT_BLUE); 
+        menu.setForeground(TEXT_BLUE);
         menu.setBackground(Color.WHITE);
-        menu.setOpaque(true); 
+        menu.setOpaque(true);
 
         for (String itemText : subItems) {
             JMenuItem item = new JMenuItem(itemText);

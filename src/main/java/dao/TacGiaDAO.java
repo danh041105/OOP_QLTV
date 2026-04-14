@@ -3,7 +3,6 @@ package dao;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
-import java.sql.Date; // Import thư viện SQL Date
 import java.util.ArrayList;
 import java.util.List;
 import model.TacGia;
@@ -14,17 +13,17 @@ public class TacGiaDAO {
     // 1. Lấy toàn bộ danh sách
     public List<TacGia> getAll() {
         List<TacGia> list = new ArrayList<>();
-        String sql = "SELECT * FROM tac_gia ORDER BY ten_tac_gia";
+        String sql = "SELECT * FROM tac_gia ORDER BY ten_tg";
         try (Connection conn = Connect.getConnection();
              PreparedStatement ps = conn.prepareStatement(sql);
              ResultSet rs = ps.executeQuery()) {
             while (rs.next()) {
                 TacGia tg = new TacGia();
-                tg.setMaTg(rs.getInt("ma_tac_gia"));
-                tg.setTenTg(rs.getString("ten_tac_gia"));
-                tg.setNgaySinh(rs.getString("ngay_sinh")); // Lấy ngày từ DB
+                tg.setMaTg(rs.getInt("ma_tg"));
+                tg.setTenTg(rs.getString("ten_tg"));
+                tg.setNgaySinh(rs.getString("ngay_sinh"));
                 tg.setGioiTinh(rs.getString("gioi_tinh"));
-                tg.setQuocTich(rs.getString("quoc_tich"));
+                tg.setQue(rs.getString("que"));
                 list.add(tg);
             }
         } catch (Exception e) {
@@ -35,18 +34,18 @@ public class TacGiaDAO {
 
     // 2. Lấy 1 Tác giả theo Mã
     public TacGia getById(int maTg) {
-        String sql = "SELECT * FROM tac_gia WHERE ma_tac_gia = ?";
+        String sql = "SELECT * FROM tac_gia WHERE ma_tg = ?";
         try (Connection conn = Connect.getConnection();
              PreparedStatement ps = conn.prepareStatement(sql)) {
             ps.setInt(1, maTg);
             ResultSet rs = ps.executeQuery();
             if (rs.next()) {
                 TacGia tg = new TacGia();
-                tg.setMaTg(rs.getInt("ma_tac_gia"));
-                tg.setTenTg(rs.getString("ten_tac_gia"));
+                tg.setMaTg(rs.getInt("ma_tg"));
+                tg.setTenTg(rs.getString("ten_tg"));
                 tg.setNgaySinh(rs.getString("ngay_sinh"));
                 tg.setGioiTinh(rs.getString("gioi_tinh"));
-                tg.setQuocTich(rs.getString("quoc_tich"));
+                tg.setQue(rs.getString("que"));
                 return tg;
             }
         } catch (Exception e) {
@@ -55,16 +54,16 @@ public class TacGiaDAO {
         return null;
     }
 
-    // 3. Thêm mới Tác giả (Xử lý ép kiểu Ngày tháng)
+    // 3. Thêm mới Tác giả
     public boolean insert(TacGia tg) {
-        String sql = "INSERT INTO tac_gia(ma_tac_gia, ten_tac_gia, ngay_sinh, gioi_tinh, quoc_tich) VALUES (?, ?, ?, ?, ?)";
+        String sql = "INSERT INTO tac_gia(ma_tg, ten_tg, ngay_sinh, gioi_tinh, que) VALUES (?, ?, ?, ?, ?)";
         try (Connection conn = Connect.getConnection();
              PreparedStatement ps = conn.prepareStatement(sql)) {
             ps.setInt(1, tg.getMaTg());
             ps.setString(2, tg.getTenTg());
             ps.setString(3, tg.getNgaySinh());
             ps.setString(4, tg.getGioiTinh());
-            ps.setString(5, tg.getQuocTich());
+            ps.setString(5, tg.getQue());
             return ps.executeUpdate() > 0;
         } catch (Exception e) {
             e.printStackTrace();
@@ -74,13 +73,13 @@ public class TacGiaDAO {
 
     // 4. Cập nhật Tác giả
     public boolean update(TacGia tg) {
-        String sql = "UPDATE tac_gia SET ten_tac_gia=?, ngay_sinh=?, gioi_tinh=?, quoc_tich=? WHERE ma_tac_gia=?";
+        String sql = "UPDATE tac_gia SET ten_tg=?, ngay_sinh=?, gioi_tinh=?, que=? WHERE ma_tg=?";
         try (Connection conn = Connect.getConnection();
              PreparedStatement ps = conn.prepareStatement(sql)) {
             ps.setString(1, tg.getTenTg());
-            ps.setString(3, tg.getNgaySinh());
+            ps.setString(2, tg.getNgaySinh());
             ps.setString(3, tg.getGioiTinh());
-            ps.setString(4, tg.getQuocTich());
+            ps.setString(4, tg.getQue());
             ps.setInt(5, tg.getMaTg());
             return ps.executeUpdate() > 0;
         } catch (Exception e) {
@@ -91,18 +90,18 @@ public class TacGiaDAO {
 
     // 5. Xóa Tác giả (Có kiểm tra ràng buộc sách)
     public boolean remove(int maTg) {
-        String checkSql = "SELECT COUNT(*) AS kiemtra FROM sach WHERE ma_tac_gia = ?";
+        String checkSql = "SELECT COUNT(*) AS kiemtra FROM sach WHERE ma_tg = ?";
         try (Connection conn = Connect.getConnection();
              PreparedStatement psCheck = conn.prepareStatement(checkSql)) {
 
             psCheck.setInt(1, maTg);
             ResultSet rs = psCheck.executeQuery();
             if (rs.next() && rs.getInt("kiemtra") > 0) {
-                System.out.println("Tác giả này đang có sách trong thư viện, không thể xóa!");
+                System.out.println("Tác giả này đang có sách, không thể xóa!");
                 return false;
             }
 
-            String deleteSql = "DELETE FROM tac_gia WHERE ma_tac_gia = ?";
+            String deleteSql = "DELETE FROM tac_gia WHERE ma_tg = ?";
             try (PreparedStatement psDelete = conn.prepareStatement(deleteSql)) {
                 psDelete.setInt(1, maTg);
                 return psDelete.executeUpdate() > 0;
@@ -117,7 +116,7 @@ public class TacGiaDAO {
     // 6. Tìm kiếm theo Tên
     public List<TacGia> searchByName(String name) {
         List<TacGia> list = new ArrayList<>();
-        String sql = "SELECT * FROM tac_gia WHERE ten_tac_gia LIKE ?";
+        String sql = "SELECT * FROM tac_gia WHERE ten_tg LIKE ?";
         try (Connection conn = Connect.getConnection();
              PreparedStatement ps = conn.prepareStatement(sql)) {
 
@@ -125,11 +124,11 @@ public class TacGiaDAO {
             ResultSet rs = ps.executeQuery();
             while (rs.next()) {
                 TacGia tg = new TacGia();
-                tg.setMaTg(rs.getInt("ma_tac_gia"));
-                tg.setTenTg(rs.getString("ten_tac_gia"));
+                tg.setMaTg(rs.getInt("ma_tg"));
+                tg.setTenTg(rs.getString("ten_tg"));
                 tg.setNgaySinh(rs.getString("ngay_sinh"));
                 tg.setGioiTinh(rs.getString("gioi_tinh"));
-                tg.setQuocTich(rs.getString("quoc_tich"));
+                tg.setQue(rs.getString("que"));
                 list.add(tg);
             }
         } catch (Exception e) {
