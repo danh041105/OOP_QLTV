@@ -25,8 +25,8 @@ public class LoginFrame extends JFrame {
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setLocationRelativeTo(null);
 
-        JPanel mainPanel = new JPanel(new GridBagLayout());
-        mainPanel.setBackground(Color.decode("#003366"));
+        BackgroundImagePanel mainPanel = new BackgroundImagePanel("/images/login_banner.jpg");
+        mainPanel.setLayout(new GridBagLayout());
         add(mainPanel);
 
         JPanel loginCard = createLoginCard();
@@ -175,5 +175,26 @@ public class LoginFrame extends JFrame {
         SwingUtilities.invokeLater(() -> {
             new LoginFrame().setVisible(true);
         });
+    }
+
+    class BackgroundImagePanel extends JPanel {
+        private Image backgroundImage;
+
+        public BackgroundImagePanel(String imagePath) {
+            try {
+                java.net.URL imgURL = getClass().getResource(imagePath);
+                if (imgURL != null)
+                    backgroundImage = javax.imageio.ImageIO.read(imgURL);
+            } catch (Exception e) {
+            }
+        }
+
+        @Override
+        protected void paintComponent(Graphics g) {
+            super.paintComponent(g);
+            if (backgroundImage != null) {
+                g.drawImage(backgroundImage, 0, 0, this.getWidth(), this.getHeight(), this);
+            }
+        }
     }
 }

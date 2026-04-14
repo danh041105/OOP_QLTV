@@ -148,7 +148,7 @@ public class YeuThichView extends JFrame {
             System.out.println(yeuThich.getImage());
             if (imgURL != null) {
                 ImageIcon icon = new ImageIcon(imgURL);
-                Image img = icon.getImage().getScaledInstance(120, 150, Image.SCALE_SMOOTH);
+                Image img = icon.getImage().getScaledInstance(120, 150, Image.SCALE_FAST);
                 return new JLabel(new ImageIcon(img), SwingConstants.CENTER);
             } else {
                 System.out.println("Không tìm thấy file ảnh: " + imgURL);

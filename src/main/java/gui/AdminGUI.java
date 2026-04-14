@@ -231,7 +231,7 @@ public class AdminGUI extends JFrame {
     }
 
     private JPanel createBodyPanel() {
-        BackgroundImagePanel body = new BackgroundImagePanel("Pictures/banner1.jpg");
+        BackgroundImagePanel body = new BackgroundImagePanel("/images/admin_banner.jpg");
         body.setLayout(new GridBagLayout());
 
         JPanel contentOverlay = new JPanel();
@@ -273,11 +273,17 @@ public class AdminGUI extends JFrame {
 
         public BackgroundImagePanel(String imagePath) {
             try {
-                backgroundImage = ImageIO.read(new File(imagePath));
-            } catch (IOException e) {
-                setBackground(Color.GRAY);
+                java.net.URL imgURL = getClass().getResource(imagePath);
+                if (imgURL != null) backgroundImage = ImageIO.read(imgURL);
+            } catch (Exception e) {}
+        }
+        
+        @Override
+        protected void paintComponent(Graphics g) {
+            super.paintComponent(g);
+            if (backgroundImage != null) {
+                g.drawImage(backgroundImage, 0, 0, this.getWidth(), this.getHeight(), this);
             }
         }
-
     }
 }

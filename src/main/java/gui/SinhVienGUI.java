@@ -147,8 +147,7 @@ public class SinhVienGUI extends JFrame {
 
         menuBar.add(Box.createHorizontalStrut(20));
 
-        JMenuItem menuTaiKhoan = createBlueStyleMenuItem("Quản lý tài khoản");
-        menuBar.add(menuTaiKhoan);
+        // Đã xóa quyền Quản lý tài khoản của Sinh Viên
 
         navPanel.add(menuBar);
    
@@ -165,16 +164,12 @@ public class SinhVienGUI extends JFrame {
             this.dispose();
         });
 
-        menuTaiKhoan.addActionListener(e -> {
-            
-            new QuanLyTaiKhoanGUI(SessionManager.getMaNguoiDung()).doShow();
-            this.dispose();
-        });
+        // Không add Action cho menuTaiKhoan nữa
         return navPanel;
     }
 
     private JPanel createBodyPanel() {
-        BackgroundImagePanel body = new BackgroundImagePanel("images/library_banner.jpg"); // Nhớ check đường dẫn ảnh
+        BackgroundImagePanel body = new BackgroundImagePanel("/images/student_banner.jpg"); // Nhớ check đường dẫn ảnh
         body.setLayout(new GridBagLayout());
 
         JPanel contentOverlay = new JPanel();
@@ -271,7 +266,12 @@ public class SinhVienGUI extends JFrame {
 
         public BackgroundImagePanel(String imagePath) {
             try {
-                backgroundImage = ImageIO.read(new File(imagePath));
+                java.net.URL imgURL = getClass().getResource(imagePath);
+                if (imgURL != null) {
+                    backgroundImage = ImageIO.read(imgURL);
+                } else {
+                    setBackground(Color.GRAY);
+                }
             } catch (IOException e) {
                 setBackground(Color.GRAY);
             }
