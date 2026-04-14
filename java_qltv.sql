@@ -32,7 +32,6 @@ CREATE TABLE `admin` (
   `ho_ten` varchar(50) NOT NULL,
   `gioi_tinh` varchar(50) NOT NULL,
   `sdt` varchar(15) NOT NULL,
-  `email` varchar(50) NOT NULL,
   `id` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
@@ -40,32 +39,12 @@ CREATE TABLE `admin` (
 -- Đang đổ dữ liệu cho bảng `admin`
 --
 
-INSERT INTO `admin` (`ma_admin`, `ho_ten`, `gioi_tinh`, `sdt`, `email`, `id`) VALUES
-('ad1', 'a đờ min', 'nu', '09768445', 'admin@gmail.com', 1);
+INSERT INTO `admin` (`ma_admin`, `ho_ten`, `gioi_tinh`, `sdt`, `id`) VALUES
+('ad1', 'a đờ min', 'nu', '09768445', 1);
 
 -- --------------------------------------------------------
 
---
--- Cấu trúc bảng cho bảng `admin_islogin`
---
 
-CREATE TABLE `admin_islogin` (
-  `id` int(11) NOT NULL,
-  `ma_admin` varchar(50) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
-
--- --------------------------------------------------------
-
---
--- Cấu trúc bảng cho bảng `dang_nhap`
---
-
-CREATE TABLE `dang_nhap` (
-  `id` int(11) NOT NULL,
-  `ma_sv` varchar(50) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
-
--- --------------------------------------------------------
 
 --
 -- Cấu trúc bảng cho bảng `hinh_phat`
@@ -156,7 +135,6 @@ CREATE TABLE `sach` (
   `nha_xb` varchar(100) NOT NULL,
   `nam_xb` int(5) NOT NULL,
   `so_luong` int(11) NOT NULL,
-  `tinh_trang` bit(1) NOT NULL,
   `mo_ta` varchar(500) NOT NULL,
   `image` varchar(300) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
@@ -165,19 +143,19 @@ CREATE TABLE `sach` (
 -- Đang đổ dữ liệu cho bảng `sach`
 --
 
-INSERT INTO `sach` (`ma_sach`, `ten_sach`, `ma_loai_sach`, `ma_tg`, `nha_xb`, `nam_xb`, `so_luong`, `tinh_trang`, `mo_ta`, `image`) VALUES
-('S001', 'Lập trình Java cơ bản', 'LS01', 4, 'NXB Thế Giới', 2018, 50, b'1', 'Giới thiệu cú pháp Java, lập trình hướng đối tượng, các ví dụ thực hành để học sinh và sinh viên nắm vững kỹ năng lập trình cơ bản.', 'laptrinhjava.jpg'),
-('S0010', 'Vợ chồng A Phủ', 'LS05', 2, 'Nhà xuất bản Kim Đồng', 1952, 0, b'0', 'Truyện kể về Mị, một cô gái Mông xinh đẹp, hiếu thảo nhưng bị bắt về làm dâu gạt nợ cho nhà thống lí Pá Tra, sống kiếp nô lệ tăm tối. A Phủ là chàng trai khỏe mạnh, gan góc, cũng bị áp bức và trở thành nô lệ trong nhà thống lí. Khi A Phủ bị trói chờ chết, Mị đã cắt dây cứu anh. Họ cùng nhau trốn đi, đến Phiềng Sa và trở thành vợ chồng, tham gia cách mạng.', 'aphu.jpg'),
-('S002', 'C: The Complete Reference', 'LS01', 4, 'McGraw-Hill', 1987, 10, b'1', 'Sách tham khảo toàn diện về ngôn ngữ C, trình bày cú pháp, thư viện chuẩn và ví dụ minh họa rõ ràng. Phù hợp cho người học và lập trình viên trung cấp.', 'c.jpg'),
-('S003', 'C#: The Complete Reference', 'LS01', 4, 'McGraw-Hill', 2002, 0, b'0', 'Trình bày toàn diện về C# và nền tảng .NET, từ cơ bản đến nâng cao, phù hợp cho lập trình ứng dụng Windows và web.', 'Csharp.jpg'),
-('S004', 'C++: The Complete Reference', 'LS01', 4, 'McGraw-Hill', 1991, 4, b'0', 'Giới thiệu đầy đủ về C++, từ lập trình hướng đối tượng đến các tính năng nâng cao. Là một trong những sách C++ phổ biến nhất thời kỳ đầu.', 'c++.jpg'),
-('S005', 'Lịch sử mỹ thuật thế giới', 'LS02', 5, 'NXB Thế Giới', 2015, 0, b'0', 'Giới thiệu các trường phái mỹ thuật, danh họa nổi tiếng, tác phẩm tiêu biểu, phù hợp cho sinh viên mỹ thuật và người yêu hội họa.', 'lichsumithuattg.jpg'),
-('S006', 'Hồ Chí Minh - Toàn Tập', 'LS04', 3, 'Nhà xuất bản Chính trị quốc gia - Sự thật', 1995, 4, b'1', 'Hồ Chí Minh Toàn tập là bộ sách tập hợp đầy đủ các tác phẩm của Chủ tịch Hồ Chí Minh.\r\nNội dung: Gồm các bài viết, bài nói, thư từ, điện, lời kêu gọi, báo cáo, tác phẩm lý luận – chính trị – văn hóa của Hồ Chí Minh từ năm 1912 đến 1969.\r\n\r\nGiá trị: Là nguồn tư liệu quan trọng để nghiên cứu tư tưởng, đạo đức, phong cách Hồ Chí Minh và lịch sử cách mạng Việt Nam.', 'toantap.jpg'),
-('S007', 'Chí Phèo', 'LS05', 1, 'Nhà xuất bản Văn Học', 1941, 15, b'1', 'Truyện ngắn “Chí Phèo” của Nam Cao kể về cuộc đời bi kịch của Chí Phèo – một người nông dân lương thiện nhưng bị xã hội phong kiến đẩy vào con đường tha hóa. Từ một người hiền lành, Chí Phèo bị tù tội, trở nên nghiện rượu, hung bạo và bị dân làng kỳ thị. Dù trong sâu thẳm, anh vẫn khao khát được sống như người lương thiện và được yêu thương, đặc biệt là qua mối tình với Thị Nở, nhưng định kiến xã hội đã ngăn cản anh. Cuộc đời Chí Phèo là hình ảnh bi thương của những con người bị xã hội đẩy ra bê', 'chipheo.jpg'),
-('S008', 'Lão Hạc', 'LS05', 1, 'Nhà xuất bản Văn Học', 1943, 16, b'1', 'Truyện ngắn “Lão Hạc” của Nam Cao kể về cuộc đời bi thương của lão Hạc – một người nông dân nghèo sống một mình trong cảnh cô đơn và túng thiếu. Lão Hạc yêu thương con chó vàng như người bạn duy nhất, nhưng vì hoàn cảnh khó khăn, ông phải bán nó để lấy tiền sinh sống, lòng đau xót nhưng vẫn thực hiện. Cuối cùng, để giữ lại chút tự trọng và không muốn làm khổ con trai, lão Hạc chọn cách kết thúc cuộc đời mình. Truyện phản ánh hiện thực khắc nghiệt của xã hội phong kiến, đồng thời khắc họa tấm lòn', 'laohac.jpg'),
-('S009', 'Đôi mắt', 'LS05', 1, 'Nhà xuất bản Văn Học', 1942, 20, b'1', 'ruyện xoay quanh cuộc gặp gỡ và tranh luận giữa hai nhân vật Hoàng và Độ. Qua cách nhìn nhận con người và cuộc sống của họ, Nam Cao đặt ra vấn đề: người trí thức phải thay đổi cách nhìn, phải biết tin tưởng, gắn bó và sống cùng nhân dân trong kháng chiến. “Đôi mắt” trở thành biểu tượng cho cách nhìn đời, nhìn người: một bên là cái nhìn phiến diện, xa rời quần chúng; bên kia là cái nhìn tiến bộ, giàu trách nhiệm xã hội.', 'doimat.jpg'),
-('S011', 'Xóm giếng', 'LS05', 1, 'Nhà xuất bản Kim Đồng', 1941, 20, b'1', 'ruyện lấy bối cảnh một xóm nghèo quanh giếng nước, nơi tập trung những con người lam lũ, sống lay lắt qua ngày. Cuộc sống túng thiếu, tù túng khiến con người trở nên mệt mỏi, ích kỷ và dễ nảy sinh mâu thuẫn. Qua những sinh hoạt đời thường và số phận nhỏ bé của người dân xóm giếng, Nam Cao phơi bày hiện thực tàn nhẫn của xã hội, nơi cái nghèo và sự thờ ơ làm con người dần mất đi niềm tin và tình người.', 'xomgieng.jpg'),
-('S012', 'Dế Mèn phiêu lưu ', 'LS03', 2, 'Nhà xuất bản Đời Nay', 1941, 0, b'0', 'Truyện “Dế Mèn phiêu lưu ký” của Tô Hoài kể về cuộc phiêu lưu của chú Dế Mèn, từ một chú dế kiêu ngạo, háo thắng đến khi trưởng thành và học được bài học về tình bạn, lòng dũng cảm và sự khiêm tốn. Trong hành trình của mình, Dế Mèn gặp nhiều thử thách và nguy hiểm, đồng thời kết bạn với các loài côn trùng khác, từ đó nhận ra giá trị của sự sẻ chia, trách nhiệm và nhận lỗi. Truyện không chỉ mang tính giải trí mà còn giáo dục, giúp trẻ em hiểu về đạo đức, nhân cách và cách ứng xử trong cuộc sống.', 'demen.jpg');
+INSERT INTO `sach` (`ma_sach`, `ten_sach`, `ma_loai_sach`, `ma_tg`, `nha_xb`, `nam_xb`, `so_luong`, `mo_ta`, `image`) VALUES
+('S001', 'Lập trình Java cơ bản', 'LS01', 4, 'NXB Thế Giới', 2018, 50, 'Giới thiệu cú pháp Java, lập trình hướng đối tượng, các ví dụ thực hành để học sinh và sinh viên nắm vững kỹ năng lập trình cơ bản.', 'laptrinhjava.jpg'),
+('S0010', 'Vợ chồng A Phủ', 'LS05', 2, 'Nhà xuất bản Kim Đồng', 1952, 0, 'Truyện kể về Mị, một cô gái Mông xinh đẹp, hiếu thảo nhưng bị bắt về làm dâu gạt nợ cho nhà thống lí Pá Tra, sống kiếp nô lệ tăm tối. A Phủ là chàng trai khỏe mạnh, gan góc, cũng bị áp bức và trở thành nô lệ trong nhà thống lí. Khi A Phủ bị trói chờ chết, Mị đã cắt dây cứu anh. Họ cùng nhau trốn đi, đến Phiềng Sa và trở thành vợ chồng, tham gia cách mạng.', 'aphu.jpg'),
+('S002', 'C: The Complete Reference', 'LS01', 4, 'McGraw-Hill', 1987, 10, 'Sách tham khảo toàn diện về ngôn ngữ C, trình bày cú pháp, thư viện chuẩn và ví dụ minh họa rõ ràng. Phù hợp cho người học và lập trình viên trung cấp.', 'c.jpg'),
+('S003', 'C#: The Complete Reference', 'LS01', 4, 'McGraw-Hill', 2002, 0, 'Trình bày toàn diện về C# và nền tảng .NET, từ cơ bản đến nâng cao, phù hợp cho lập trình ứng dụng Windows và web.', 'Csharp.jpg'),
+('S004', 'C++: The Complete Reference', 'LS01', 4, 'McGraw-Hill', 1991, 4, 'Giới thiệu đầy đủ về C++, từ lập trình hướng đối tượng đến các tính năng nâng cao. Là một trong những sách C++ phổ biến nhất thời kỳ đầu.', 'c++.jpg'),
+('S005', 'Lịch sử mỹ thuật thế giới', 'LS02', 5, 'NXB Thế Giới', 2015, 0, 'Giới thiệu các trường phái mỹ thuật, danh họa nổi tiếng, tác phẩm tiêu biểu, phù hợp cho sinh viên mỹ thuật và người yêu hội họa.', 'lichsumithuattg.jpg'),
+('S006', 'Hồ Chí Minh - Toàn Tập', 'LS04', 3, 'Nhà xuất bản Chính trị quốc gia - Sự thật', 1995, 4, 'Hồ Chí Minh Toàn tập là bộ sách tập hợp đầy đủ các tác phẩm của Chủ tịch Hồ Chí Minh.\r\nNội dung: Gồm các bài viết, bài nói, thư từ, điện, lời kêu gọi, báo cáo, tác phẩm lý luận – chính trị – văn hóa của Hồ Chí Minh từ năm 1912 đến 1969.\r\n\r\nGiá trị: Là nguồn tư liệu quan trọng để nghiên cứu tư tưởng, đạo đức, phong cách Hồ Chí Minh và lịch sử cách mạng Việt Nam.', 'toantap.jpg'),
+('S007', 'Chí Phèo', 'LS05', 1, 'Nhà xuất bản Văn Học', 1941, 15, 'Truyện ngắn “Chí Phèo” của Nam Cao kể về cuộc đời bi kịch của Chí Phèo – một người nông dân lương thiện nhưng bị xã hội phong kiến đẩy vào con đường tha hóa. Từ một người hiền lành, Chí Phèo bị tù tội, trở nên nghiện rượu, hung bạo và bị dân làng kỳ thị. Dù trong sâu thẳm, anh vẫn khao khát được sống như người lương thiện và được yêu thương, đặc biệt là qua mối tình với Thị Nở, nhưng định kiến xã hội đã ngăn cản anh. Cuộc đời Chí Phèo là hình ảnh bi thương của những con người bị xã hội đẩy ra bê', 'chipheo.jpg'),
+('S008', 'Lão Hạc', 'LS05', 1, 'Nhà xuất bản Văn Học', 1943, 16, 'Truyện ngắn “Lão Hạc” của Nam Cao kể về cuộc đời bi thương của lão Hạc – một người nông dân nghèo sống một mình trong cảnh cô đơn và túng thiếu. Lão Hạc yêu thương con chó vàng như người bạn duy nhất, nhưng vì hoàn cảnh khó khăn, ông phải bán nó để lấy tiền sinh sống, lòng đau xót nhưng vẫn thực hiện. Cuối cùng, để giữ lại chút tự trọng và không muốn làm khổ con trai, lão Hạc chọn cách kết thúc cuộc đời mình. Truyện phản ánh hiện thực khắc nghiệt của xã hội phong kiến, đồng thời khắc họa tấm lòn', 'laohac.jpg'),
+('S009', 'Đôi mắt', 'LS05', 1, 'Nhà xuất bản Văn Học', 1942, 20, 'ruyện xoay quanh cuộc gặp gỡ và tranh luận giữa hai nhân vật Hoàng và Độ. Qua cách nhìn nhận con người và cuộc sống của họ, Nam Cao đặt ra vấn đề: người trí thức phải thay đổi cách nhìn, phải biết tin tưởng, gắn bó và sống cùng nhân dân trong kháng chiến. “Đôi mắt” trở thành biểu tượng cho cách nhìn đời, nhìn người: một bên là cái nhìn phiến diện, xa rời quần chúng; bên kia là cái nhìn tiến bộ, giàu trách nhiệm xã hội.', 'doimat.jpg'),
+('S011', 'Xóm giếng', 'LS05', 1, 'Nhà xuất bản Kim Đồng', 1941, 20, 'ruyện lấy bối cảnh một xóm nghèo quanh giếng nước, nơi tập trung những con người lam lũ, sống lay lắt qua ngày. Cuộc sống túng thiếu, tù túng khiến con người trở nên mệt mỏi, ích kỷ và dễ nảy sinh mâu thuẫn. Qua những sinh hoạt đời thường và số phận nhỏ bé của người dân xóm giếng, Nam Cao phơi bày hiện thực tàn nhẫn của xã hội, nơi cái nghèo và sự thờ ơ làm con người dần mất đi niềm tin và tình người.', 'xomgieng.jpg'),
+('S012', 'Dế Mèn phiêu lưu ', 'LS03', 2, 'Nhà xuất bản Đời Nay', 1941, 0, 'Truyện “Dế Mèn phiêu lưu ký” của Tô Hoài kể về cuộc phiêu lưu của chú Dế Mèn, từ một chú dế kiêu ngạo, háo thắng đến khi trưởng thành và học được bài học về tình bạn, lòng dũng cảm và sự khiêm tốn. Trong hành trình của mình, Dế Mèn gặp nhiều thử thách và nguy hiểm, đồng thời kết bạn với các loài côn trùng khác, từ đó nhận ra giá trị của sự sẻ chia, trách nhiệm và nhận lỗi. Truyện không chỉ mang tính giải trí mà còn giáo dục, giúp trẻ em hiểu về đạo đức, nhân cách và cách ứng xử trong cuộc sống.', 'demen.jpg');
 
 -- --------------------------------------------------------
 
@@ -192,7 +170,6 @@ CREATE TABLE `sinh_vien` (
   `gioi_tinh` varchar(10) NOT NULL,
   `ngay_sinh` date NOT NULL,
   `dia_chi` varchar(100) NOT NULL,
-  `email` varchar(50) NOT NULL,
   `sdt` varchar(15) NOT NULL,
   `id` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
@@ -201,9 +178,9 @@ CREATE TABLE `sinh_vien` (
 -- Đang đổ dữ liệu cho bảng `sinh_vien`
 --
 
-INSERT INTO `sinh_vien` (`ma_sv`, `ho_ten`, `lop`, `gioi_tinh`, `ngay_sinh`, `dia_chi`, `email`, `sdt`, `id`) VALUES
-('SV01', 'Nguyễn Văn A', 'CNTT1', 'Nam', '2003-08-15', 'Hà Nội', 'a@gmail.com', '0123456789', 2),
-('SV015', 'Lê Văn C', 'TT24', 'Nam', '0013-02-25', 'Hà Nội', 'phuonglinh9005@gmail.com', '0123456789', 6);
+INSERT INTO `sinh_vien` (`ma_sv`, `ho_ten`, `lop`, `gioi_tinh`, `ngay_sinh`, `dia_chi`, `sdt`, `id`) VALUES
+('SV01', 'Nguyễn Văn A', 'CNTT1', 'Nam', '2003-08-15', 'Hà Nội', '0123456789', 2),
+('SV015', 'Lê Văn C', 'TT24', 'Nam', '0013-02-25', 'Hà Nội', '0123456789', 6);
 
 -- --------------------------------------------------------
 
@@ -241,9 +218,9 @@ INSERT INTO `tac_gia` (`ma_tg`, `ten_tg`, `ngay_sinh`, `gioi_tinh`, `que`, `tieu
 CREATE TABLE `user` (
   `id` int(11) NOT NULL,
   `username` varchar(50) NOT NULL,
-  `password` varchar(50) NOT NULL,
+  `password` varchar(255) NOT NULL,
   `email` varchar(100) NOT NULL,
-  `role` bit(1) NOT NULL
+  `role` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
@@ -251,10 +228,10 @@ CREATE TABLE `user` (
 --
 
 INSERT INTO `user` (`id`, `username`, `password`, `email`, `role`) VALUES
-(1, 'ad1', '12345', '', b'0'),
-(2, 'SV01', '09122005', 'a@gmail.com', b'1'),
-(5, 'SV012', '789789', 'phuonglinh9005@gmail.com', b'1'),
-(6, 'SV015', '123', 'phuonglinh9005@gmail.com', b'1');
+(1, 'ad1', '12345', 'admin@gmail.com', 0),
+(2, 'SV01', '09122005', 'a@gmail.com', 1),
+(5, 'SV012', '789789', 'phuonglinh9005@gmail.com', 1),
+(6, 'SV015', '123', 'phuonglinh9005@gmail.com', 1);
 
 -- --------------------------------------------------------
 
@@ -295,17 +272,7 @@ ALTER TABLE `admin`
   ADD PRIMARY KEY (`ma_admin`),
   ADD KEY `id` (`id`);
 
---
--- Chỉ mục cho bảng `admin_islogin`
---
-ALTER TABLE `admin_islogin`
-  ADD PRIMARY KEY (`id`);
 
---
--- Chỉ mục cho bảng `dang_nhap`
---
-ALTER TABLE `dang_nhap`
-  ADD PRIMARY KEY (`id`);
 
 --
 -- Chỉ mục cho bảng `hinh_phat`
@@ -368,17 +335,7 @@ ALTER TABLE `yeu_thich`
 -- AUTO_INCREMENT cho các bảng đã đổ
 --
 
---
--- AUTO_INCREMENT cho bảng `admin_islogin`
---
-ALTER TABLE `admin_islogin`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=28;
 
---
--- AUTO_INCREMENT cho bảng `dang_nhap`
---
-ALTER TABLE `dang_nhap`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=60;
 
 --
 -- AUTO_INCREMENT cho bảng `hinh_phat`
@@ -412,41 +369,41 @@ ALTER TABLE `yeu_thich`
 -- Các ràng buộc cho bảng `admin`
 --
 ALTER TABLE `admin`
-  ADD CONSTRAINT `admin_ibfk_1` FOREIGN KEY (`id`) REFERENCES `user` (`id`);
+  ADD CONSTRAINT `admin_ibfk_1` FOREIGN KEY (`id`) REFERENCES `user` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 --
 -- Các ràng buộc cho bảng `hinh_phat`
 --
 ALTER TABLE `hinh_phat`
-  ADD CONSTRAINT `hinh_phat_ibfk_1` FOREIGN KEY (`ma_sv`) REFERENCES `sinh_vien` (`ma_sv`),
-  ADD CONSTRAINT `hinh_phat_ibfk_2` FOREIGN KEY (`ma_pm`) REFERENCES `phieu_muon` (`ma_pm`);
+  ADD CONSTRAINT `hinh_phat_ibfk_1` FOREIGN KEY (`ma_sv`) REFERENCES `sinh_vien` (`ma_sv`) ON DELETE CASCADE ON UPDATE CASCADE,
+  ADD CONSTRAINT `hinh_phat_ibfk_2` FOREIGN KEY (`ma_pm`) REFERENCES `phieu_muon` (`ma_pm`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 --
 -- Các ràng buộc cho bảng `phieu_muon`
 --
 ALTER TABLE `phieu_muon`
-  ADD CONSTRAINT `phieu_muon_ibfk_1` FOREIGN KEY (`ma_sach`) REFERENCES `sach` (`ma_sach`),
-  ADD CONSTRAINT `phieu_muon_ibfk_2` FOREIGN KEY (`ma_sv`) REFERENCES `sinh_vien` (`ma_sv`);
+  ADD CONSTRAINT `phieu_muon_ibfk_1` FOREIGN KEY (`ma_sach`) REFERENCES `sach` (`ma_sach`) ON DELETE CASCADE ON UPDATE CASCADE,
+  ADD CONSTRAINT `phieu_muon_ibfk_2` FOREIGN KEY (`ma_sv`) REFERENCES `sinh_vien` (`ma_sv`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 --
 -- Các ràng buộc cho bảng `sach`
 --
 ALTER TABLE `sach`
-  ADD CONSTRAINT `sach_ibfk_1` FOREIGN KEY (`ma_loai_sach`) REFERENCES `loai_sach` (`ma_loai_sach`),
-  ADD CONSTRAINT `sach_ibfk_2` FOREIGN KEY (`ma_tg`) REFERENCES `tac_gia` (`ma_tg`);
+  ADD CONSTRAINT `sach_ibfk_1` FOREIGN KEY (`ma_loai_sach`) REFERENCES `loai_sach` (`ma_loai_sach`) ON DELETE CASCADE ON UPDATE CASCADE,
+  ADD CONSTRAINT `sach_ibfk_2` FOREIGN KEY (`ma_tg`) REFERENCES `tac_gia` (`ma_tg`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 --
 -- Các ràng buộc cho bảng `sinh_vien`
 --
 ALTER TABLE `sinh_vien`
-  ADD CONSTRAINT `sinh_vien_ibfk_1` FOREIGN KEY (`id`) REFERENCES `user` (`id`);
+  ADD CONSTRAINT `sinh_vien_ibfk_1` FOREIGN KEY (`id`) REFERENCES `user` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 --
 -- Các ràng buộc cho bảng `yeu_thich`
 --
 ALTER TABLE `yeu_thich`
-  ADD CONSTRAINT `yeu_thich_ibfk_2` FOREIGN KEY (`ma_sach`) REFERENCES `sach` (`ma_sach`),
-  ADD CONSTRAINT `yeu_thich_ibfk_3` FOREIGN KEY (`ma_sv`) REFERENCES `sinh_vien` (`ma_sv`);
+  ADD CONSTRAINT `yeu_thich_ibfk_2` FOREIGN KEY (`ma_sach`) REFERENCES `sach` (`ma_sach`) ON DELETE CASCADE ON UPDATE CASCADE,
+  ADD CONSTRAINT `yeu_thich_ibfk_3` FOREIGN KEY (`ma_sv`) REFERENCES `sinh_vien` (`ma_sv`) ON DELETE CASCADE ON UPDATE CASCADE;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;

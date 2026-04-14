@@ -20,6 +20,7 @@ import model.YeuThich;
 import dao.UserDAO;
 import view.SachDetailView;
 import view.YeuThichView;
+import model.SessionManager;
 
 /**
  *
@@ -28,75 +29,72 @@ import view.YeuThichView;
 public class YeuThichController {
     private YeuThichView view;
     private YeuThichDAO dao;
-    private UserDAO uDAO;
     private String maSvDangNhap;
-    
+
     private JMenu menuHome, menuDanhMuc, menuYeuThich, menuMuonSach;
     private JMenuItem itemTheLoai, itemTacGia;
 
     public YeuThichController(YeuThichView view) {
         this.dao = new YeuThichDAO();
-        this.uDAO = new UserDAO();
         this.view = view;
-        
-        this.maSvDangNhap = uDAO.getMSV_isLogin();
+        this.maSvDangNhap = SessionManager.getMaNguoiDung();
     }
-    
-    public void initView(){
+
+    public void initView() {
         loadData();
     }
-    
-    public boolean daYeuThich(String maSV, String maSach){
+
+    public boolean daYeuThich(String maSV, String maSach) {
         return dao.checkExists(maSV, maSach);
     }
-    
-    public boolean insertYeuThich(String maSv, String maSach){
-        if(daYeuThich(maSv, maSach)) {
+
+    public boolean insertYeuThich(String maSv, String maSach) {
+        if (daYeuThich(maSv, maSach)) {
             return false;
         }
         return dao.insert(maSv, maSach);
     }
-    
+
     public boolean deleteYeuThich(String maSv, String maSach) {
         return dao.delete(maSv, maSach);
     }
 
-    private void loadData(){
+    private void loadData() {
         try {
-        List<YeuThich> list = dao.getYeuthichByMaSv(maSvDangNhap);
-        if(list == null || list.isEmpty()) {
-           view.showMessage("Bạn chưa có sách yêu thích nào!");
-            return;
-       }
-       view.displayYeuThich(list);
-       
-       attachCardRvents();
+            List<YeuThich> list = dao.getYeuthichByMaSv(maSvDangNhap);
+            if (list == null || list.isEmpty()) {
+                view.showMessage("Bạn chưa có sách yêu thích nào!");
+                return;
+            }
+            view.displayYeuThich(list);
+
+            attachCardRvents();
         } catch (Exception e) {
             e.printStackTrace();
             System.out.println("Loi 73");
         }
-        
+
     }
-    
+
     private void attachCardRvents() {
         JPanel gridPanel = view.getGridPanel();
-        for(Component comp : gridPanel.getComponents()) {
-            if(comp instanceof JPanel) {
+        for (Component comp : gridPanel.getComponents()) {
+            if (comp instanceof JPanel) {
                 JPanel card = (JPanel) comp;
                 // Xóa listener cũ (tránh bị add trùng)
-                for(MouseListener ml : card.getMouseListeners().clone()){
-                    if(ml instanceof MouseAdapter) {
+                for (MouseListener ml : card.getMouseListeners().clone()) {
+                    if (ml instanceof MouseAdapter) {
                         card.removeMouseListener(ml);
                     }
                 }
                 card.addMouseListener(new MouseAdapter() {
                     @Override
                     public void mouseClicked(MouseEvent e) {
-                        if(e.getClickCount() == 2) {
+                        if (e.getClickCount() == 2) {
                             int index = getCardIndex(card);
-                            if(index != -1) {
+                            if (index != -1) {
                                 handleCardClick(index);
-                                
+
                             }
                         }
                     }
@@ -104,21 +102,21 @@ public class YeuThichController {
             }
         }
     }
-    
+
     private int getCardIndex(JPanel card) {
         Component[] comp = view.getGridPanel().getComponents();
-        for(int i=0;i < comp.length; i++) {
-            if(comp[i] == card) {
+        for (int i = 0; i < comp.length; i++) {
+            if (comp[i] == card) {
                 return i;
             }
         }
         return -1;
     }
-    
+
     private void handleCardClick(int index) {
         try {
             List<YeuThich> ds = dao.getYeuthichByMaSv(maSvDangNhap);
-            if(index >=0 && index < ds.size()) {
+            if (index >= 0 && index < ds.size()) {
                 YeuThich yt = ds.get(index);
                 openSachDetail(yt.getMaSach());
             }
@@ -127,7 +125,7 @@ public class YeuThichController {
             view.showError("Lỗi khi mở chi tiết sách!");
         }
     }
-    
+
     private void setCardBackground(JPanel card, Color color) {
         card.setBackground(color);
         for (Component comp : card.getComponents()) {
@@ -141,8 +139,8 @@ public class YeuThichController {
         try {
             SachDAO sachDAO = new SachDAO();
             Sach sach = sachDAO.getById(maSach);
-            if(sach == null) {
-                 view.showError("Không tìm thấy sách!");
+            if (sach == null) {
+                view.showError("Không tìm thấy sách!");
                 return;
             }
             SachDetailView sdv = new SachDetailView(sach, maSvDangNhap);
@@ -152,5 +150,5 @@ public class YeuThichController {
             view.showError("Lỗi khi mở chi tiết sách!");
         }
     }
-    
+
 }

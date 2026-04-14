@@ -23,10 +23,10 @@ public class LoginFrame extends JFrame {
         setTitle("Đăng nhập hệ thống");
         setSize(800, 500);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        setLocationRelativeTo(null); 
+        setLocationRelativeTo(null);
 
         JPanel mainPanel = new JPanel(new GridBagLayout());
-        mainPanel.setBackground(Color.decode("#003366")); 
+        mainPanel.setBackground(Color.decode("#003366"));
         add(mainPanel);
 
         JPanel loginCard = createLoginCard();
@@ -62,7 +62,7 @@ public class LoginFrame extends JFrame {
 
         JButton btnLogin = new JButton("Đăng nhập");
         btnLogin.setBackground(Color.decode("#00CC66")); // Màu xanh lá
-        btnLogin.setForeground(Color.WHITE);             // Chữ trắng
+        btnLogin.setForeground(Color.WHITE); // Chữ trắng
         btnLogin.setFont(new Font("Arial", Font.BOLD, 14));
         btnLogin.setAlignmentX(Component.CENTER_ALIGNMENT);
 
@@ -128,7 +128,7 @@ public class LoginFrame extends JFrame {
         btnForgot.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-              
+
                 new QuenMk(LoginFrame.this).setVisible(true);
             }
         });
@@ -152,26 +152,22 @@ public class LoginFrame extends JFrame {
         User user = userDAO.checkLogin(username, password);
 
         if (user != null) {
-            String role = user.getRole();
+            int role = user.getRole();
             this.dispose();
 
+            // Lưu session vào RAM
+            model.SessionManager.currentUser = user;
+
             // Logic phân quyền: 0 là Admin, 1 là SV
-            if (role != null && role.equals("0")) {
-                boolean check = userDAO.admin_login(username);
-                if (!check) {
-                    JOptionPane.showMessageDialog(this, "Lỗi ", "Lỗi đăng nhập", JOptionPane.ERROR_MESSAGE);
-                }
+            if (role == 0) {
                 new AdminGUI(user.getUsername()).setVisible(true);
             } else {
-                boolean check = userDAO.sv_login(username);
-                if (!check) {
-                    JOptionPane.showMessageDialog(this, "Lỗi", "Lỗi đăng nhập", JOptionPane.ERROR_MESSAGE);
-                }
                 new SinhVienGUI(user.getUsername()).setVisible(true);
             }
 
         } else {
-            JOptionPane.showMessageDialog(this, "Sai tài khoản hoặc mật khẩu!", "Lỗi đăng nhập", JOptionPane.ERROR_MESSAGE);
+            JOptionPane.showMessageDialog(this, "Sai tài khoản hoặc mật khẩu!", "Lỗi đăng nhập",
+                    JOptionPane.ERROR_MESSAGE);
         }
     }
 

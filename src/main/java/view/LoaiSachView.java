@@ -1,5 +1,7 @@
 package view;
 
+import model.SessionManager;
+
 import controller.LoaiSachController;
 import java.awt.BorderLayout;
 import java.awt.Color;
@@ -43,19 +45,19 @@ public class LoaiSachView extends JFrame {
     public void doShow() {
         addControl();
         controller.loadData();
-        
+
         setSize(900, 600);
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         setLocationRelativeTo(null);
         addWindowListener(new WindowAdapter() {
             @Override
             public void windowClosing(WindowEvent e) {
-                UserDAO dao = new UserDAO();
-                new SinhVienGUI(dao.getMSV_isLogin()).setVisible(true);
+                new SinhVienGUI(SessionManager.getMaNguoiDung()).setVisible(true);
             }
         });
         setVisible(true);
     }
+
     private void addControl() {
         createMainPanel();
         add(mainPanel);
@@ -82,14 +84,12 @@ public class LoaiSachView extends JFrame {
         mainPanel.add(scrollPane, BorderLayout.CENTER);
     }
 
-
     public JPanel createCard(LoaiSach loaiSach) {
         JPanel cardPanel = new JPanel(new BorderLayout());
         cardPanel.setBackground(Color.WHITE);
         cardPanel.setBorder(BorderFactory.createCompoundBorder(
                 BorderFactory.createLineBorder(border_color, 1),
-                BorderFactory.createEmptyBorder(10, 10, 10, 10)
-        ));
+                BorderFactory.createEmptyBorder(10, 10, 10, 10)));
         cardPanel.setPreferredSize(new Dimension(200, 120));
         cardPanel.setCursor(new Cursor(Cursor.HAND_CURSOR));
 
@@ -107,7 +107,8 @@ public class LoaiSachView extends JFrame {
                 controller.viewBooksByCategory(loaiSach);
                 dispose();
             }
-            //Hiệu ứng
+
+            // Hiệu ứng
             @Override
             public void mouseEntered(MouseEvent e) {
                 cardPanel.setBackground(new Color(245, 245, 245));

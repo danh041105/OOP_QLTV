@@ -3,12 +3,12 @@ package model;
 public class User {
     private String username;
     private String password;
-    private String role; 
+    private int role;
 
     public User() {
     }
 
-    public User(String username, String password, String role) {
+    public User(String username, String password, int role) {
         this.username = username;
         this.password = password;
         this.role = role;
@@ -30,15 +30,15 @@ public class User {
         this.password = password;
     }
 
-    public String getRole() {
+    public int getRole() {
         return role;
     }
 
-    public void setRole(String role) {
+    public void setRole(int role) {
         this.role = role;
     }
 
     void setusername(String string) {
-        throw new UnsupportedOperationException("Not supported yet."); 
+        throw new UnsupportedOperationException("Not supported yet.");
     }
 }

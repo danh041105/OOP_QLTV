@@ -1,5 +1,7 @@
 package view;
 
+import model.SessionManager;
+
 import controller.TacGiaController;
 import java.awt.*;
 import java.awt.event.MouseAdapter;
@@ -40,7 +42,7 @@ public class TacGiaListView extends JFrame {
             @Override
             public void windowClosing(WindowEvent e) {
                 UserDAO dao = new UserDAO();
-                new SinhVienGUI(dao.getMSV_isLogin()).setVisible(true);
+                new SinhVienGUI(SessionManager.getMaNguoiDung()).setVisible(true);
             }
         });
         setVisible(true);

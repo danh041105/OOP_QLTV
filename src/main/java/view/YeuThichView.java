@@ -4,6 +4,8 @@
  */
 package view;
 
+import model.SessionManager;
+
 import controller.YeuThichController;
 import java.awt.BorderLayout;
 import java.awt.Color;
@@ -61,7 +63,7 @@ public class YeuThichView extends JFrame {
             @Override
             public void windowClosing(WindowEvent e) {
                 UserDAO dao = new UserDAO();
-                new SinhVienGUI(dao.getMSV_isLogin()).setVisible(true);
+                new SinhVienGUI(SessionManager.getMaNguoiDung()).setVisible(true);
             }
         });
         setVisible(true);

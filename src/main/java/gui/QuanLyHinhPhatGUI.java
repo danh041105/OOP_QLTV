@@ -4,6 +4,8 @@
  */
 package gui;
 
+import model.SessionManager;
+
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 import javax.swing.table.DefaultTableCellRenderer;
@@ -49,7 +51,7 @@ public class QuanLyHinhPhatGUI extends JFrame {
             public void windowClosing(WindowEvent e) {
                 dispose();
                 UserDAO dao = new UserDAO();
-                new AdminGUI(dao.getMaADMIN_isLogin()).setVisible(true);
+                new AdminGUI(SessionManager.getMaNguoiDung()).setVisible(true);
             }
         });
     }

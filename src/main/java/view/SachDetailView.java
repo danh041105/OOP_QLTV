@@ -4,6 +4,8 @@
  */
 package view;
 
+import model.SessionManager;
+
 import controller.PhieuMuonController;
 import dao.PhieuMuonDAO;
 import dao.YeuThichDAO;
@@ -26,14 +28,14 @@ public class SachDetailView extends JFrame {
     PhieuMuonDAO pmdao = new PhieuMuonDAO();
     UserDAO uDAO = new UserDAO();
     PhieuMuonController controller;
-    
+
     private String maSvDangNhap;
 
     public SachDetailView(Sach sach, String maSvDangNhap) {
         super("Chi tiết sách");
         controller = new PhieuMuonController(pmdao);
         this.sach = sach;
-        this.maSvDangNhap = uDAO.getMSV_isLogin();
+        this.maSvDangNhap = SessionManager.getMaNguoiDung();
     }
 
     public void doShow() {
@@ -52,7 +54,7 @@ public class SachDetailView extends JFrame {
         mainPanel.setBorder(BorderFactory.createEmptyBorder(15, 15, 15, 15));
         mainPanel.setBackground(Color.WHITE);
 
-        //Tiêu đề
+        // Tiêu đề
         JLabel lblTitle = new JLabel(sach.getTenSach());
         lblTitle.setFont(new Font("Arial", Font.BOLD, 22));
         lblTitle.setAlignmentX(Component.LEFT_ALIGNMENT);
@@ -60,7 +62,7 @@ public class SachDetailView extends JFrame {
 
         mainPanel.add(Box.createVerticalStrut(10));
 
-        //Thông tin + ảnh
+        // Thông tin + ảnh
         JPanel infoPanel = new JPanel(new BorderLayout(15, 10));
         infoPanel.setBackground(Color.WHITE);
         infoPanel.setAlignmentX(Component.LEFT_ALIGNMENT);
@@ -78,7 +80,6 @@ public class SachDetailView extends JFrame {
         textInfo.add(createInfoLabel("Nhà xuất bản: ", sach.getNhaXb()));
         textInfo.add(createInfoLabel("Năm xuất bản: ", String.valueOf(sach.getNamXb())));
         textInfo.add(createInfoLabel("Số lượng: ", String.valueOf(sach.getSoLuong())));
-        textInfo.add(createInfoLabel("Tình trạng: ", sach.getTinhTrangText()));
 
         infoPanel.add(textInfo, BorderLayout.CENTER);
         mainPanel.add(infoPanel);
@@ -98,7 +99,7 @@ public class SachDetailView extends JFrame {
         scroll.setAlignmentX(Component.LEFT_ALIGNMENT);
 
         mainPanel.add(scroll);
-        // nút 
+        // nút
         JPanel btnPanel = new JPanel(new FlowLayout(FlowLayout.RIGHT, 10, 5));
         btnPanel.setBackground(Color.WHITE);
 
@@ -163,10 +164,10 @@ public class SachDetailView extends JFrame {
     private void checkFavorite() {
         checkFavorite = dao.checkExists(maSvDangNhap, sach.getMaSach());
         if (sach.getSoLuong() <= 0) {
-                    btnMuon.setEnabled(false);
-                    btnMuon.setText("Hết sách");
-                    btnMuon.setBackground(new Color(240, 240, 240));
-                }
+            btnMuon.setEnabled(false);
+            btnMuon.setText("Hết sách");
+            btnMuon.setBackground(new Color(240, 240, 240));
+        }
         updateFavorite();
     }
 
@@ -179,7 +180,7 @@ public class SachDetailView extends JFrame {
             btnYeuThich.setBackground(new Color(255, 182, 193));
         }
     }
-    
+
     private void addEvent() {
         btnYeuThich.addActionListener(new ActionListener() {
             @Override
@@ -198,7 +199,7 @@ public class SachDetailView extends JFrame {
         });
         btnMuon.addActionListener(new ActionListener() {
             @Override
-            public void actionPerformed(ActionEvent e) {    
+            public void actionPerformed(ActionEvent e) {
                 PhieuMuonView pmv = new PhieuMuonView(sach.getMaSach(), maSvDangNhap, controller);
                 pmv.doShow();
             }

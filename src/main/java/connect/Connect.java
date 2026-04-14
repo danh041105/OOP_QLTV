@@ -1,7 +1,3 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
 package connect;
 
 import java.sql.Statement;
@@ -13,7 +9,7 @@ import java.util.logging.Logger;
 public class Connect {
     private static final Logger logger = Logger.getLogger(Connect.class.getName());
     private static final String user ="root";
-    private static final String password ="";
+    private static final String password ="Duyanh9191";
     private static final String host ="localhost";
     private static final String port="3306";
     private static final String dbName ="java_qltv";

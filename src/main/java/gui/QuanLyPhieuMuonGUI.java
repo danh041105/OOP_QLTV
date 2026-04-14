@@ -4,6 +4,8 @@
  */
 package gui;
 
+import model.SessionManager;
+
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 
@@ -45,7 +47,7 @@ public class QuanLyPhieuMuonGUI extends JFrame {
             public void windowClosing(WindowEvent e) {
                 dispose();
                 UserDAO dao = new UserDAO();
-                new AdminGUI(dao.getMaADMIN_isLogin()).setVisible(true);
+                new AdminGUI(SessionManager.getMaNguoiDung()).setVisible(true);
             }
         });
     }

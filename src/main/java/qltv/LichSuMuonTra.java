@@ -1,5 +1,7 @@
 package qltv;
 
+import model.SessionManager;
+
 import dao.UserDAO;
 import gui.AdminGUI;
 import gui.SinhVienGUI;
@@ -150,9 +152,9 @@ public class LichSuMuonTra extends JFrame {
                 dispose();
                 UserDAO dao = new UserDAO();
                 if(isAdmin){
-                      new AdminGUI(dao.getMaADMIN_isLogin()).setVisible(true);
+                      new AdminGUI(SessionManager.getMaNguoiDung()).setVisible(true);
                 }else{
-                      new SinhVienGUI(dao.getMSV_isLogin()).setVisible(true);
+                      new SinhVienGUI(SessionManager.getMaNguoiDung()).setVisible(true);
                 }
                 
             }

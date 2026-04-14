@@ -5,17 +5,14 @@ import dao.SachDAO;
 import java.text.SimpleDateFormat;
 import model.PhieuMuon;
 import view.PhieuMuonView;
-
+import model.SessionManager;
 import java.util.Date;
-
-import dao.UserDAO;
 
 public class PhieuMuonController {
 
     private PhieuMuonDAO dao;
     private PhieuMuonView view;
     private SachDAO sachDAO;
-    private UserDAO uDAO;
 
     private String maSv;
 
@@ -25,8 +22,7 @@ public class PhieuMuonController {
     public PhieuMuonController(PhieuMuonDAO dao) {
         this.dao = dao;
         sachDAO = new SachDAO();
-        uDAO = new UserDAO();
-        this.maSv = uDAO.getMSV_isLogin();
+        this.maSv = SessionManager.getMaNguoiDung();
 
     }
 
@@ -55,6 +51,8 @@ public class PhieuMuonController {
             pm.setMaSach(maSach);
             pm.setSoLuong(soLuong);
             pm.setTinhTrang("Đang mượn");
+            pm.setNgayMuon(ngayMuon);
+            pm.setNgayTra(ngayTra);
             String strNgayMuon = sdf.format(pm.getNgayMuon());
             String strNgayTra = sdf.format(pm.getNgayTra());
 

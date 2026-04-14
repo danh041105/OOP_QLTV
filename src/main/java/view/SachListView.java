@@ -1,5 +1,7 @@
 package view;
 
+import model.SessionManager;
+
 import model.Sach;
 import controller.SachListController;
 import java.awt.*;
@@ -153,7 +155,7 @@ public class SachListView extends JFrame {
                 s.getNhaXb(),
                 s.getNamXb(),
                 s.getSoLuong(),
-                s.isTinhTrang() ? "Còn sách" : "Hết sách"
+                (s.getSoLuong() > 0) ? "Còn sách" : "Hết sách"
             });
         }        
     }

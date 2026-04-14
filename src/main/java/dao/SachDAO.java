@@ -13,8 +13,7 @@ public class SachDAO {
     public List<Sach> getByLoaiSach(String maLoaiSach) {
         List<Sach> list = new ArrayList<>();
 
-        String sql
-                = "SELECT s.*, ls.ten_loai_sach, tg.ten_tg "
+        String sql = "SELECT s.*, ls.ten_loai_sach, tg.ten_tg "
                 + "FROM sach s "
                 + "JOIN loai_sach ls ON s.ma_loai_sach = ls.ma_loai_sach "
                 + "JOIN tac_gia tg ON s.ma_tg = tg.ma_tg "
@@ -22,7 +21,7 @@ public class SachDAO {
                 + "ORDER BY s.ten_sach";
 
         try (Connection conn = Connect.getConnection();
-             PreparedStatement ps = conn.prepareStatement(sql)) {
+                PreparedStatement ps = conn.prepareStatement(sql)) {
             ps.setString(1, maLoaiSach);
             ResultSet rs = ps.executeQuery();
 
@@ -37,7 +36,6 @@ public class SachDAO {
                 s.setNhaXb(rs.getString("nha_xb"));
                 s.setNamXb(rs.getInt("nam_xb"));
                 s.setSoLuong(rs.getInt("so_luong"));
-                s.setTinhTrang(rs.getBoolean("tinh_trang"));
                 s.setMoTa(rs.getString("mo_ta"));
                 s.setImage(rs.getString("image"));
 
@@ -66,7 +64,7 @@ public class SachDAO {
                 + "order by s.ten_sach";
 
         try (Connection conn = Connect.getConnection();
-             PreparedStatement ps = conn.prepareStatement(sql)) {
+                PreparedStatement ps = conn.prepareStatement(sql)) {
 
             String kw = "%" + keyword + "%";
             ps.setString(1, maLoaiSach);
@@ -88,7 +86,6 @@ public class SachDAO {
                 s.setNhaXb(rs.getString("nha_xb"));
                 s.setNamXb(rs.getInt("nam_xb"));
                 s.setSoLuong(rs.getInt("so_luong"));
-                s.setTinhTrang(rs.getBoolean("tinh_trang"));
                 s.setMoTa(rs.getString("mo_ta"));
                 s.setImage(rs.getString("image"));
 
@@ -104,8 +101,7 @@ public class SachDAO {
 
     public Sach getById(String maSach) {
 
-        String sql
-                = "SELECT s.*, ls.ten_loai_sach, tg.ten_tg "
+        String sql = "SELECT s.*, ls.ten_loai_sach, tg.ten_tg "
                 + "FROM sach s "
                 + "JOIN loai_sach ls ON s.ma_loai_sach = ls.ma_loai_sach "
                 + "JOIN tac_gia tg ON s.ma_tg = tg.ma_tg "
@@ -127,7 +123,6 @@ public class SachDAO {
                 s.setNhaXb(rs.getString("nha_xb"));
                 s.setNamXb(rs.getInt("nam_xb"));
                 s.setSoLuong(rs.getInt("so_luong"));
-                s.setTinhTrang(rs.getBoolean("tinh_trang"));
                 s.setMoTa(rs.getString("mo_ta"));
                 s.setImage(rs.getString("image"));
 
@@ -146,7 +141,7 @@ public class SachDAO {
         String sql = "select * from sach where ma_tg=?";
 
         try (Connection conn = Connect.getConnection();
-             PreparedStatement ps = conn.prepareStatement(sql)) {
+                PreparedStatement ps = conn.prepareStatement(sql)) {
 
             ps.setInt(1, maTg);
             ResultSet rs = ps.executeQuery();
@@ -165,6 +160,7 @@ public class SachDAO {
 
         return ds;
     }
+
     public int getSoLuongTon(String maSach) {
         int sl = 0;
         String sql = "select so_luong from sach where ma_sach=?";
@@ -181,11 +177,11 @@ public class SachDAO {
         }
         return sl;
     }
-    
+
     public boolean truSoLuong(String maSach, int soLuongMuon) {
         String sql = "update sach set so_luong = so_luong - ? where ma_sach = ? and so_luong >= ?";
         try (Connection conn = Connect.getConnection();
-             PreparedStatement ps = conn.prepareStatement(sql)) {
+                PreparedStatement ps = conn.prepareStatement(sql)) {
             ps.setInt(1, soLuongMuon);
             ps.setString(2, maSach);
             ps.setInt(3, soLuongMuon);
@@ -196,28 +192,12 @@ public class SachDAO {
         }
         return false;
     }
-    
-    public boolean capNhatTinhTrang(String maSach) {
-        String sql = "UPDATE sach SET tinh_trang = CASE "
-                + "WHEN so_luong = 0 THEN 0 "
-                + "ELSE 1 "
-                + "END "
-                + "WHERE ma_sach = ?";
-        try (Connection conn = Connect.getConnection();
-             PreparedStatement ps = conn.prepareStatement(sql)) {
-            ps.setString(1, maSach);
-            return ps.executeUpdate() > 0;
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        return false;
-    }
 
     // Thêm mới Sách
     public boolean insert(Sach s) {
-        String sql = "INSERT INTO sach(ma_sach, ten_sach, ma_loai_sach, ma_tg, nha_xb, nam_xb, so_luong, tinh_trang, mo_ta, image) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+        String sql = "INSERT INTO sach(ma_sach, ten_sach, ma_loai_sach, ma_tg, nha_xb, nam_xb, so_luong, mo_ta, image) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
         try (Connection conn = Connect.getConnection();
-             PreparedStatement ps = conn.prepareStatement(sql)) {
+                PreparedStatement ps = conn.prepareStatement(sql)) {
             ps.setString(1, s.getMaSach());
             ps.setString(2, s.getTenSach());
             ps.setString(3, s.getMaLoaiSach());
@@ -225,9 +205,8 @@ public class SachDAO {
             ps.setString(5, s.getNhaXb());
             ps.setInt(6, s.getNamXb());
             ps.setInt(7, s.getSoLuong());
-            ps.setBoolean(8, s.isTinhTrang());
-            ps.setString(9, s.getMoTa());
-            ps.setString(10, s.getImage());
+            ps.setString(8, s.getMoTa());
+            ps.setString(9, s.getImage());
             return ps.executeUpdate() > 0;
         } catch (Exception e) {
             e.printStackTrace();
@@ -237,19 +216,18 @@ public class SachDAO {
 
     // Cập nhật thông tin Sách
     public boolean update(Sach s) {
-        String sql = "UPDATE sach SET ten_sach=?, ma_loai_sach=?, ma_tg=?, nha_xb=?, nam_xb=?, so_luong=?, tinh_trang=?, mo_ta=?, image=? WHERE ma_sach=?";
+        String sql = "UPDATE sach SET ten_sach=?, ma_loai_sach=?, ma_tg=?, nha_xb=?, nam_xb=?, so_luong=?, mo_ta=?, image=? WHERE ma_sach=?";
         try (Connection conn = Connect.getConnection();
-             PreparedStatement ps = conn.prepareStatement(sql)) {
+                PreparedStatement ps = conn.prepareStatement(sql)) {
             ps.setString(1, s.getTenSach());
             ps.setString(2, s.getMaLoaiSach());
             ps.setInt(3, s.getMa_Tg());
             ps.setString(4, s.getNhaXb());
             ps.setInt(5, s.getNamXb());
             ps.setInt(6, s.getSoLuong());
-            ps.setBoolean(7, s.isTinhTrang());
-            ps.setString(8, s.getMoTa());
-            ps.setString(9, s.getImage());
-            ps.setString(10, s.getMaSach());
+            ps.setString(7, s.getMoTa());
+            ps.setString(8, s.getImage());
+            ps.setString(9, s.getMaSach());
             return ps.executeUpdate() > 0;
         } catch (Exception e) {
             e.printStackTrace();
@@ -261,7 +239,7 @@ public class SachDAO {
     public boolean remove(String maSach) {
         String checkSql = "SELECT COUNT(*) AS kiemtra FROM phieu_muon WHERE ma_sach = ?";
         try (Connection conn = Connect.getConnection();
-             PreparedStatement psCheck = conn.prepareStatement(checkSql)) {
+                PreparedStatement psCheck = conn.prepareStatement(checkSql)) {
 
             psCheck.setString(1, maSach);
             ResultSet rs = psCheck.executeQuery();

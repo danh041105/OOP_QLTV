@@ -1,5 +1,7 @@
 package gui;
 
+import model.SessionManager;
+
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.WindowAdapter;
@@ -33,7 +35,7 @@ public class QuanLyTaiKhoanGUI extends JFrame {
             public void windowClosing(WindowEvent e) {
                 dispose();
                 UserDAO dao = new UserDAO();
-                new AdminGUI(dao.getMaADMIN_isLogin()).setVisible(true);
+                new AdminGUI(SessionManager.getMaNguoiDung()).setVisible(true);
             }
         });
     }

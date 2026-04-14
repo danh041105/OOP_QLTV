@@ -1,4 +1,6 @@
 package gui;
+
+import model.SessionManager;
 import qltv.LichSuMuonTra;
 import qltv.LoginFrame;
 
@@ -54,7 +56,7 @@ public class AdminGUI extends JFrame {
             public void windowClosing(WindowEvent e) {
                 int choice = JOptionPane.showConfirmDialog(AdminGUI.this, "Đóng chương trình?", "Xác nhận", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
                 if (choice == JOptionPane.YES_OPTION) {
-                    userDAO.admin_logout();
+                    SessionManager.logout();
                     System.exit(0);
                 }
             }
@@ -84,7 +86,7 @@ public class AdminGUI extends JFrame {
         btnLogout.setFocusPainted(false);
         btnLogout.setBorder(new EmptyBorder(5, 15, 5, 15));
         btnLogout.addActionListener(e -> {
-            userDAO.admin_logout();
+            SessionManager.logout();
             dispose();
             new LoginFrame().setVisible(true);
         });

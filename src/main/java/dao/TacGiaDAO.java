@@ -16,8 +16,8 @@ public class TacGiaDAO {
         List<TacGia> list = new ArrayList<>();
         String sql = "SELECT * FROM tac_gia ORDER BY ten_tac_gia";
         try (Connection conn = Connect.getConnection();
-             PreparedStatement ps = conn.prepareStatement(sql);
-             ResultSet rs = ps.executeQuery()) {
+                PreparedStatement ps = conn.prepareStatement(sql);
+                ResultSet rs = ps.executeQuery()) {
             while (rs.next()) {
                 TacGia tg = new TacGia();
                 tg.setMaTg(rs.getInt("ma_tac_gia"));
@@ -37,7 +37,7 @@ public class TacGiaDAO {
     public TacGia getById(int maTg) {
         String sql = "SELECT * FROM tac_gia WHERE ma_tac_gia = ?";
         try (Connection conn = Connect.getConnection();
-             PreparedStatement ps = conn.prepareStatement(sql)) {
+                PreparedStatement ps = conn.prepareStatement(sql)) {
             ps.setInt(1, maTg);
             ResultSet rs = ps.executeQuery();
             if (rs.next()) {
@@ -59,7 +59,7 @@ public class TacGiaDAO {
     public boolean insert(TacGia tg) {
         String sql = "INSERT INTO tac_gia(ma_tac_gia, ten_tac_gia, ngay_sinh, gioi_tinh, quoc_tich) VALUES (?, ?, ?, ?, ?)";
         try (Connection conn = Connect.getConnection();
-             PreparedStatement ps = conn.prepareStatement(sql)) {
+                PreparedStatement ps = conn.prepareStatement(sql)) {
             ps.setInt(1, tg.getMaTg());
             ps.setString(2, tg.getTenTg());
             ps.setString(3, tg.getNgaySinh());
@@ -76,9 +76,9 @@ public class TacGiaDAO {
     public boolean update(TacGia tg) {
         String sql = "UPDATE tac_gia SET ten_tac_gia=?, ngay_sinh=?, gioi_tinh=?, quoc_tich=? WHERE ma_tac_gia=?";
         try (Connection conn = Connect.getConnection();
-             PreparedStatement ps = conn.prepareStatement(sql)) {
+                PreparedStatement ps = conn.prepareStatement(sql)) {
             ps.setString(1, tg.getTenTg());
-            ps.setString(3, tg.getNgaySinh());
+            ps.setString(2, tg.getNgaySinh());
             ps.setString(3, tg.getGioiTinh());
             ps.setString(4, tg.getQuocTich());
             ps.setInt(5, tg.getMaTg());
@@ -93,7 +93,7 @@ public class TacGiaDAO {
     public boolean remove(int maTg) {
         String checkSql = "SELECT COUNT(*) AS kiemtra FROM sach WHERE ma_tac_gia = ?";
         try (Connection conn = Connect.getConnection();
-             PreparedStatement psCheck = conn.prepareStatement(checkSql)) {
+                PreparedStatement psCheck = conn.prepareStatement(checkSql)) {
 
             psCheck.setInt(1, maTg);
             ResultSet rs = psCheck.executeQuery();
@@ -119,7 +119,7 @@ public class TacGiaDAO {
         List<TacGia> list = new ArrayList<>();
         String sql = "SELECT * FROM tac_gia WHERE ten_tac_gia LIKE ?";
         try (Connection conn = Connect.getConnection();
-             PreparedStatement ps = conn.prepareStatement(sql)) {
+                PreparedStatement ps = conn.prepareStatement(sql)) {
 
             ps.setString(1, "%" + name + "%");
             ResultSet rs = ps.executeQuery();
