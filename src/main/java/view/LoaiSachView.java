@@ -25,7 +25,7 @@ import javax.swing.SwingConstants;
 import javax.swing.border.EmptyBorder;
 import model.LoaiSach;
 import gui.SinhVienGUI;
-
+import gui.AdminGUI;  // ✅ THÊM IMPORT NÀY
 /**
  * @author ADMIN
  */
@@ -51,7 +51,13 @@ public class LoaiSachView extends JFrame {
         addWindowListener(new WindowAdapter() {
             @Override
             public void windowClosing(WindowEvent e) {
-                new SinhVienGUI(SessionManager.getMaNguoiDung()).setVisible(true);
+                // ✅ THAY ĐỔI:
+                String role = SessionManager.getCurrentRole();
+                if ("admin".equals(role)) {
+                    new AdminGUI(SessionManager.getMaNguoiDung()).setVisible(true);
+                } else {
+                    new SinhVienGUI(SessionManager.getMaNguoiDung()).setVisible(true);
+                }
             }
         });
         setVisible(true);

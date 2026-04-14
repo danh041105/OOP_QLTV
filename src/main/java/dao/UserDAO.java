@@ -6,6 +6,8 @@ import model.User;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.sql.Statement;
+import java.sql.ResultSet;
 
 public class UserDAO {
 
@@ -82,34 +84,52 @@ public class UserDAO {
     public boolean registerUser(String username, String password, String email, int role) {
         Connect cn = new Connect();
         Connection conn = null;
-        PreparedStatement pstm = null;
 
         try {
             conn = cn.getConnection();
-            String sql = "INSERT INTO user (username, password, email, role) VALUES (?, ?, ?, ?)";
+            conn.setAutoCommit(false);
 
-            pstm = conn.prepareStatement(sql);
+            // 1. INSERT vào bảng user
+            String sqlUser = "INSERT INTO user (username, password, email, role) VALUES (?, ?, ?, ?)";
+            PreparedStatement pstm = conn.prepareStatement(sqlUser, Statement.RETURN_GENERATED_KEYS);
             pstm.setString(1, username);
             pstm.setString(2, password);
             pstm.setString(3, email);
             pstm.setInt(4, role);
+            pstm.executeUpdate();
 
-            int row = pstm.executeUpdate();
-            return row > 0;
+            // Lấy id vừa tạo (auto_increment)
+            ResultSet rs = pstm.getGeneratedKeys();
+            if (rs.next()) {
+                int userId = rs.getInt(1);
+
+                // 2. INSERT vào bảng sinh_vien (nếu role = 1)
+// 2. INSERT vào bảng sinh_vien (nếu role = 1)
+                if (role == 1) {
+                    String sqlSV = "INSERT INTO sinh_vien (ma_sv, ho_ten, lop, gioi_tinh, ngay_sinh, dia_chi, sdt, id) "
+                            + "VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
+                    PreparedStatement pstmSV = conn.prepareStatement(sqlSV);
+                    pstmSV.setString(1, username);       // ma_sv
+                    pstmSV.setString(2, username);       // ho_ten (tạm)
+                    pstmSV.setString(3, "Chưa cập nhật"); // lop — varchar(50) ✅
+                    pstmSV.setString(4, "N/A");           // gioi_tinh — varchar(10) ✅
+                    pstmSV.setDate(5, java.sql.Date.valueOf("2000-01-01"));
+                    pstmSV.setString(6, "Chưa cập nhật"); // dia_chi — varchar(100) ✅
+                    pstmSV.setString(7, "0000000000");    // sdt — varchar(15) ✅
+                    pstmSV.setInt(8, userId);
+                    pstmSV.executeUpdate();
+                }
+            }
+
+            conn.commit();
+            return true;
 
         } catch (Exception e) {
             e.printStackTrace();
+            try { if (conn != null) conn.rollback(); } catch (Exception ex) {}
             return false;
         } finally {
-            try {
-                if (pstm != null) {
-                    pstm.close();
-                }
-                if (conn != null) {
-                    conn.close();
-                }
-            } catch (Exception e) {
-            }
+            try { if (conn != null) conn.close(); } catch (Exception e) {}
         }
     }
 

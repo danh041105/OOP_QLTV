@@ -22,8 +22,11 @@ public class TacGiaDAO {
                 TacGia tg = new TacGia();
                 tg.setMa_tg(rs.getInt("ma_tg"));
                 tg.setTen_tg(rs.getString("ten_tg"));
-                tg.setNgay_sinh(rs.getString("ngay_sinh")); // Lấy ngày từ DB
+                tg.setNgay_sinh(rs.getString("ngay_sinh"));
                 tg.setGioi_tinh(rs.getString("gioi_tinh"));
+                tg.setQue(rs.getString("que"));          // ← THÊM
+                tg.setTieu_su(rs.getString("tieu_su"));  // ← THÊM
+                tg.setHinh(rs.getString("hinh"));        // ← THÊM
                 list.add(tg);
             }
         } catch (Exception e) {
@@ -45,6 +48,9 @@ public class TacGiaDAO {
                 tg.setTen_tg(rs.getString("ten_tg"));
                 tg.setNgay_sinh(rs.getString("ngay_sinh"));
                 tg.setGioi_tinh(rs.getString("gioi_tinh"));
+                tg.setQue(rs.getString("que"));          // ← THÊM
+                tg.setTieu_su(rs.getString("tieu_su"));  // ← THÊM
+                tg.setHinh(rs.getString("hinh"));        // ← THÊM
                 return tg;
             }
         } catch (Exception e) {

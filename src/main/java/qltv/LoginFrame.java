@@ -182,10 +182,12 @@ public class LoginFrame extends JFrame {
             // Lưu session vào RAM
             model.SessionManager.currentUser = user;
 
-            // Logic phân quyền: 0 là Admin, 1 là SV
+            // ✅ THÊM DÒNG NÀY:
             if (role == 0) {
+                model.SessionManager.setCurrentRole("admin");
                 new AdminGUI(user.getUsername()).setVisible(true);
             } else {
+                model.SessionManager.setCurrentRole("sinhvien");
                 new SinhVienGUI(user.getUsername()).setVisible(true);
             }
 

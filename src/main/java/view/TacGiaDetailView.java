@@ -192,7 +192,7 @@ public class TacGiaDetailView extends JFrame {
 
     private JLabel loadImage() {
         try {
-            String path = "D:\\hoc tap\\ki 6\\OOP\\java_demo\\src\\main\\resources\\images" + tacGia.getHinh();
+            String path = "D:\\OOP_QLTV\\src\\main\\resources\\images" + tacGia.getHinh();
             URL imgURL = getClass().getResource(path);
 
             if (imgURL != null) {

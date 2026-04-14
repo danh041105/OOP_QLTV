@@ -2,6 +2,7 @@ package model;
 
 public class SessionManager {
     public static User currentUser;
+    public static String currentRole;  // "admin" hoặc "sinhvien"
 
     public static String getMaNguoiDung() {
         if (currentUser != null) {
@@ -10,8 +11,17 @@ public class SessionManager {
         return null;
     }
 
+    public static String getCurrentRole() {
+        return currentRole;
+    }
+
+    public static void setCurrentRole(String role) {
+        currentRole = role;
+    }
+
     // Đăng xuất ra khỏi tài khoản
     public static void logout() {
         currentUser = null;
+        currentRole = null;
     }
 }

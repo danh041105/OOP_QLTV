@@ -15,6 +15,7 @@ import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 import model.TacGia;
 import gui.SinhVienGUI;
+import gui.AdminGUI;  // ✅ THÊM IMPORT NÀY
 
 public class TacGiaListView extends JFrame {
 
@@ -37,7 +38,13 @@ public class TacGiaListView extends JFrame {
         addWindowListener(new WindowAdapter() {
             @Override
             public void windowClosing(WindowEvent e) {
-                new SinhVienGUI(SessionManager.getMaNguoiDung()).setVisible(true);
+                // ✅ THAY ĐỔI:
+                String role = SessionManager.getCurrentRole();
+                if ("admin".equals(role)) {
+                    new AdminGUI(SessionManager.getMaNguoiDung()).setVisible(true);
+                } else {
+                    new SinhVienGUI(SessionManager.getMaNguoiDung()).setVisible(true);
+                }
             }
         });
         setVisible(true);

@@ -12,6 +12,7 @@ import java.util.List;
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 import javax.swing.table.DefaultTableModel;
+import gui.AdminGUI;  // ✅ THÊM IMPORT NÀY
 
 public class SachListView extends JFrame {
     private JTable table;
@@ -49,7 +50,13 @@ public class SachListView extends JFrame {
         addWindowListener(new WindowAdapter() {
             @Override
             public void windowClosing(WindowEvent e) {
-                new LoaiSachView("Thể Loại").doShow();
+                // ✅ THAY ĐỔI:
+                String role = SessionManager.getCurrentRole();
+                if ("admin".equals(role)) {
+                    new AdminGUI(SessionManager.getMaNguoiDung()).setVisible(true);
+                } else {
+                    new LoaiSachView("Thể Loại").doShow();
+                }
             }
         });
         setVisible(true);
