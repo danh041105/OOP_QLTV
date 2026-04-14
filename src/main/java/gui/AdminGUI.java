@@ -54,7 +54,8 @@ public class AdminGUI extends JFrame {
         addWindowListener(new WindowAdapter() {
             @Override
             public void windowClosing(WindowEvent e) {
-                int choice = JOptionPane.showConfirmDialog(AdminGUI.this, "Đóng chương trình?", "Xác nhận", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
+                int choice = JOptionPane.showConfirmDialog(AdminGUI.this, "Đóng chương trình?", "Xác nhận",
+                        JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
                 if (choice == JOptionPane.YES_OPTION) {
                     SessionManager.logout();
                     System.exit(0);
@@ -111,9 +112,10 @@ public class AdminGUI extends JFrame {
 
         menuBar.setLayout(new GridLayout(1, 4, 0, 0));
 
-        menuBar.add(createBlueStyleMenu("Quản lý sách", new String[]{"Danh mục sách", "Thể loại", "Tác giả"}));
+        menuBar.add(createBlueStyleMenu("Quản lý sách", new String[] { "Danh mục sách", "Thể loại", "Tác giả" }));
 
-        menuBar.add(createBlueStyleMenu("Quản lý mượn trả", new String[]{"Quản lý phiếu mượn", "Xem lịch sử hình phạt"}));
+        menuBar.add(createBlueStyleMenu("Quản lý mượn trả",
+                new String[] { "Quản lý phiếu mượn", "Xem lịch sử hình phạt" }));
 
         JMenuItem menuLichSu = createBlueStyleMenuItem("Lịch sử mượn trả sách");
         menuLichSu.addActionListener(e -> {
@@ -122,7 +124,8 @@ public class AdminGUI extends JFrame {
         });
         menuBar.add(menuLichSu);
 
-        menuBar.add(createBlueStyleMenu("Quản lý tài khoản", new String[]{"Tài khoản Admin", "Tài khoản Sinh viên"}));
+        menuBar.add(
+                createBlueStyleMenu("Quản lý tài khoản", new String[] { "Tài khoản Admin", "Tài khoản Sinh viên" }));
 
         navPanel.add(menuBar);
         return navPanel;
@@ -147,8 +150,8 @@ public class AdminGUI extends JFrame {
             item.setForeground(Color.BLACK);
             item.setPreferredSize(new Dimension(240, 35));
 
-            item.setHorizontalAlignment(SwingConstants.LEFT); 
- 
+            item.setHorizontalAlignment(SwingConstants.LEFT);
+
             item.setBorder(new EmptyBorder(0, 30, 0, 0));
             // ------------------------------------------
             item.addActionListener(e -> {
@@ -258,7 +261,7 @@ public class AdminGUI extends JFrame {
         footer.setBackground(PRIMARY_BLUE);
         footer.setBorder(new EmptyBorder(15, 0, 15, 0));
 
-        JLabel lblCopyright = new JLabel("@2025 Thư viện ABC | Thiết kế bởi sinh viên CNTT");
+        JLabel lblCopyright = new JLabel("@2026 Thư viện SVPTIT | Thiết kế bởi sinh viên KTDL");
         lblCopyright.setForeground(Color.WHITE);
         footer.add(lblCopyright);
         return footer;
