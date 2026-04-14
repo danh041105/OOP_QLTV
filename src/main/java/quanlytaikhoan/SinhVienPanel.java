@@ -18,20 +18,38 @@ public class SinhVienPanel extends JPanel {
     private JComboBox<String> cbGioiTinh;
     private JButton btnThem, btnSua, btnXoa, btnLamMoi, btnTimkiem;
 
+    private boolean isProfileMode = false;
+    private SinhVien currentSV;
+
     public SinhVienPanel() {
+        this(null);
+    }
+
+    public SinhVienPanel(SinhVien sv) {
+        if(sv != null) {
+            this.isProfileMode = true;
+            this.currentSV = sv;
+        }
         setLayout(new BorderLayout(10, 10));
 
-        JPanel pnlNorth = new JPanel(new GridLayout(2, 1));
-        JLabel lblTitle = new JLabel("QUẢN LÝ TÀI KHOẢN SINH VIÊN", 0);
-        lblTitle.setFont(new Font("Segoe UI", Font.BOLD, 22));
-        
-        JPanel pnlSearch = new JPanel();
-        pnlSearch.add(new JLabel("Tìm kiếm:"));
-        pnlSearch.add(txtTimkiem = new JTextField(15));
-        pnlSearch.add(btnTimkiem = new JButton("Tìm kiếm"));
-        
-        pnlNorth.add(lblTitle); pnlNorth.add(pnlSearch);
-        add(pnlNorth, BorderLayout.NORTH);
+        if (!isProfileMode) {
+            JPanel pnlNorth = new JPanel(new GridLayout(2, 1));
+            JLabel lblTitle = new JLabel("QUẢN LÝ TÀI KHOẢN SINH VIÊN", 0);
+            lblTitle.setFont(new Font("Segoe UI", Font.BOLD, 22));
+            
+            JPanel pnlSearch = new JPanel();
+            pnlSearch.add(new JLabel("Tìm kiếm:"));
+            pnlSearch.add(txtTimkiem = new JTextField(15));
+            pnlSearch.add(btnTimkiem = new JButton("Tìm kiếm"));
+            
+            pnlNorth.add(lblTitle); pnlNorth.add(pnlSearch);
+            add(pnlNorth, BorderLayout.NORTH);
+        } else {
+            JLabel lblTitle = new JLabel("HỒ SƠ CÁ NHÂN", 0);
+            lblTitle.setFont(new Font("Segoe UI", Font.BOLD, 22));
+            lblTitle.setBorder(BorderFactory.createEmptyBorder(10, 0, 10, 0));
+            add(lblTitle, BorderLayout.NORTH);
+        }
 
         JPanel pnlWest = new JPanel(new GridLayout(10, 2, 5, 5));
         pnlWest.setBorder(BorderFactory.createTitledBorder("Thông tin sinh viên"));
@@ -50,75 +68,124 @@ public class SinhVienPanel extends JPanel {
 
         add(pnlWest, BorderLayout.WEST);
 
-        model = new DefaultTableModel(new String[]{"Mã SV", "Họ tên", "Lớp", "Giới tính", "Ngày sinh", "Địa chỉ", "Email", "SĐT", "Username", "Password"}, 0);
-        add(new JScrollPane(tblSV = new JTable(model)), BorderLayout.CENTER);
+        if (!isProfileMode) {
+            model = new DefaultTableModel(new String[]{"Mã SV", "Họ tên", "Lớp", "Giới tính", "Ngày sinh", "Địa chỉ", "Email", "SĐT", "Username", "Password"}, 0);
+            add(new JScrollPane(tblSV = new JTable(model)), BorderLayout.CENTER);
+        } else {
+            // Hiển thị một banner nhẹ nhàng trong trang cá nhân
+            JLabel lblBanner = new JLabel(new ImageIcon(getClass().getResource("/images/student_banner.jpg")));
+            // Scale banner
+            Image img = ((ImageIcon)lblBanner.getIcon()).getImage().getScaledInstance(900, 300, Image.SCALE_SMOOTH);
+            lblBanner.setIcon(new ImageIcon(img));
+            add(lblBanner, BorderLayout.CENTER);
+        }
 
         JPanel pnlSouth = new JPanel();
-        pnlSouth.add(btnThem = new JButton("Thêm mới"));
-        pnlSouth.add(btnSua = new JButton("Cập nhật"));
-        pnlSouth.add(btnXoa = new JButton("Xóa"));
-        pnlSouth.add(btnLamMoi = new JButton("Làm mới"));
+        if (!isProfileMode) {
+            pnlSouth.add(btnThem = new JButton("Thêm mới"));
+            pnlSouth.add(btnSua = new JButton("Cập nhật"));
+            pnlSouth.add(btnXoa = new JButton("Xóa"));
+            pnlSouth.add(btnLamMoi = new JButton("Làm mới"));
+        } else {
+            pnlSouth.add(btnSua = new JButton("Lưu thay đổi"));
+            pnlSouth.add(new JLabel("(Mã SV và Username không được phép thay đổi)"));
+        }
         add(pnlSouth, BorderLayout.SOUTH);
 
-        loadData();
+        if (isProfileMode) {
+            setForm(currentSV);
+        } else {
+            loadData();
+        }
         addEvents();
     }
     private void addEvents() {
-    tblSV.getSelectionModel().addListSelectionListener(e -> {
-    if (!e.getValueIsAdjusting()) {
-        int row = tblSV.getSelectedRow();
-        if (row != -1) {
-            try {
-                txtMasv.setText(model.getValueAt(row, 0).toString()); 
-                txtMasv.setEditable(false); txtMasv.setBackground(new Color(240, 240, 240));
-                txtTen.setText(model.getValueAt(row, 1).toString());
-                txtLop.setText(model.getValueAt(row, 2).toString());
-                cbGioiTinh.setSelectedItem(model.getValueAt(row, 3).toString());
-                txtNgaySinh.setText(model.getValueAt(row, 4).toString());
-                txtDiaChi.setText(model.getValueAt(row, 5).toString());
-                txtEmail.setText(model.getValueAt(row, 6).toString());
-                txtSdt.setText(model.getValueAt(row, 7).toString());
-                txtUsername.setText(model.getValueAt(row, 8).toString());
-                txtUsername.setEditable(false); txtUsername.setBackground(new Color(240, 240, 240));
-                txtPassword.setText(model.getValueAt(row, 9).toString());
-            } catch (Exception ex) {
-            }
-        }
-    }
-});
+        if (!isProfileMode) {
+            tblSV.getSelectionModel().addListSelectionListener(e -> {
+                if (!e.getValueIsAdjusting()) {
+                    int row = tblSV.getSelectedRow();
+                    if (row != -1) {
+                        try {
+                            txtMasv.setText(model.getValueAt(row, 0).toString());
+                            txtMasv.setEditable(false);
+                            txtMasv.setBackground(new Color(240, 240, 240));
+                            txtTen.setText(model.getValueAt(row, 1).toString());
+                            txtLop.setText(model.getValueAt(row, 2).toString());
+                            cbGioiTinh.setSelectedItem(model.getValueAt(row, 3).toString());
+                            txtNgaySinh.setText(model.getValueAt(row, 4).toString());
+                            txtDiaChi.setText(model.getValueAt(row, 5).toString());
+                            txtEmail.setText(model.getValueAt(row, 6).toString());
+                            txtSdt.setText(model.getValueAt(row, 7).toString());
+                            txtUsername.setText(model.getValueAt(row, 8).toString());
+                            txtUsername.setEditable(false);
+                            txtUsername.setBackground(new Color(240, 240, 240));
+                            txtPassword.setText(model.getValueAt(row, 9).toString());
+                        } catch (Exception ex) {
+                        }
+                    }
+                }
+            });
 
-         btnThem.addActionListener(e -> {
-            SinhVien sv = getForm();
-            if (svDAO.insert(sv, txtUsername.getText().trim(), txtPassword.getText().trim())) {
-                loadData();
-                clearForm();
-                JOptionPane.showMessageDialog(this, "Thêm thành công!");
-            }
-        });
+            btnThem.addActionListener(e -> {
+                SinhVien sv = getForm();
+                if (svDAO.insert(sv, txtUsername.getText().trim(), txtPassword.getText().trim())) {
+                    loadData();
+                    clearForm();
+                    JOptionPane.showMessageDialog(this, "Thêm thành công!");
+                }
+            });
+
+            btnXoa.addActionListener(e -> {
+                int row = tblSV.getSelectedRow();
+                if (row == -1)
+                    return;
+                int id = svDAO.getAll().get(row).getId();
+                if (JOptionPane.showConfirmDialog(this, "Xóa sinh viên này?", "Xác nhận", 0) == 0) {
+                    if (svDAO.delete(id))
+                        loadData();
+                }
+            });
+
+            btnLamMoi.addActionListener(e -> clearForm());
+            btnTimkiem.addActionListener(e -> fillTable(svDAO.search(txtTimkiem.getText().trim())));
+        }
 
         btnSua.addActionListener(e -> {
-            int row = tblSV.getSelectedRow();
-            if (row == -1) return;
-            int id = svDAO.getAll().get(row).getId(); 
+            int id;
+            if (isProfileMode) {
+                id = currentSV.getId();
+            } else {
+                int row = tblSV.getSelectedRow();
+                if (row == -1)
+                    return;
+                id = svDAO.getAll().get(row).getId();
+            }
             SinhVien sv = getForm();
             sv.setId(id);
-            if(svDAO.update(sv)) {
-                loadData();
+            if (svDAO.update(sv)) {
+                if (!isProfileMode)
+                    loadData();
                 JOptionPane.showMessageDialog(this, "Cập nhật thành công!");
             }
         });
+    }
 
-        btnXoa.addActionListener(e -> {
-            int row = tblSV.getSelectedRow();
-            if (row == -1) return;
-            int id = svDAO.getAll().get(row).getId();
-            if(JOptionPane.showConfirmDialog(this, "Xóa sinh viên này?", "Xác nhận", 0) == 0) {
-                if(svDAO.delete(id)) loadData();
-            }
-        });
-
-        btnLamMoi.addActionListener(e -> clearForm());
-        btnTimkiem.addActionListener(e -> fillTable(svDAO.search(txtTimkiem.getText().trim())));
+    private void setForm(SinhVien sv) {
+        SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
+        txtMasv.setText(sv.getMasv());
+        txtMasv.setEditable(false);
+        txtMasv.setBackground(new Color(240, 240, 240));
+        txtTen.setText(sv.getHoten());
+        txtLop.setText(sv.getLop());
+        cbGioiTinh.setSelectedItem(sv.getGioitinh());
+        txtNgaySinh.setText(sv.getNgaysinh() != null ? sdf.format(sv.getNgaysinh()) : "");
+        txtDiaChi.setText(sv.getDiachi());
+        txtEmail.setText(sv.getEmail());
+        txtSdt.setText(sv.getSdt());
+        txtUsername.setText(sv.getUsername());
+        txtUsername.setEditable(false);
+        txtUsername.setBackground(new Color(240, 240, 240));
+        txtPassword.setText(sv.getPassword());
     }
 
     private SinhVien getForm() {

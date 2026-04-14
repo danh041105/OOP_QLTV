@@ -11,7 +11,7 @@ public class UserDAO {
 
     public User checkLogin(String u, String p) {
         User user = null;
-        String sql = "SELECT username, password, role FROM user WHERE username = ? AND password = ?";
+        String sql = "SELECT id, username, password, role FROM user WHERE username = ? AND password = ?";
         Connect myConnect = new Connect();
 
         try (Connection conn = myConnect.getConnection()) {
@@ -24,6 +24,7 @@ public class UserDAO {
                 ResultSet rs = ps.executeQuery();
                 if (rs.next()) {
                     user = new User();
+                    user.setId(rs.getInt("id"));
                     user.setUsername(rs.getString("username"));
                     user.setRole(rs.getInt("role"));
                 }

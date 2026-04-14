@@ -22,13 +22,13 @@ import view.YeuThichView;
 
 public class SinhVienGUI extends JFrame {
 
-    private final Color PRIMARY_BLUE = Color.decode("#005a9e"); 
-    private final Color TEXT_BLUE = Color.decode("#005a9e");    
-    private final Color RED_BUTTON = Color.decode("#dc3545");  
+    private final Color PRIMARY_BLUE = Color.decode("#005a9e");
+    private final Color TEXT_BLUE = Color.decode("#005a9e");
+    private final Color RED_BUTTON = Color.decode("#dc3545");
     private final Color MENU_BG_HOVER = Color.decode("#f0f0f0");
 
     private final Font MAIN_FONT = new Font("Arial", Font.PLAIN, 14);
-    private final Font MENU_FONT = new Font("Arial", Font.BOLD, 15); 
+    private final Font MENU_FONT = new Font("Arial", Font.BOLD, 15);
     private final Font TITLE_FONT = new Font("Arial", Font.BOLD, 22);
 
     private String currentUsername;
@@ -51,8 +51,8 @@ public class SinhVienGUI extends JFrame {
         JPanel mainHeader = new JPanel();
         mainHeader.setLayout(new BoxLayout(mainHeader, BoxLayout.Y_AXIS));
 
-        mainHeader.add(createTopBluePanel());   
-        mainHeader.add(createWhiteMenuBar()); 
+        mainHeader.add(createTopBluePanel());
+        mainHeader.add(createWhiteMenuBar());
 
         add(mainHeader, BorderLayout.NORTH);
 
@@ -62,7 +62,8 @@ public class SinhVienGUI extends JFrame {
         addWindowListener(new WindowAdapter() {
             @Override
             public void windowClosing(WindowEvent e) {
-                int choice = JOptionPane.showConfirmDialog(SinhVienGUI.this,  "Đóng chương trình?","Xác nhận", JOptionPane.YES_NO_OPTION,   JOptionPane.QUESTION_MESSAGE  );
+                int choice = JOptionPane.showConfirmDialog(SinhVienGUI.this, "Đóng chương trình?", "Xác nhận",
+                        JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
                 if (choice == JOptionPane.YES_OPTION) {
                     SessionManager.logout();
                     System.exit(0);
@@ -75,8 +76,8 @@ public class SinhVienGUI extends JFrame {
     private JPanel createTopBluePanel() {
         JPanel panel = new JPanel(new BorderLayout());
         panel.setBackground(PRIMARY_BLUE);
-        panel.setBorder(new EmptyBorder(10, 30, 10, 30)); 
-        panel.setPreferredSize(new Dimension(1200, 60));  
+        panel.setBorder(new EmptyBorder(10, 30, 10, 30));
+        panel.setPreferredSize(new Dimension(1200, 60));
 
         JLabel lblTitle = new JLabel("Thư viện ABC");
         lblTitle.setFont(TITLE_FONT);
@@ -124,8 +125,7 @@ public class SinhVienGUI extends JFrame {
         JMenu menuDanhmuc = createStyleMenu(
                 "Danh mục",
                 menuItemTheloai,
-                menuItemTacgia
-        );
+                menuItemTacgia);
 
         menuBar.add(menuDanhmuc);
 
@@ -147,10 +147,11 @@ public class SinhVienGUI extends JFrame {
 
         menuBar.add(Box.createHorizontalStrut(20));
 
-        // Đã xóa quyền Quản lý tài khoản của Sinh Viên
+        JMenuItem menuTaiKhoan = createBlueStyleMenuItem("Quản lý tài khoản");
+        menuBar.add(menuTaiKhoan);
 
         navPanel.add(menuBar);
-   
+
         menuItemTacgia.addActionListener(e -> {
             new TacGiaListView("Danh sách tác giả").doShow();
             this.dispose();
@@ -164,7 +165,11 @@ public class SinhVienGUI extends JFrame {
             this.dispose();
         });
 
-        // Không add Action cho menuTaiKhoan nữa
+        menuTaiKhoan.addActionListener(e -> {
+
+            new QuanLyTaiKhoanGUI(SessionManager.getMaNguoiDung()).doShow();
+            this.dispose();
+        });
         return navPanel;
     }
 
@@ -208,9 +213,9 @@ public class SinhVienGUI extends JFrame {
     private JMenu createBlueStyleMenu(String title, String[] subItems) {
         JMenu menu = new JMenu(title);
         menu.setFont(MENU_FONT);
-        menu.setForeground(TEXT_BLUE); 
+        menu.setForeground(TEXT_BLUE);
         menu.setBackground(Color.WHITE);
-        menu.setOpaque(true); 
+        menu.setOpaque(true);
 
         for (String itemText : subItems) {
             JMenuItem item = new JMenuItem(itemText);

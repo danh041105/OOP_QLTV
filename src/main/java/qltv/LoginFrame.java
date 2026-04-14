@@ -34,10 +34,19 @@ public class LoginFrame extends JFrame {
     }
 
     private JPanel createLoginCard() {
-        JPanel card = new JPanel();
+        JPanel card = new JPanel() {
+            @Override
+            protected void paintComponent(Graphics g) {
+                g.setColor(getBackground());
+                g.fillRoundRect(0, 0, getWidth(), getHeight(), 20, 20);
+                super.paintComponent(g);
+            }
+        };
+        card.setOpaque(false); // Quan trọng để thấy nền phía sau
         card.setLayout(new BoxLayout(card, BoxLayout.Y_AXIS));
-        card.setBackground(Color.WHITE);
-        card.setBorder(new EmptyBorder(40, 40, 40, 40)); // Căn lề trong
+        card.setBackground(new Color(255, 255, 255, 220)); 
+        card.setBorder(new EmptyBorder(40, 40, 40, 40));
+        card.setMaximumSize(new Dimension(400, 500));
 
         JLabel lblTitle = new JLabel("ĐĂNG NHẬP");
         lblTitle.setFont(new Font("Arial", Font.BOLD, 24));
@@ -116,6 +125,9 @@ public class LoginFrame extends JFrame {
         });
 
         card.add(btnRegister);
+
+        card.setOpaque(true); // Ensure transparency works
+
 
         JButton btnForgot = new JButton("Quên mật khẩu?");
         btnForgot.setFont(new Font("Arial", Font.PLAIN, 12));

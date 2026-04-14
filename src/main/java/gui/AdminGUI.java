@@ -20,7 +20,7 @@ import javax.imageio.ImageIO;
 
 public class AdminGUI extends JFrame {
 
-    private final Color PRIMARY_BLUE = Color.decode("#005a9e");
+    private final Color PRIMARY_RED = Color.decode("#ff0000");
     private final Color TEXT_BLUE = Color.decode("#005a9e");
     private final Color RED_BUTTON = Color.decode("#dc3545");
     private final Color MENU_BG_HOVER = Color.decode("#f0f0f0");
@@ -66,11 +66,11 @@ public class AdminGUI extends JFrame {
 
     private JPanel createTopBluePanel() {
         JPanel panel = new JPanel(new BorderLayout());
-        panel.setBackground(PRIMARY_BLUE);
+        panel.setBackground(PRIMARY_RED);
         panel.setBorder(new EmptyBorder(10, 30, 10, 30));
         panel.setPreferredSize(new Dimension(1200, 60));
 
-        JLabel lblTitle = new JLabel("Thư viện ABC");
+        JLabel lblTitle = new JLabel("Thư viện PTIT");
         lblTitle.setFont(TITLE_FONT);
         lblTitle.setForeground(Color.WHITE);
 
@@ -258,7 +258,7 @@ public class AdminGUI extends JFrame {
 
     private JPanel createFooterPanel() {
         JPanel footer = new JPanel(new FlowLayout(FlowLayout.CENTER));
-        footer.setBackground(PRIMARY_BLUE);
+        footer.setBackground(PRIMARY_RED);
         footer.setBorder(new EmptyBorder(15, 0, 15, 0));
 
         JLabel lblCopyright = new JLabel("@2026 Thư viện SVPTIT | Thiết kế bởi sinh viên KTDL");

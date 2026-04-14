@@ -24,6 +24,22 @@ public class SinhVienDAO {
         return sv;
     }
 
+    public SinhVien getByUserId(int userId) {
+        String sql = "SELECT u.id, u.email, sv.*, u.username, u.password "
+                + "FROM user u JOIN sinh_vien sv ON u.id = sv.id "
+                + "WHERE u.id = ?";
+        try (Connection conn = new Connect().getConnection();
+                PreparedStatement ps = conn.prepareStatement(sql)) {
+            ps.setInt(1, userId);
+            try (ResultSet rs = ps.executeQuery()) {
+                if (rs.next()) return readResultSet(rs);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
     public ArrayList<SinhVien> getAll() {
         ArrayList<SinhVien> list = new ArrayList<>();
         String sql = "SELECT u.id, u.email, sv.*, u.username, u.password "

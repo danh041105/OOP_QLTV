@@ -6,8 +6,7 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
-
-import dao.UserDAO;
+import dao.SinhVienDAO;
 import quanlytaikhoan.AdminPanel;
 import quanlytaikhoan.SinhVienPanel;
 
@@ -15,29 +14,45 @@ public class QuanLyTaiKhoanGUI extends JFrame {
 
     JPanel pnlMain = new JPanel(new BorderLayout());
 
+    public QuanLyTaiKhoanGUI() {
+        this("Hồ sơ người dùng");
+    }
+
     public QuanLyTaiKhoanGUI(String title) {
         super(title);
         initUI();
     }
 
-    public QuanLyTaiKhoanGUI() {
-        this("Quản lý tài khoản");
-    }
     private void initUI() {
-        setSize(1200, 700);
+        setSize(1200, 750);
         setLocationRelativeTo(null);
         setDefaultCloseOperation(DISPOSE_ON_CLOSE);
-        setJMenuBar(createMenu());
+
+        // Phân quyền giao diện
+        if (SessionManager.currentUser != null && SessionManager.currentUser.getRole() == 0) {
+            setJMenuBar(createMenu());
+            showSinhVien(); // Mặc định admin xem danh sách SV
+        } else {
+            showProfile(); // Sinh viên xem profile chính mình
+        }
+
         add(pnlMain);
-        showSinhVien();
+
         addWindowListener(new WindowAdapter() {
             @Override
             public void windowClosing(WindowEvent e) {
-                dispose();
-                UserDAO dao = new UserDAO();
-                new AdminGUI(SessionManager.getMaNguoiDung()).setVisible(true);
+                goBack();
             }
         });
+    }
+
+    private void goBack() {
+        dispose();
+        if (SessionManager.currentUser != null && SessionManager.currentUser.getRole() == 0) {
+            new AdminGUI(SessionManager.currentUser.getUsername()).setVisible(true);
+        } else if (SessionManager.currentUser != null) {
+            new SinhVienGUI(SessionManager.currentUser.getUsername()).setVisible(true);
+        }
     }
 
     public void doShow() {
@@ -54,7 +69,7 @@ public class QuanLyTaiKhoanGUI extends JFrame {
 
         JMenuItem mnuAdmin = new JMenuItem("Tài khoản Admin");
         JMenuItem mnuSV = new JMenuItem("Tài khoản Sinh viên");
-        
+
         mnuAdmin.addActionListener(e -> showAdmin());
         mnuSV.addActionListener(e -> showSinhVien());
 
@@ -75,6 +90,15 @@ public class QuanLyTaiKhoanGUI extends JFrame {
     public void showSinhVien() {
         pnlMain.removeAll();
         pnlMain.add(new SinhVienPanel(), BorderLayout.CENTER);
+        pnlMain.revalidate();
+        pnlMain.repaint();
+    }
+
+    public void showProfile() {
+        pnlMain.removeAll();
+        SinhVienDAO svDAO = new SinhVienDAO();
+        model.SinhVien sv = svDAO.getByUserId(SessionManager.currentUser.getId());
+        pnlMain.add(new SinhVienPanel(sv), BorderLayout.CENTER);
         pnlMain.revalidate();
         pnlMain.repaint();
     }

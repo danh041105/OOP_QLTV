@@ -1,8 +1,6 @@
 package qltv;
 
 import model.SessionManager;
-
-import dao.UserDAO;
 import gui.AdminGUI;
 import gui.SinhVienGUI;
 import model.PhieuMuon;
@@ -21,8 +19,8 @@ import java.util.List;
 
 public class LichSuMuonTra extends JFrame {
 
-    private String currentUser; 
-    private boolean isAdmin; 
+    private String currentUser;
+    private boolean isAdmin;
     private JTable table;
     private DefaultTableModel model;
     private JTextField txtSearch;
@@ -47,11 +45,11 @@ public class LichSuMuonTra extends JFrame {
         JLabel lblTitle = new JLabel("LỊCH SỬ MƯỢN TRẢ SÁCH");
         lblTitle.setFont(new Font("Arial", Font.BOLD, 24));
         lblTitle.setForeground(Color.decode("#005a9e"));
-        
+
         JLabel lblSub = new JLabel("Chào, " + username + " | Trang chủ > Lịch sử");
         lblSub.setFont(new Font("Arial", Font.PLAIN, 14));
         lblSub.setForeground(Color.GRAY);
-        
+
         titlePanel.add(lblTitle);
         titlePanel.add(lblSub);
 
@@ -64,27 +62,27 @@ public class LichSuMuonTra extends JFrame {
         btnBack.setFocusPainted(false);
 
         btnBack.addActionListener(e -> {
-            this.dispose(); 
-            
+            this.dispose();
+
             if (isAdmin) {
-   
+
                 new AdminGUI(currentUser).setVisible(true);
             } else {
 
                 new SinhVienGUI(currentUser).setVisible(true);
             }
         });
-        
+
         searchPanel.add(btnBack);
-        searchPanel.add(Box.createHorizontalStrut(15)); 
+        searchPanel.add(Box.createHorizontalStrut(15));
 
         txtSearch = new JTextField(20);
         txtSearch.setPreferredSize(new Dimension(200, 35));
-        
+
         JButton btnSearch = new JButton("Tìm kiếm");
         btnSearch.setBackground(Color.decode("#005a9e"));
         btnSearch.setForeground(Color.BLUE);
-        
+
         txtSearch.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyReleased(java.awt.event.KeyEvent e) {
                 filterTable(txtSearch.getText());
@@ -93,10 +91,10 @@ public class LichSuMuonTra extends JFrame {
 
         searchPanel.add(txtSearch);
         searchPanel.add(btnSearch);
-        
+
         headerPanel.add(titlePanel, BorderLayout.WEST);
-        headerPanel.add(searchPanel, BorderLayout.EAST); 
-        
+        headerPanel.add(searchPanel, BorderLayout.EAST);
+
         add(headerPanel, BorderLayout.NORTH);
 
         txtSearch.addKeyListener(new KeyAdapter() {
@@ -116,25 +114,27 @@ public class LichSuMuonTra extends JFrame {
 
         JScrollPane scrollPane = new JScrollPane();
         scrollPane.setBorder(new EmptyBorder(10, 20, 20, 20));
-        scrollPane.getViewport().setBackground(Color.WHITE); 
+        scrollPane.getViewport().setBackground(Color.WHITE);
 
         table = new JTable();
-        table.setRowHeight(40); 
+        table.setRowHeight(40);
         table.setFont(new Font("Arial", Font.PLAIN, 14));
         table.setSelectionBackground(Color.decode("#e6f3ff"));
 
         table.getTableHeader().setDefaultRenderer(new DefaultTableCellRenderer() {
             @Override
-            public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus, int row, int column) {
-                JLabel label = (JLabel) super.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, column);
+            public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected,
+                    boolean hasFocus, int row, int column) {
+                JLabel label = (JLabel) super.getTableCellRendererComponent(table, value, isSelected, hasFocus, row,
+                        column);
 
-                label.setBackground(Color.decode("#005a9e")); 
-                label.setForeground(Color.WHITE);            
+                label.setBackground(Color.decode("#005a9e"));
+                label.setForeground(Color.WHITE);
                 label.setFont(new Font("Arial", Font.BOLD, 14));
 
                 label.setHorizontalAlignment(JLabel.CENTER);
-                label.setBorder(BorderFactory.createMatteBorder(0, 0, 1, 1, Color.WHITE)); 
-                
+                label.setBorder(BorderFactory.createMatteBorder(0, 0, 1, 1, Color.WHITE));
+
                 return label;
             }
         });
@@ -150,20 +150,20 @@ public class LichSuMuonTra extends JFrame {
             @Override
             public void windowClosing(WindowEvent e) {
                 dispose();
-                UserDAO dao = new UserDAO();
-                if(isAdmin){
-                      new AdminGUI(SessionManager.getMaNguoiDung()).setVisible(true);
-                }else{
-                      new SinhVienGUI(SessionManager.getMaNguoiDung()).setVisible(true);
+                if (isAdmin) {
+                    new AdminGUI(SessionManager.getMaNguoiDung()).setVisible(true);
+                } else {
+                    new SinhVienGUI(SessionManager.getMaNguoiDung()).setVisible(true);
                 }
-                
+
             }
         });
     }
 
     private void loadData() {
         // 1. Tự định nghĩa cấu trúc bảng (Thay vì nhờ DAO làm hộ)
-        String[] columnNames = {"Mã PM", "Mã SV", "Họ Tên", "Mã Sách", "Tên Sách", "Số Lượng", "Ngày Mượn", "Ngày Trả", "Trạng Thái", "Hình Phạt"};
+        String[] columnNames = { "Mã PM", "Mã SV", "Họ Tên", "Mã Sách", "Tên Sách", "Số Lượng", "Ngày Mượn", "Ngày Trả",
+                "Trạng Thái", "Hình Phạt" };
         model = new DefaultTableModel(columnNames, 0);
 
         // 2. Gọi DAO lấy danh sách dữ liệu thô
@@ -217,7 +217,8 @@ public class LichSuMuonTra extends JFrame {
 
     class CustomStatusRenderer extends DefaultTableCellRenderer {
         @Override
-        public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus, int row, int column) {
+        public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus,
+                int row, int column) {
             Component c = super.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, column);
             String colName = table.getColumnName(column);
             String text = (value != null) ? value.toString() : "";
@@ -231,22 +232,20 @@ public class LichSuMuonTra extends JFrame {
                     c.setForeground(Color.RED);
                     c.setFont(new Font("Arial", Font.BOLD, 14));
                 } else if (text.equalsIgnoreCase("Đã trả")) {
-                    c.setForeground(Color.decode("#009933")); 
+                    c.setForeground(Color.decode("#009933"));
                     c.setFont(new Font("Arial", Font.BOLD, 14));
                 }
-            }
-            else if (colName.equals("Hình Phạt")) {
+            } else if (colName.equals("Hình Phạt")) {
                 if (text.equals("Không")) {
-                     c.setForeground(Color.decode("#009933")); 
-                     setText("Không");
+                    c.setForeground(Color.decode("#009933"));
+                    setText("Không");
                 } else {
-                     c.setForeground(Color.RED); 
-                     c.setFont(new Font("Arial", Font.BOLD, 14));
-                     setText("⚠ " + text);
+                    c.setForeground(Color.RED);
+                    c.setFont(new Font("Arial", Font.BOLD, 14));
+                    setText("⚠ " + text);
                 }
-            } 
-            else {
-                setHorizontalAlignment(SwingConstants.LEFT); 
+            } else {
+                setHorizontalAlignment(SwingConstants.LEFT);
             }
             return c;
         }
