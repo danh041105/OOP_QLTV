@@ -40,7 +40,7 @@ public class LichSuMuonTra extends JFrame {
         getContentPane().setBackground(ThemeUtils.BG_MAIN);
 
         // === TOP BAR ===
-        JButton btnBack = ThemeUtils.createSecondaryButton("← Quay lại trang chủ");
+        JButton btnBack = ThemeUtils.createSecondaryButton("← Quay lại");
         btnBack.addActionListener(e -> {
             this.dispose();
             if (isAdmin) {

@@ -1,4 +1,5 @@
 package quanlymuontra;
+
 import utils.ThemeUtils;
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
@@ -20,7 +21,7 @@ public class FormSuaPhieuMuon extends JDialog {
         this.maPM = data[0].toString();
         this.maSachCu = data[3].toString();
         
-        this.setSize(500, 680);
+        this.setSize(550, 720);
         this.setLocationRelativeTo(parent);
         this.setLayout(new BorderLayout(10, 10));
         this.getContentPane().setBackground(ThemeUtils.BG_MAIN);
@@ -38,7 +39,6 @@ public class FormSuaPhieuMuon extends JDialog {
         lblTitle.setBorder(new EmptyBorder(15, 20, 15, 10));
         titleBar.add(lblTitle, BorderLayout.CENTER);
 
-        // Close button on title bar
         JButton btnClose = new JButton("✕");
         btnClose.setFont(new Font("Segoe UI", Font.BOLD, 18));
         btnClose.setForeground(ThemeUtils.TEXT_WHITE);
@@ -52,57 +52,24 @@ public class FormSuaPhieuMuon extends JDialog {
         this.add(titleBar, BorderLayout.NORTH);
 
         // ===== FORM CARD =====
-        JPanel cardPanel = ThemeUtils.createCardPanel(25);
+        JPanel cardPanel = ThemeUtils.createCardPanel(20);
         cardPanel.setLayout(new BorderLayout(0, 0));
 
-        // Icon row at top of card
         JPanel iconRow = new JPanel(new FlowLayout(FlowLayout.CENTER, 0, 0));
         iconRow.setOpaque(false);
-        iconRow.setBorder(new EmptyBorder(5, 0, 15, 0));
-
-        JPanel iconCircle = new JPanel() {
-            @Override
-            protected void paintComponent(Graphics g) {
-                Graphics2D g2 = (Graphics2D) g.create();
-                g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
-                g2.setColor(ThemeUtils.PRIMARY_LIGHT);
-                g2.fillOval(0, 0, getWidth(), getHeight());
-                g2.dispose();
-                super.paintComponent(g);
-            }
-        };
-        iconCircle.setPreferredSize(new Dimension(56, 56));
-        iconCircle.setLayout(new BorderLayout());
-        iconCircle.setOpaque(false);
+        iconRow.setBorder(new EmptyBorder(5, 0, 10, 0));
         JLabel lblIcon = new JLabel("✏️", JLabel.CENTER);
-        lblIcon.setFont(new Font("Segoe UI", Font.PLAIN, 24));
-        iconCircle.add(lblIcon, BorderLayout.CENTER);
-        iconRow.add(iconCircle);
+        lblIcon.setFont(new Font("Segoe UI", Font.PLAIN, 32));
+        iconRow.add(lblIcon);
         cardPanel.add(iconRow, BorderLayout.NORTH);
 
-        // Form fields
-        JPanel formPanel = new JPanel();
-        formPanel.setLayout(new BoxLayout(formPanel, BoxLayout.Y_AXIS));
-        formPanel.setOpaque(false);
-        formPanel.setBorder(new EmptyBorder(0, 10, 0, 10));
-
-        int gap = 12;
-
-        // --- Row 1: Sinh viên (read-only) ---
-        formPanel.add(Box.createVerticalStrut(gap));
-        formPanel.add(createFormFieldRow("Sinh viên:"));
+        // --- Initialize Components ---
         txtSinhVien = ThemeUtils.createTextField(0);
         txtSinhVien.setText(data[1] + " - " + data[2]);
         txtSinhVien.setEditable(false);
         txtSinhVien.setBackground(ThemeUtils.BG_TABLE_ALT);
         txtSinhVien.setForeground(ThemeUtils.TEXT_MUTED);
-        txtSinhVien.setPreferredSize(new Dimension(400, 38));
-        formPanel.add(Box.createVerticalStrut(4));
-        formPanel.add(txtSinhVien);
 
-        // --- Row 2: Sách mượn (combobox) ---
-        formPanel.add(Box.createVerticalStrut(gap));
-        formPanel.add(createFormFieldRow("Sách mượn:"));
         cbSach = new JComboBox<>();
         cbSach.setFont(ThemeUtils.FONT_BODY);
         cbSach.setBackground(ThemeUtils.BG_INPUT);
@@ -114,42 +81,18 @@ public class FormSuaPhieuMuon extends JDialog {
         cbSach.setPreferredSize(new Dimension(400, 38));
         loadAllBooksToCombo();
         setSelectedSach(this.maSachCu);
-        formPanel.add(Box.createVerticalStrut(4));
-        formPanel.add(cbSach);
 
-        // --- Row 3: Số lượng ---
-        formPanel.add(Box.createVerticalStrut(gap));
-        formPanel.add(createFormFieldRow("Số lượng mượn:"));
         txtSoLuong = ThemeUtils.createTextField(0);
         txtSoLuong.setText(data[7].toString());
-        txtSoLuong.setPreferredSize(new Dimension(400, 38));
-        formPanel.add(Box.createVerticalStrut(4));
-        formPanel.add(txtSoLuong);
 
-        // --- Row 4: Ngày mượn (read-only) ---
-        formPanel.add(Box.createVerticalStrut(gap));
-        formPanel.add(createFormFieldRow("Ngày mượn:"));
         txtNgayMuon = ThemeUtils.createTextField(0);
         txtNgayMuon.setText(data[8].toString());
         txtNgayMuon.setEditable(false);
         txtNgayMuon.setBackground(ThemeUtils.BG_TABLE_ALT);
-        txtNgayMuon.setForeground(ThemeUtils.TEXT_MUTED);
-        txtNgayMuon.setPreferredSize(new Dimension(400, 38));
-        formPanel.add(Box.createVerticalStrut(4));
-        formPanel.add(txtNgayMuon);
 
-        // --- Row 5: Ngày trả ---
-        formPanel.add(Box.createVerticalStrut(gap));
-        formPanel.add(createFormFieldRow("Ngày trả (yyyy-MM-dd):"));
         txtNgayTra = ThemeUtils.createTextField(0);
         txtNgayTra.setText(data[9].toString());
-        txtNgayTra.setPreferredSize(new Dimension(400, 38));
-        formPanel.add(Box.createVerticalStrut(4));
-        formPanel.add(txtNgayTra);
 
-        // --- Row 6: Tình trạng (combobox) ---
-        formPanel.add(Box.createVerticalStrut(gap));
-        formPanel.add(createFormFieldRow("Tình trạng phiếu:"));
         cbTinhTrang = new JComboBox<>(new String[]{
             "Đang mượn", "Đã trả", "Trả chậm", "Quá hạn trả"
         });
@@ -162,13 +105,54 @@ public class FormSuaPhieuMuon extends JDialog {
             BorderFactory.createEmptyBorder(6, 10, 6, 10)
         ));
         cbTinhTrang.setPreferredSize(new Dimension(400, 38));
-        formPanel.add(Box.createVerticalStrut(4));
-        formPanel.add(cbTinhTrang);
 
-        cardPanel.add(formPanel, BorderLayout.CENTER);
+        // --- Layout inside formPanel ---
+        JPanel formPanel = new JPanel(new GridBagLayout());
+        formPanel.setOpaque(false);
+        formPanel.setBorder(new EmptyBorder(10, 20, 10, 20));
+        
+        GridBagConstraints g = new GridBagConstraints();
+        g.fill = GridBagConstraints.HORIZONTAL;
+        g.weightx = 1.0;
+        g.gridx = 0;
+        int r = 0;
 
-        // Wrap card in a scrollable center panel
-        JPanel centerWrapper = new JPanel(new FlowLayout(FlowLayout.CENTER, 20, 10));
+        g.insets = new Insets(0, 0, 4, 0);
+        g.gridy = r++; formPanel.add(createFormFieldRow("Sinh viên:"), g);
+        g.gridy = r++; formPanel.add(txtSinhVien, g);
+        
+        g.insets = new Insets(12, 0, 4, 0);
+        g.gridy = r++; formPanel.add(createFormFieldRow("Sách mượn:"), g);
+        g.insets = new Insets(0, 0, 0, 0);
+        g.gridy = r++; formPanel.add(cbSach, g);
+        
+        g.insets = new Insets(12, 0, 4, 0);
+        g.gridy = r++; formPanel.add(createFormFieldRow("Số lượng mượn:"), g);
+        g.insets = new Insets(0, 0, 0, 0);
+        g.gridy = r++; formPanel.add(txtSoLuong, g);
+        
+        g.insets = new Insets(12, 0, 4, 0);
+        g.gridy = r++; formPanel.add(createFormFieldRow("Ngày mượn:"), g);
+        g.insets = new Insets(0, 0, 0, 0);
+        g.gridy = r++; formPanel.add(txtNgayMuon, g);
+        
+        g.insets = new Insets(12, 0, 4, 0);
+        g.gridy = r++; formPanel.add(createFormFieldRow("Ngày trả (yyyy-MM-dd):"), g);
+        g.insets = new Insets(0, 0, 0, 0);
+        g.gridy = r++; formPanel.add(txtNgayTra, g);
+        
+        g.insets = new Insets(12, 0, 4, 0);
+        g.gridy = r++; formPanel.add(createFormFieldRow("Tình trạng phiếu:"), g);
+        g.insets = new Insets(0, 0, 0, 0);
+        g.gridy = r++; formPanel.add(cbTinhTrang, g);
+
+        JScrollPane formScroll = new JScrollPane(formPanel);
+        ThemeUtils.styleScrollPane(formScroll);
+        formScroll.setPreferredSize(new Dimension(480, 420));
+        formScroll.setBorder(null);
+        cardPanel.add(formScroll, BorderLayout.CENTER);
+
+        JPanel centerWrapper = new JPanel(new GridBagLayout());
         centerWrapper.setBackground(ThemeUtils.BG_MAIN);
         centerWrapper.add(cardPanel);
         this.add(centerWrapper, BorderLayout.CENTER);
@@ -190,12 +174,10 @@ public class FormSuaPhieuMuon extends JDialog {
         pnlSouth.add(btnHuy);
         this.add(pnlSouth, BorderLayout.SOUTH);
 
-        // Events
         btnLuu.addActionListener(e -> xuLyCapNhat());
         btnHuy.addActionListener(e -> dispose());
     }
 
-    // Helper: Create a styled form field label
     private JLabel createFormFieldRow(String text) {
         JLabel lbl = new JLabel(text);
         lbl.setFont(ThemeUtils.FONT_LABEL_BOLD);
@@ -203,7 +185,6 @@ public class FormSuaPhieuMuon extends JDialog {
         return lbl;
     }
 
-    // --- Các hàm hỗ trợ và Logic ---
     private void loadAllBooksToCombo() {
         try (Connection conn = new Connect().getConnection();
              Statement st = conn.createStatement();

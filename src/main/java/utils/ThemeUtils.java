@@ -37,6 +37,7 @@ public final class ThemeUtils {
     public static final Color TEXT_PRIMARY = new Color(15, 23, 42);
     public static final Color TEXT_SECONDARY = new Color(100, 116, 139);
     public static final Color TEXT_MUTED = new Color(148, 163, 184);
+    public static final Color TEXT_BLACK = Color.BLACK;
     public static final Color TEXT_WHITE = new Color(255, 255, 255);
     public static final Color TEXT_ON_PRIMARY = new Color(255, 255, 255);
 
@@ -533,18 +534,18 @@ public final class ThemeUtils {
         badge.setBorder(new EmptyBorder(4, 12, 4, 12));
         return badge;
     }
+
     public static void addExitConfirmation(JFrame frame) {
         frame.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
         frame.addWindowListener(new java.awt.event.WindowAdapter() {
             @Override
             public void windowClosing(java.awt.event.WindowEvent e) {
                 int option = JOptionPane.showConfirmDialog(
-                    frame, 
-                    "Bạn có chắc chắn muốn thoát chương trình không?", 
-                    "Xác nhận thoát", 
-                    JOptionPane.YES_NO_OPTION,
-                    JOptionPane.QUESTION_MESSAGE
-                );
+                        frame,
+                        "Bạn có chắc chắn muốn thoát chương trình không?",
+                        "Xác nhận thoát",
+                        JOptionPane.YES_NO_OPTION,
+                        JOptionPane.QUESTION_MESSAGE);
                 if (option == JOptionPane.YES_OPTION) {
                     System.exit(0);
                 }
