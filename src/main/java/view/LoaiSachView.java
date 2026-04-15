@@ -16,7 +16,7 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
-import javax.swing.BorderFactory;
+import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
@@ -51,13 +51,8 @@ public class LoaiSachView extends JFrame {
         addWindowListener(new WindowAdapter() {
             @Override
             public void windowClosing(WindowEvent e) {
-                // ✅ THAY ĐỔI:
-                String role = SessionManager.getCurrentRole();
-                if ("admin".equals(role)) {
-                    new AdminGUI(SessionManager.getMaNguoiDung()).setVisible(true);
-                } else {
-                    new SinhVienGUI(SessionManager.getMaNguoiDung()).setVisible(true);
-                }
+                // ĐÃ THAY ĐỔI: Sử dụng xác nhận thoát chung của hệ thống
+                ThemeUtils.addExitConfirmation(LoaiSachView.this);
             }
         });
         setVisible(true);
@@ -74,7 +69,18 @@ public class LoaiSachView extends JFrame {
         mainPanel.setBorder(new EmptyBorder(0, 0, 0, 0));
 
         // Top bar with title and breadcrumb
-        JPanel topBar = ThemeUtils.createTopBar("THỂ LOẠI SÁCH", "Trang chủ > Thể loại sách");
+        JButton btnBack = ThemeUtils.createSecondaryButton("← Quay lại");
+        btnBack.addActionListener(e -> {
+            dispose();
+            String role = SessionManager.getCurrentRole();
+            if ("admin".equals(role)) {
+                new AdminGUI(SessionManager.getMaNguoiDung()).setVisible(true);
+            } else {
+                new SinhVienGUI(SessionManager.getMaNguoiDung()).setVisible(true);
+            }
+        });
+
+        JPanel topBar = ThemeUtils.createTopBar("THỂ LOẠI SÁCH", "Trang chủ > Thể loại sách", btnBack);
         mainPanel.add(topBar, BorderLayout.NORTH);
 
         // Content panel

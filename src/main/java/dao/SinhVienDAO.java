@@ -159,11 +159,12 @@ public class SinhVienDAO {
     }
 
     public boolean update(SinhVien sv) {
-        if (sv.getPassword().isEmpty() || sv.getHoten().isEmpty() || sv.getLop().isEmpty()
+        // Bỏ kiểm tra sv.getPassword().isEmpty() để cho phép không đổi mật khẩu
+        if (sv.getHoten().isEmpty() || sv.getLop().isEmpty()
                 || sv.getGioitinh().isEmpty() || sv.getNgaysinh() == null
                 || sv.getDiachi().isEmpty() || sv.getEmail().isEmpty()
                 || sv.getSdt().isEmpty()) {
-            JOptionPane.showMessageDialog(null, "Nhập đầy đủ thông tin!");
+            JOptionPane.showMessageDialog(null, "Vui lòng nhập đầy đủ các thông tin cá nhân!");
             return false;
         }
         if (!checkDinhDang(sv))
@@ -182,12 +183,20 @@ public class SinhVienDAO {
             }
             conn.setAutoCommit(false);
 
-            // 1. Cập nhật User (Thêm Email vào đây)
-            String sqlUser = "UPDATE user SET password=?, email=? WHERE id=?";
+            // 1. Cập nhật User
+            boolean hasNewPassword = sv.getPassword() != null && !sv.getPassword().trim().isEmpty();
+            String sqlUser = hasNewPassword ? "UPDATE user SET password=?, email=? WHERE id=?" : "UPDATE user SET email=? WHERE id=?";
+            
             try (PreparedStatement psUser = conn.prepareStatement(sqlUser)) {
-                psUser.setString(1, sv.getPassword());
-                psUser.setString(2, sv.getEmail());
-                psUser.setInt(3, sv.getId());
+                if (hasNewPassword) {
+                    String hashedPassword = utils.PasswordUtils.hashPassword(sv.getPassword());
+                    psUser.setString(1, hashedPassword);
+                    psUser.setString(2, sv.getEmail());
+                    psUser.setInt(3, sv.getId());
+                } else {
+                    psUser.setString(1, sv.getEmail());
+                    psUser.setInt(2, sv.getId());
+                }
                 psUser.executeUpdate();
             }
 

@@ -37,7 +37,10 @@ public class TacGiaDetailView extends JFrame {
         mainPanel.setBackground(ThemeUtils.BG_MAIN);
 
         // Top bar with author name and breadcrumb
-        JPanel topBar = ThemeUtils.createTopBar(tacGia.getTen_tg(), "Danh sách tác giả > Chi tiết tác giả");
+        JButton btnBack = ThemeUtils.createSecondaryButton("← Quay lại");
+        btnBack.addActionListener(e -> dispose());
+        
+        JPanel topBar = ThemeUtils.createTopBar(tacGia.getTen_tg(), "Danh sách tác giả > Chi tiết tác giả", btnBack);
         mainPanel.add(topBar, BorderLayout.NORTH);
 
         // Scrollable content
@@ -190,10 +193,26 @@ public class TacGiaDetailView extends JFrame {
         return panel;
     }
 
+    private JLabel createPlaceholderImage() {
+        JLabel lbl = new JLabel("No Image", SwingConstants.CENTER);
+        lbl.setFont(utils.ThemeUtils.FONT_BODY);
+        lbl.setForeground(utils.ThemeUtils.TEXT_MUTED);
+        lbl.setPreferredSize(new Dimension(200, 280));
+        lbl.setBackground(utils.ThemeUtils.BG_INPUT);
+        lbl.setOpaque(true);
+        lbl.setBorder(BorderFactory.createLineBorder(utils.ThemeUtils.BORDER, 1));
+        return lbl;
+    }
+
     private JLabel loadImage() {
         try {
-            String path = "D:\\OOP_QLTV\\src\\main\\resources\\images" + tacGia.getHinh();
-            URL imgURL = getClass().getResource(path);
+            String hinh = tacGia.getHinh();
+            if (hinh == null || hinh.trim().isEmpty()) {
+                return createPlaceholderImage();
+            }
+
+            // Using standard classpath resource loading
+            URL imgURL = getClass().getResource("/images/" + hinh);
 
             if (imgURL != null) {
                 ImageIcon icon = new ImageIcon(imgURL);
@@ -217,23 +236,15 @@ public class TacGiaDetailView extends JFrame {
                     }
                 };
                 lbl.setPreferredSize(new Dimension(200, 280));
-                lbl.setBorder(new EmptyBorder(8, 8, 8, 8));
+                lbl.setBorder(new javax.swing.border.EmptyBorder(8, 8, 8, 8));
                 return lbl;
             } else {
-                System.out.println("Không tìm thấy file: " + path);
+                System.out.println("Không tìm thấy file ảnh: " + hinh);
             }
         } catch (Exception e) {
-            System.out.println("Lỗi xử lý ảnh: " + e.getMessage());
+            System.err.println("Lỗi xử lý ảnh: " + e.getMessage());
         }
 
-        // Placeholder
-        JLabel lbl = new JLabel("No Image", SwingConstants.CENTER);
-        lbl.setFont(ThemeUtils.FONT_BODY);
-        lbl.setForeground(ThemeUtils.TEXT_MUTED);
-        lbl.setPreferredSize(new Dimension(200, 280));
-        lbl.setBackground(ThemeUtils.BG_INPUT);
-        lbl.setOpaque(true);
-        lbl.setBorder(BorderFactory.createLineBorder(ThemeUtils.BORDER, 1));
-        return lbl;
+        return createPlaceholderImage();
     }
 }

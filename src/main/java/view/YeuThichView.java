@@ -45,7 +45,7 @@ public class YeuThichView extends JFrame {
         addWindowListener(new WindowAdapter() {
             @Override
             public void windowClosing(WindowEvent e) {
-                new SinhVienGUI(SessionManager.getMaNguoiDung()).setVisible(true);
+                ThemeUtils.addExitConfirmation(YeuThichView.this);
             }
         });
         setVisible(true);
@@ -62,7 +62,13 @@ public class YeuThichView extends JFrame {
         mainPanel.setBorder(new EmptyBorder(0, 0, 0, 0));
 
         // Top bar with title and heart icon
-        JPanel topBar = ThemeUtils.createTopBar("❤ SÁCH YÊU THÍCH", "Trang chủ > Sách yêu thích");
+        JButton btnBack = ThemeUtils.createSecondaryButton("← Quay lại");
+        btnBack.addActionListener(e -> {
+            dispose();
+            new gui.SinhVienGUI(SessionManager.getMaNguoiDung()).setVisible(true);
+        });
+
+        JPanel topBar = ThemeUtils.createTopBar("❤ SÁCH YÊU THÍCH", "Trang chủ > Sách yêu thích", btnBack);
         mainPanel.add(topBar, BorderLayout.NORTH);
 
         // Content area

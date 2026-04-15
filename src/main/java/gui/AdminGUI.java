@@ -39,19 +39,7 @@ public class AdminGUI extends JFrame {
         // Right main content
         add(createMainContent(), BorderLayout.CENTER);
 
-        // Window close behavior
-        addWindowListener(new WindowAdapter() {
-            @Override
-            public void windowClosing(WindowEvent e) {
-                int choice = JOptionPane.showConfirmDialog(AdminGUI.this,
-                        "Đóng chương trình?", "Xác nhận",
-                        JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
-                if (choice == JOptionPane.YES_OPTION) {
-                    SessionManager.logout();
-                    System.exit(0);
-                }
-            }
-        });
+        ThemeUtils.addExitConfirmation(this);
     }
 
     // ===== SIDEBAR =====
@@ -195,8 +183,7 @@ public class AdminGUI extends JFrame {
         topBar.setBackground(ThemeUtils.BG_CARD);
         topBar.setBorder(BorderFactory.createCompoundBorder(
                 BorderFactory.createMatteBorder(0, 0, 1, 0, ThemeUtils.BORDER),
-                new EmptyBorder(15, 25, 15, 25)
-        ));
+                new EmptyBorder(15, 25, 15, 25)));
 
         JLabel lblTitle = new JLabel("Trang chủ Admin");
         lblTitle.setFont(ThemeUtils.FONT_HEADING);
@@ -234,15 +221,17 @@ public class AdminGUI extends JFrame {
         JPanel contentOverlay = new JPanel();
         contentOverlay.setLayout(new BoxLayout(contentOverlay, BoxLayout.Y_AXIS));
         contentOverlay.setOpaque(false);
+        contentOverlay.setBackground(new Color(0, 0, 0, 120));
+        contentOverlay.setBorder(BorderFactory.createEmptyBorder(40, 60, 40, 60));
 
         JLabel lblMainText = new JLabel("Kho tri thức dành cho mọi người");
-        lblMainText.setFont(new Font("Segoe UI", Font.BOLD, 36));
+        lblMainText.setFont(new Font("Segoe UI", Font.BOLD, 42));
         lblMainText.setForeground(Color.WHITE);
         lblMainText.setAlignmentX(Component.CENTER_ALIGNMENT);
 
         JLabel lblSubText = new JLabel("Chào mừng Quản trị viên: " + currentUsername);
-        lblSubText.setFont(new Font("Segoe UI", Font.PLAIN, 18));
-        lblSubText.setForeground(new Color(240, 240, 240));
+        lblSubText.setFont(new Font("Segoe UI", Font.PLAIN, 30));
+        lblSubText.setForeground(Color.WHITE);
         lblSubText.setAlignmentX(Component.CENTER_ALIGNMENT);
 
         contentOverlay.add(lblMainText);
@@ -262,7 +251,8 @@ public class AdminGUI extends JFrame {
         public BackgroundImagePanel(String imagePath) {
             try {
                 java.net.URL imgURL = getClass().getResource(imagePath);
-                if (imgURL != null) backgroundImage = ImageIO.read(imgURL);
+                if (imgURL != null)
+                    backgroundImage = ImageIO.read(imgURL);
             } catch (Exception e) {
             }
         }
@@ -271,7 +261,37 @@ public class AdminGUI extends JFrame {
         protected void paintComponent(Graphics g) {
             super.paintComponent(g);
             if (backgroundImage != null) {
-                g.drawImage(backgroundImage, 0, 0, this.getWidth(), this.getHeight(), this);
+                Graphics2D g2 = (Graphics2D) g.create();
+                g2.setRenderingHint(RenderingHints.KEY_INTERPOLATION, RenderingHints.VALUE_INTERPOLATION_BILINEAR);
+
+                int panelWidth = getWidth();
+                int panelHeight = getHeight();
+                int imageWidth = backgroundImage.getWidth(this);
+                int imageHeight = backgroundImage.getHeight(this);
+
+                double panelAspect = (double) panelWidth / panelHeight;
+                double imageAspect = (double) imageWidth / imageHeight;
+
+                int drawWidth, drawHeight;
+                int x = 0, y = 0;
+
+                if (panelAspect > imageAspect) {
+                    drawWidth = panelWidth;
+                    drawHeight = (int) (panelWidth / imageAspect);
+                    y = (panelHeight - drawHeight) / 2;
+                } else {
+                    drawHeight = panelHeight;
+                    drawWidth = (int) (panelHeight * imageAspect);
+                    x = (panelWidth - drawWidth) / 2;
+                }
+
+                g2.drawImage(backgroundImage, x, y, drawWidth, drawHeight, this);
+
+                // Overlay for readability
+                g2.setColor(new Color(0, 0, 0, 80));
+                g2.fillRect(0, 0, panelWidth, panelHeight);
+
+                g2.dispose();
             }
         }
     }

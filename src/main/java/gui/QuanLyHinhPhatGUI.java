@@ -39,9 +39,7 @@ public class QuanLyHinhPhatGUI extends JFrame {
         this.addWindowListener(new WindowAdapter() {
             @Override
             public void windowClosing(WindowEvent e) {
-                dispose();
-                UserDAO dao = new UserDAO();
-                new AdminGUI(SessionManager.getMaNguoiDung()).setVisible(true);
+                ThemeUtils.addExitConfirmation(QuanLyHinhPhatGUI.this);
             }
         });
     }

@@ -16,7 +16,8 @@ public class SinhVienPanel extends JPanel {
     private DefaultTableModel model;
     private SinhVienDAO svDAO = new SinhVienDAO();
 
-    private JTextField txtMasv, txtTen, txtLop, txtNgaySinh, txtDiaChi, txtEmail, txtSdt, txtTimkiem, txtUsername, txtPassword;
+    private JTextField txtMasv, txtTen, txtLop, txtNgaySinh, txtDiaChi, txtEmail, txtSdt, txtTimkiem, txtUsername;
+    private JPasswordField txtPassword;
     private JComboBox<String> cbGioiTinh;
     private JButton btnThem, btnSua, btnXoa, btnLamMoi, btnTimkiem;
 
@@ -48,9 +49,8 @@ public class SinhVienPanel extends JPanel {
             JPanel pnlSearch = new JPanel(new FlowLayout(FlowLayout.LEFT, 8, 5));
             pnlSearch.setBackground(ThemeUtils.BG_CARD);
             pnlSearch.setBorder(BorderFactory.createCompoundBorder(
-                BorderFactory.createMatteBorder(0, 0, 1, 0, ThemeUtils.BORDER),
-                new EmptyBorder(8, 15, 8, 15)
-            ));
+                    BorderFactory.createMatteBorder(0, 0, 1, 0, ThemeUtils.BORDER),
+                    new EmptyBorder(8, 15, 8, 15)));
 
             pnlSearch.add(ThemeUtils.createLabel("Tìm kiếm:"));
             txtTimkiem = ThemeUtils.createTextField(15);
@@ -75,7 +75,7 @@ public class SinhVienPanel extends JPanel {
 
         // === LEFT FORM CARD ===
         JPanel pnlFormCard = ThemeUtils.createCardPanel(20);
-        pnlFormCard.setPreferredSize(new Dimension(300, 0));
+        pnlFormCard.setPreferredSize(new Dimension(380, 0));
 
         JPanel pnlForm = new JPanel(new GridBagLayout());
         pnlForm.setOpaque(false);
@@ -89,89 +89,109 @@ public class SinhVienPanel extends JPanel {
         JLabel lblFormTitle = new JLabel("Thông tin sinh viên");
         lblFormTitle.setFont(ThemeUtils.FONT_SUBHEADING);
         lblFormTitle.setForeground(ThemeUtils.PRIMARY);
-        gbc.gridx = 0; gbc.gridy = 0; gbc.gridwidth = 2;
+        gbc.gridx = 0;
+        gbc.gridy = 0;
+        gbc.gridwidth = 2;
         pnlForm.add(lblFormTitle, gbc);
         gbc.gridwidth = 1;
 
         // Row 1: Mã SV
-        gbc.gridy = 1; gbc.gridx = 0;
+        gbc.gridy = 1;
+        gbc.gridx = 0;
         pnlForm.add(ThemeUtils.createLabel("Mã SV:"), gbc);
         gbc.gridx = 1;
         txtMasv = ThemeUtils.createTextField(15);
         pnlForm.add(txtMasv, gbc);
 
         // Row 2: Họ tên
-        gbc.gridy = 2; gbc.gridx = 0;
+        gbc.gridy = 2;
+        gbc.gridx = 0;
         pnlForm.add(ThemeUtils.createLabel("Họ tên:"), gbc);
         gbc.gridx = 1;
         txtTen = ThemeUtils.createTextField(15);
         pnlForm.add(txtTen, gbc);
 
         // Row 3: Lớp
-        gbc.gridy = 3; gbc.gridx = 0;
+        gbc.gridy = 3;
+        gbc.gridx = 0;
         pnlForm.add(ThemeUtils.createLabel("Lớp:"), gbc);
         gbc.gridx = 1;
         txtLop = ThemeUtils.createTextField(15);
         pnlForm.add(txtLop, gbc);
 
         // Row 4: Giới tính
-        gbc.gridy = 4; gbc.gridx = 0;
+        gbc.gridy = 4;
+        gbc.gridx = 0;
         pnlForm.add(ThemeUtils.createLabel("Giới tính:"), gbc);
         gbc.gridx = 1;
-        cbGioiTinh = ThemeUtils.createComboBox(new String[]{"Nam", "Nữ", "Khác"});
+        cbGioiTinh = ThemeUtils.createComboBox(new String[] { "Nam", "Nữ", "Khác" });
         pnlForm.add(cbGioiTinh, gbc);
 
         // Row 5: Ngày sinh
-        gbc.gridy = 5; gbc.gridx = 0;
+        gbc.gridy = 5;
+        gbc.gridx = 0;
         pnlForm.add(ThemeUtils.createLabel("Ngày sinh:"), gbc);
         gbc.gridx = 1;
         txtNgaySinh = ThemeUtils.createTextField(15);
         pnlForm.add(txtNgaySinh, gbc);
 
         // Row 6: Địa chỉ
-        gbc.gridy = 6; gbc.gridx = 0;
+        gbc.gridy = 6;
+        gbc.gridx = 0;
         pnlForm.add(ThemeUtils.createLabel("Địa chỉ:"), gbc);
         gbc.gridx = 1;
         txtDiaChi = ThemeUtils.createTextField(15);
         pnlForm.add(txtDiaChi, gbc);
 
         // Row 7: Email
-        gbc.gridy = 7; gbc.gridx = 0;
+        gbc.gridy = 7;
+        gbc.gridx = 0;
         pnlForm.add(ThemeUtils.createLabel("Email:"), gbc);
         gbc.gridx = 1;
         txtEmail = ThemeUtils.createTextField(15);
         pnlForm.add(txtEmail, gbc);
 
         // Row 8: SĐT
-        gbc.gridy = 8; gbc.gridx = 0;
+        gbc.gridy = 8;
+        gbc.gridx = 0;
         pnlForm.add(ThemeUtils.createLabel("SĐT:"), gbc);
         gbc.gridx = 1;
         txtSdt = ThemeUtils.createTextField(15);
         pnlForm.add(txtSdt, gbc);
 
         // Row 9: Username
-        gbc.gridy = 9; gbc.gridx = 0;
+        gbc.gridy = 9;
+        gbc.gridx = 0;
         pnlForm.add(ThemeUtils.createLabel("Username:"), gbc);
         gbc.gridx = 1;
         txtUsername = ThemeUtils.createTextField(15);
         pnlForm.add(txtUsername, gbc);
 
         // Row 10: Password
-        gbc.gridy = 10; gbc.gridx = 0;
+        gbc.gridy = 10;
+        gbc.gridx = 0;
         pnlForm.add(ThemeUtils.createLabel("Password:"), gbc);
         gbc.gridx = 1;
-        txtPassword = ThemeUtils.createTextField(15);
+        txtPassword = ThemeUtils.createPasswordField(15);
         pnlForm.add(txtPassword, gbc);
 
-        pnlFormCard.add(pnlForm, BorderLayout.CENTER);
+        JScrollPane formScroll = new JScrollPane(pnlForm);
+        formScroll.setBorder(null);
+        formScroll.setOpaque(false);
+        formScroll.getViewport().setOpaque(false);
+        pnlFormCard.add(formScroll, BorderLayout.CENTER);
+
         pnlCenter.add(pnlFormCard, BorderLayout.WEST);
 
         // === RIGHT CONTENT ===
         if (!isProfileMode) {
             // Admin mode: Table
-            model = new DefaultTableModel(new String[]{"Mã SV", "Họ tên", "Lớp", "Giới tính", "Ngày sinh", "Địa chỉ", "Email", "SĐT", "Username", "Password"}, 0) {
+            model = new DefaultTableModel(new String[] { "Mã SV", "Họ tên", "Lớp", "Giới tính", "Ngày sinh", "Địa chỉ",
+                    "Email", "SĐT", "Username" }, 0) {
                 @Override
-                public boolean isCellEditable(int row, int column) { return false; }
+                public boolean isCellEditable(int row, int column) {
+                    return false;
+                }
             };
             tblSV = new JTable(model);
             ThemeUtils.styleTable(tblSV);
@@ -258,7 +278,7 @@ public class SinhVienPanel extends JPanel {
                             txtUsername.setText(model.getValueAt(row, 8).toString());
                             txtUsername.setEditable(false);
                             txtUsername.setBackground(new Color(240, 240, 240));
-                            txtPassword.setText(model.getValueAt(row, 9).toString());
+                            txtPassword.setText(""); // Không hiển thị mật khẩu đã băm (security)
                         } catch (Exception ex) {
                         }
                     }
@@ -324,7 +344,7 @@ public class SinhVienPanel extends JPanel {
         txtUsername.setText(sv.getUsername());
         txtUsername.setEditable(false);
         txtUsername.setBackground(new Color(240, 240, 240));
-        txtPassword.setText(sv.getPassword());
+        txtPassword.setText(""); // Security: Không hiển thị ngược lại mật khẩu đã mã hóa
     }
 
     private SinhVien getForm() {
@@ -341,18 +361,17 @@ public class SinhVienPanel extends JPanel {
             }
 
             SinhVien sv = new SinhVien(
-                0,
-                txtMasv.getText().trim(),
-                txtTen.getText().trim(),
-                txtLop.getText().trim(),
-                cbGioiTinh.getSelectedItem().toString(),
-                sqlDate,
-                txtDiaChi.getText().trim(),
-                txtEmail.getText().trim(),
-                txtSdt.getText().trim()
-            );
+                    0,
+                    txtMasv.getText().trim(),
+                    txtTen.getText().trim(),
+                    txtLop.getText().trim(),
+                    cbGioiTinh.getSelectedItem().toString(),
+                    sqlDate,
+                    txtDiaChi.getText().trim(),
+                    txtEmail.getText().trim(),
+                    txtSdt.getText().trim());
             sv.setUsername(txtUsername.getText().trim());
-            sv.setPassword(txtPassword.getText().trim());
+            sv.setPassword(new String(txtPassword.getPassword()));
             return sv;
         } catch (Exception e) {
             return null;
@@ -360,14 +379,18 @@ public class SinhVienPanel extends JPanel {
     }
 
     private void clearForm() {
-        txtMasv.setText(""); txtMasv.setEditable(true); txtMasv.setBackground(Color.WHITE);
+        txtMasv.setText("");
+        txtMasv.setEditable(true);
+        txtMasv.setBackground(Color.WHITE);
         txtTen.setText("");
         txtLop.setText("");
         txtNgaySinh.setText("");
         txtDiaChi.setText("");
         txtEmail.setText("");
         txtSdt.setText("");
-        txtUsername.setText(""); txtUsername.setEditable(true); txtUsername.setBackground(Color.WHITE);
+        txtUsername.setText("");
+        txtUsername.setEditable(true);
+        txtUsername.setBackground(Color.WHITE);
         txtPassword.setText("");
         tblSV.clearSelection();
     }
@@ -376,11 +399,13 @@ public class SinhVienPanel extends JPanel {
         model.setRowCount(0);
         SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
         for (SinhVien sv : list) {
-            model.addRow(new Object[]{sv.getMasv(), sv.getHoten(), sv.getLop(), sv.getGioitinh(),
-                sv.getNgaysinh() != null ? sdf.format(sv.getNgaysinh()) : "", sv.getDiachi(),
-                sv.getEmail(), sv.getSdt(), sv.getUsername(), sv.getPassword()});
+            model.addRow(new Object[] { sv.getMasv(), sv.getHoten(), sv.getLop(), sv.getGioitinh(),
+                    sv.getNgaysinh() != null ? sdf.format(sv.getNgaysinh()) : "", sv.getDiachi(),
+                    sv.getEmail(), sv.getSdt(), sv.getUsername() });
         }
     }
 
-    private void loadData() { fillTable(svDAO.getAll()); }
+    private void loadData() {
+        fillTable(svDAO.getAll());
+    }
 }

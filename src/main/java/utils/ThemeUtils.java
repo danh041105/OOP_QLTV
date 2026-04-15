@@ -61,12 +61,13 @@ public final class ThemeUtils {
     public static final Font FONT_LINK = new Font("Segoe UI", Font.PLAIN, 13);
 
     // ===== GRADIENT COLORS =====
-    public static final Color[] GRADIENT_PRIMARY = {new Color(37, 99, 235), new Color(99, 102, 241)};
-    public static final Color[] GRADIENT_DARK = {new Color(15, 23, 42), new Color(30, 41, 59)};
-    public static final Color[] GRADIENT_SUCCESS = {new Color(34, 197, 94), new Color(16, 185, 129)};
-    public static final Color[] GRADIENT_DANGER = {new Color(239, 68, 68), new Color(244, 63, 94)};
+    public static final Color[] GRADIENT_PRIMARY = { new Color(37, 99, 235), new Color(99, 102, 241) };
+    public static final Color[] GRADIENT_DARK = { new Color(15, 23, 42), new Color(30, 41, 59) };
+    public static final Color[] GRADIENT_SUCCESS = { new Color(34, 197, 94), new Color(16, 185, 129) };
+    public static final Color[] GRADIENT_DANGER = { new Color(239, 68, 68), new Color(244, 63, 94) };
 
-    private ThemeUtils() {}
+    private ThemeUtils() {
+    }
 
     // ===== PANEL CREATION =====
 
@@ -235,9 +236,8 @@ public final class ThemeUtils {
         cb.setBackground(BG_INPUT);
         cb.setForeground(TEXT_PRIMARY);
         cb.setBorder(BorderFactory.createCompoundBorder(
-            BorderFactory.createLineBorder(BORDER, 1),
-            BorderFactory.createEmptyBorder(6, 10, 6, 10)
-        ));
+                BorderFactory.createLineBorder(BORDER, 1),
+                BorderFactory.createEmptyBorder(6, 10, 6, 10)));
         cb.setPreferredSize(new Dimension(cb.getPreferredSize().width, 38));
         return cb;
     }
@@ -353,6 +353,7 @@ public final class ThemeUtils {
         content.add(lblSub);
 
         header.add(content, BorderLayout.CENTER);
+        header.setMaximumSize(new Dimension(Integer.MAX_VALUE, 100));
         return header;
     }
 
@@ -370,7 +371,8 @@ public final class ThemeUtils {
                 g2.fillOval(0, 0, getWidth(), getHeight());
                 g2.setColor(TEXT_WHITE);
                 g2.setFont(new Font("Segoe UI", Font.BOLD, 14));
-                String initials = username != null && !username.isEmpty() ? username.substring(0, 1).toUpperCase() : "U";
+                String initials = username != null && !username.isEmpty() ? username.substring(0, 1).toUpperCase()
+                        : "U";
                 FontMetrics fm = g2.getFontMetrics();
                 int x = (getWidth() - fm.stringWidth(initials)) / 2;
                 int y = (getHeight() + fm.getAscent() - fm.getDescent()) / 2;
@@ -399,6 +401,10 @@ public final class ThemeUtils {
 
         panel.add(avatar, BorderLayout.WEST);
         panel.add(info, BorderLayout.CENTER);
+
+        // Cố định chiều cao để không bị giãn theo chiều dọc trong BoxLayout
+        panel.setMaximumSize(new Dimension(Integer.MAX_VALUE, 70));
+
         return panel;
     }
 
@@ -452,9 +458,8 @@ public final class ThemeUtils {
         JPanel topBar = new JPanel(new BorderLayout());
         topBar.setBackground(BG_CARD);
         topBar.setBorder(BorderFactory.createCompoundBorder(
-            BorderFactory.createMatteBorder(0, 0, 1, 0, BORDER),
-            new EmptyBorder(15, 25, 15, 25)
-        ));
+                BorderFactory.createMatteBorder(0, 0, 1, 0, BORDER),
+                new EmptyBorder(15, 25, 15, 25)));
 
         JPanel left = new JPanel(new BorderLayout());
         left.setOpaque(false);
@@ -488,9 +493,8 @@ public final class ThemeUtils {
         JPanel toolbar = new JPanel(new FlowLayout(FlowLayout.LEFT, 10, 8));
         toolbar.setBackground(BG_CARD);
         toolbar.setBorder(BorderFactory.createCompoundBorder(
-            BorderFactory.createMatteBorder(0, 0, 1, 0, BORDER),
-            new EmptyBorder(10, 25, 10, 25)
-        ));
+                BorderFactory.createMatteBorder(0, 0, 1, 0, BORDER),
+                new EmptyBorder(10, 25, 10, 25)));
 
         toolbar.add(new JLabel("Tìm kiếm:"));
         toolbar.add(searchField);
@@ -528,5 +532,23 @@ public final class ThemeUtils {
         badge.setHorizontalAlignment(SwingConstants.CENTER);
         badge.setBorder(new EmptyBorder(4, 12, 4, 12));
         return badge;
+    }
+    public static void addExitConfirmation(JFrame frame) {
+        frame.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
+        frame.addWindowListener(new java.awt.event.WindowAdapter() {
+            @Override
+            public void windowClosing(java.awt.event.WindowEvent e) {
+                int option = JOptionPane.showConfirmDialog(
+                    frame, 
+                    "Bạn có chắc chắn muốn thoát chương trình không?", 
+                    "Xác nhận thoát", 
+                    JOptionPane.YES_NO_OPTION,
+                    JOptionPane.QUESTION_MESSAGE
+                );
+                if (option == JOptionPane.YES_OPTION) {
+                    System.exit(0);
+                }
+            }
+        });
     }
 }

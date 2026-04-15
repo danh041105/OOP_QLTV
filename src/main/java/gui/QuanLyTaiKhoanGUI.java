@@ -31,6 +31,12 @@ public class QuanLyTaiKhoanGUI extends JFrame {
         setDefaultCloseOperation(DISPOSE_ON_CLOSE);
         getContentPane().setBackground(ThemeUtils.BG_MAIN);
 
+        JButton btnBack = ThemeUtils.createSecondaryButton("← Quay lại");
+        btnBack.addActionListener(e -> goBack());
+
+        JPanel topBar = ThemeUtils.createTopBar("HỒ SƠ & TÀI KHOẢN", "Trang chủ > Quản lý tài khoản", btnBack);
+        add(topBar, BorderLayout.NORTH);
+
         // Phân quyền giao diện
         if (SessionManager.currentUser != null && SessionManager.currentUser.getRole() == 0) {
             // Admin mode: styled menu bar
@@ -44,12 +50,7 @@ public class QuanLyTaiKhoanGUI extends JFrame {
 
         add(pnlMain);
 
-        addWindowListener(new WindowAdapter() {
-            @Override
-            public void windowClosing(WindowEvent e) {
-                goBack();
-            }
-        });
+        ThemeUtils.addExitConfirmation(this);
     }
 
     private void goBack() {
@@ -74,12 +75,12 @@ public class QuanLyTaiKhoanGUI extends JFrame {
         bar.setBackground(ThemeUtils.BG_CARD);
         bar.setBorder(BorderFactory.createMatteBorder(0, 0, 1, 0, ThemeUtils.BORDER));
 
-        JMenu mnuQL = new JMenu("  Quản lý tài khoản  ");
-        mnuQL.setFont(ThemeUtils.FONT_BODY_BOLD);
-        mnuQL.setForeground(ThemeUtils.TEXT_PRIMARY);
-        mnuQL.setBackground(ThemeUtils.BG_CARD);
-        mnuQL.setBorderPainted(false);
-        mnuQL.setOpaque(true);
+        // JMenu mnuQL = new JMenu(" Quản lý tài khoản ");
+        // mnuQL.setFont(ThemeUtils.FONT_BODY_BOLD);
+        // mnuQL.setForeground(ThemeUtils.TEXT_PRIMARY);
+        // mnuQL.setBackground(ThemeUtils.BG_CARD);
+        // mnuQL.setBorderPainted(false);
+        // mnuQL.setOpaque(true);
 
         JMenuItem mnuAdmin = new JMenuItem("  Tài khoản Admin  ");
         mnuAdmin.setFont(ThemeUtils.FONT_BODY);
@@ -96,9 +97,9 @@ public class QuanLyTaiKhoanGUI extends JFrame {
         mnuAdmin.addActionListener(e -> showAdmin());
         mnuSV.addActionListener(e -> showSinhVien());
 
-        mnuQL.add(mnuAdmin);
-        mnuQL.add(mnuSV);
-        bar.add(mnuQL);
+        // mnuQL.add(mnuAdmin);
+        // mnuQL.add(mnuSV);
+        // bar.add(mnuQL);
 
         return bar;
     }

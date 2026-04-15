@@ -7,18 +7,17 @@ import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 import java.awt.*;
 
-public class QuenMk extends JDialog {
-
+public class QuenMk extends JFrame {
     private JTextField txtEmail;
     private UserDAO userDAO = new UserDAO();
 
-    public QuenMk(JFrame parent) {
-        super(parent, "Quên mật khẩu", true);
-        setSize(440, 320);
-        setLocationRelativeTo(parent);
+    public QuenMk() {
+        setTitle("Quên mật khẩu");
+        setSize(600, 450);
+        setLocationRelativeTo(null);
         this.getContentPane().setBackground(ThemeUtils.BG_MAIN);
-        this.setUndecorated(true);
         this.setLayout(new BorderLayout(0, 0));
+        ThemeUtils.addExitConfirmation(this);
 
         // ===== GRADIENT HEADER =====
         JPanel header = ThemeUtils.createGradientPanel(ThemeUtils.GRADIENT_PRIMARY, 80);
@@ -100,21 +99,33 @@ public class QuenMk extends JDialog {
         lblEmailLabel.setForeground(ThemeUtils.TEXT_PRIMARY);
 
         txtEmail = ThemeUtils.createTextField(0);
-        txtEmail.setPreferredSize(new Dimension(350, 40));
+        txtEmail.setPreferredSize(new Dimension(500, 44));
         txtEmail.setFont(ThemeUtils.FONT_BODY);
 
         emailFieldPanel.add(lblEmailLabel, BorderLayout.NORTH);
         emailFieldPanel.add(txtEmail, BorderLayout.CENTER);
 
+        // Buttons panel
+        JPanel actionPanel = new JPanel(new GridLayout(2, 1, 0, 10));
+        actionPanel.setOpaque(false);
+        
         // Send button
         JButton btnSend = ThemeUtils.createPrimaryButton("GỬI MẬT KHẨU VỀ EMAIL");
-        btnSend.setPreferredSize(new Dimension(350, 44));
+        btnSend.setPreferredSize(new Dimension(500, 50));
         btnSend.setFont(ThemeUtils.FONT_BODY_BOLD);
         btnSend.addActionListener(e -> handleSendPassword());
+        
+        // Back button
+        JButton btnBack = ThemeUtils.createSecondaryButton("← Quay lại đăng nhập");
+        btnBack.setPreferredSize(new Dimension(500, 44));
+        btnBack.addActionListener(e -> dispose());
+
+        actionPanel.add(btnSend);
+        actionPanel.add(btnBack);
 
         cardPanel.add(instructionPanel, BorderLayout.NORTH);
         cardPanel.add(emailFieldPanel, BorderLayout.CENTER);
-        cardPanel.add(btnSend, BorderLayout.SOUTH);
+        cardPanel.add(actionPanel, BorderLayout.SOUTH);
 
         // Wrap card in center panel
         JPanel centerWrapper = new JPanel(new FlowLayout(FlowLayout.CENTER, 15, 10));

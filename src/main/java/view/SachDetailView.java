@@ -56,7 +56,10 @@ public class SachDetailView extends JFrame {
         mainPanel.setBorder(new EmptyBorder(0, 0, 0, 0));
 
         // Top bar with book title and breadcrumb
-        JPanel topBar = ThemeUtils.createTopBar(sach.getTenSach(), "Danh mục sách > Chi tiết sách");
+        JButton btnBack = ThemeUtils.createSecondaryButton("← Quay lại");
+        btnBack.addActionListener(e -> dispose());
+        
+        JPanel topBar = ThemeUtils.createTopBar(sach.getTenSach(), "Danh mục sách > Chi tiết sách", btnBack);
         mainPanel.add(topBar, BorderLayout.NORTH);
 
         // Content area
@@ -227,6 +230,13 @@ public class SachDetailView extends JFrame {
     }
 
     private void checkFavorite() {
+        // Chỉ sinh viên mới có tính năng yêu thích và mượn sách
+        if (SessionManager.currentUser == null || SessionManager.currentUser.getRole() != 1) {
+            btnYeuThich.setVisible(false);
+            btnMuon.setVisible(false);
+            return;
+        }
+
         checkFavorite = dao.checkExists(maSvDangNhap, sach.getMaSach());
         if (sach.getSoLuong() <= 0) {
             btnMuon.setEnabled(false);

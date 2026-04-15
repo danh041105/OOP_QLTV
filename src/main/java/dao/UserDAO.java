@@ -13,7 +13,7 @@ public class UserDAO {
 
     public User checkLogin(String u, String p) {
         User user = null;
-        String sql = "SELECT id, username, password, role FROM user WHERE username = ? AND password = ?";
+        String sql = "SELECT id, username, password, role FROM user WHERE username = ?";
         Connect myConnect = new Connect();
 
         try (Connection conn = myConnect.getConnection()) {
@@ -21,14 +21,18 @@ public class UserDAO {
             if (conn != null) {
                 PreparedStatement ps = conn.prepareStatement(sql);
                 ps.setString(1, u);
-                ps.setString(2, p);
 
                 ResultSet rs = ps.executeQuery();
                 if (rs.next()) {
-                    user = new User();
-                    user.setId(rs.getInt("id"));
-                    user.setUsername(rs.getString("username"));
-                    user.setRole(rs.getInt("role"));
+                    String storedHash = rs.getString("password");
+                    
+                    // So sánh mật khẩu bằng BCrypt
+                    if (utils.PasswordUtils.checkPassword(p, storedHash)) {
+                        user = new User();
+                        user.setId(rs.getInt("id"));
+                        user.setUsername(rs.getString("username"));
+                        user.setRole(rs.getInt("role"));
+                    }
                 }
             }
         } catch (Exception e) {
@@ -81,7 +85,8 @@ public class UserDAO {
         return (hoTen.isEmpty()) ? maSV : hoTen;
     }
 
-    public boolean registerUser(String username, String password, String email, int role) {
+    public boolean registerUser(String username, String password, String email, int role,
+                               String hoTen, String lop, String gioiTinh, String diaChi, String sdt) {
         Connect cn = new Connect();
         Connection conn = null;
 
@@ -92,30 +97,31 @@ public class UserDAO {
             // 1. INSERT vào bảng user
             String sqlUser = "INSERT INTO user (username, password, email, role) VALUES (?, ?, ?, ?)";
             PreparedStatement pstm = conn.prepareStatement(sqlUser, Statement.RETURN_GENERATED_KEYS);
+            
+            String hashedPassword = utils.PasswordUtils.hashPassword(password);
+            
             pstm.setString(1, username);
-            pstm.setString(2, password);
+            pstm.setString(2, hashedPassword);
             pstm.setString(3, email);
             pstm.setInt(4, role);
             pstm.executeUpdate();
 
-            // Lấy id vừa tạo (auto_increment)
             ResultSet rs = pstm.getGeneratedKeys();
             if (rs.next()) {
                 int userId = rs.getInt(1);
 
                 // 2. INSERT vào bảng sinh_vien (nếu role = 1)
-// 2. INSERT vào bảng sinh_vien (nếu role = 1)
                 if (role == 1) {
                     String sqlSV = "INSERT INTO sinh_vien (ma_sv, ho_ten, lop, gioi_tinh, ngay_sinh, dia_chi, sdt, id) "
                             + "VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
                     PreparedStatement pstmSV = conn.prepareStatement(sqlSV);
-                    pstmSV.setString(1, username);       // ma_sv
-                    pstmSV.setString(2, username);       // ho_ten (tạm)
-                    pstmSV.setString(3, "Chưa cập nhật"); // lop — varchar(50) ✅
-                    pstmSV.setString(4, "N/A");           // gioi_tinh — varchar(10) ✅
-                    pstmSV.setDate(5, java.sql.Date.valueOf("2000-01-01"));
-                    pstmSV.setString(6, "Chưa cập nhật"); // dia_chi — varchar(100) ✅
-                    pstmSV.setString(7, "0000000000");    // sdt — varchar(15) ✅
+                    pstmSV.setString(1, username);   // ma_sv
+                    pstmSV.setString(2, hoTen);      // ho_ten
+                    pstmSV.setString(3, lop);        // lop
+                    pstmSV.setString(4, gioiTinh);   // gioi_tinh
+                    pstmSV.setDate(5, java.sql.Date.valueOf("2000-01-01")); // Ngày sinh tạm để mặc định
+                    pstmSV.setString(6, diaChi);     // dia_chi
+                    pstmSV.setString(7, sdt);        // sdt
                     pstmSV.setInt(8, userId);
                     pstmSV.executeUpdate();
                 }

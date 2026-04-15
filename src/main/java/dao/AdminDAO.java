@@ -36,9 +36,10 @@ public class AdminDAO {
     }
 
     public boolean update(Admin ad) {
-        if (ad.getPassword().isEmpty() || ad.getHoten().isEmpty() || ad.getEmail().isEmpty() || ad.getSdt().isEmpty()
+        // Bỏ kiểm tra password.isEmpty()
+        if (ad.getHoten().isEmpty() || ad.getEmail().isEmpty() || ad.getSdt().isEmpty()
                 || ad.getGioitinh().isEmpty()) {
-            JOptionPane.showMessageDialog(null, "Vui lòng nhập đầy đủ tất cả thông tin!");
+            JOptionPane.showMessageDialog(null, "Vui lòng nhập đầy đủ các thông tin!");
             return false;
         }
         if (!ad.getEmail().contains("@") || !ad.getEmail().contains(".")) {
@@ -52,12 +53,23 @@ public class AdminDAO {
         }
         try (Connection conn = new Connect().getConnection();) {
             conn.setAutoCommit(false);
-            String sqlUser = "UPDATE user SET password=?, email=? WHERE id=?";
-            PreparedStatement psUser = conn.prepareStatement(sqlUser);
-            psUser.setString(1, ad.getPassword());
-            psUser.setString(2, ad.getEmail()); // update thêm email
-            psUser.setInt(3, ad.getId());
-            psUser.executeUpdate();
+
+            boolean hasNewPassword = ad.getPassword() != null && !ad.getPassword().trim().isEmpty();
+            String sqlUser = hasNewPassword ? "UPDATE user SET password=?, email=? WHERE id=?"
+                    : "UPDATE user SET email=? WHERE id=?";
+
+            try (PreparedStatement psUser = conn.prepareStatement(sqlUser)) {
+                if (hasNewPassword) {
+                    String hashedPassword = utils.PasswordUtils.hashPassword(ad.getPassword());
+                    psUser.setString(1, hashedPassword);
+                    psUser.setString(2, ad.getEmail());
+                    psUser.setInt(3, ad.getId());
+                } else {
+                    psUser.setString(1, ad.getEmail());
+                    psUser.setInt(2, ad.getId());
+                }
+                psUser.executeUpdate();
+            }
 
             String sqlAdmin = "UPDATE admin SET ho_ten=?, gioi_tinh=?, sdt=? WHERE id=?";
             PreparedStatement psAdmin = conn.prepareStatement(sqlAdmin);
@@ -69,6 +81,70 @@ public class AdminDAO {
 
             conn.commit();
             return res > 0;
+        } catch (Exception e) {
+            return false;
+        }
+    }
+
+    public boolean insert(Admin ad) {
+        if (ad.getMaadmin().isEmpty() || ad.getHoten().isEmpty() || ad.getEmail().isEmpty()
+                || ad.getSdt().isEmpty() || ad.getUsername().isEmpty() || ad.getPassword().isEmpty()) {
+            JOptionPane.showMessageDialog(null, "Vui lòng nhập đầy đủ tất cả thông tin để tạo Admin mới!");
+            return false;
+        }
+
+        try (Connection conn = new Connect().getConnection()) {
+            conn.setAutoCommit(false);
+
+            // 1. Insert into user
+            String sqlUser = "INSERT INTO user (username, password, email, role) VALUES (?, ?, ?, 0)";
+            PreparedStatement psUser = conn.prepareStatement(sqlUser, Statement.RETURN_GENERATED_KEYS);
+            psUser.setString(1, ad.getUsername());
+            psUser.setString(2, utils.PasswordUtils.hashPassword(ad.getPassword()));
+            psUser.setString(3, ad.getEmail());
+            psUser.executeUpdate();
+
+            ResultSet rs = psUser.getGeneratedKeys();
+            if (rs.next()) {
+                int id = rs.getInt(1);
+
+                // 2. Insert into admin
+                String sqlAdmin = "INSERT INTO admin (ma_admin, ho_ten, gioi_tinh, sdt, id) VALUES (?, ?, ?, ?, ?)";
+                PreparedStatement psAdmin = conn.prepareStatement(sqlAdmin);
+                psAdmin.setString(1, ad.getMaadmin());
+                psAdmin.setString(2, ad.getHoten());
+                psAdmin.setString(3, ad.getGioitinh());
+                psAdmin.setString(4, ad.getSdt());
+                psAdmin.setInt(5, id);
+                psAdmin.executeUpdate();
+            }
+
+            conn.commit();
+            return true;
+        } catch (Exception e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
+    public boolean checkUsernameExists(String username) {
+        String sql = "SELECT id FROM user WHERE username = ?";
+        try (Connection conn = new Connect().getConnection();
+             PreparedStatement ps = conn.prepareStatement(sql)) {
+            ps.setString(1, username);
+            ResultSet rs = ps.executeQuery();
+            return rs.next();
+        } catch (Exception e) {
+            return false;
+        }
+    }
+
+    public boolean checkMaAdminExists(String maAdmin) {
+        String sql = "SELECT id FROM admin WHERE ma_admin = ?";
+        try (Connection conn = new Connect().getConnection();
+             PreparedStatement ps = conn.prepareStatement(sql)) {
+            ps.setString(1, maAdmin);
+            ResultSet rs = ps.executeQuery();
+            return rs.next();
         } catch (Exception e) {
             return false;
         }

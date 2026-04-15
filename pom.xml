@@ -48,6 +48,13 @@
             <version>1.2.0</version>
         </dependency>
 
+        <!-- jBCrypt for hashing passwords -->
+        <dependency>
+            <groupId>org.mindrot</groupId>
+            <artifactId>jbcrypt</artifactId>
+            <version>0.4</version>
+        </dependency>
+
     </dependencies>
 
     <!-- Build -->

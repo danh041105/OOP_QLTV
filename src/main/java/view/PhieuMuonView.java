@@ -41,8 +41,8 @@ public class PhieuMuonView extends JFrame {
         addEvent();
         setSize(420, 400);
         setLocationRelativeTo(null);
-        setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         setResizable(false);
+        ThemeUtils.addExitConfirmation(this);
         setVisible(true);
     }
 
@@ -55,7 +55,14 @@ public class PhieuMuonView extends JFrame {
         JLabel lblHeaderTitle = new JLabel("📖 MƯỢN SÁCH", SwingConstants.CENTER);
         lblHeaderTitle.setFont(ThemeUtils.FONT_HEADING);
         lblHeaderTitle.setForeground(ThemeUtils.TEXT_WHITE);
+        
+        JButton btnBack = ThemeUtils.createSecondaryButton("✕");
+        btnBack.setPreferredSize(new Dimension(50, 40));
+        btnBack.addActionListener(e -> dispose());
+        
+        headerPanel.setLayout(new BorderLayout(15, 0));
         headerPanel.add(lblHeaderTitle, BorderLayout.CENTER);
+        headerPanel.add(btnBack, BorderLayout.WEST);
 
         // Form panel
         JPanel formPanel = new JPanel(new GridBagLayout());

@@ -106,12 +106,7 @@ public class LichSuMuonTra extends JFrame {
         addWindowListener(new WindowAdapter() {
             @Override
             public void windowClosing(WindowEvent e) {
-                dispose();
-                if (isAdmin) {
-                    new AdminGUI(SessionManager.getMaNguoiDung()).setVisible(true);
-                } else {
-                    new SinhVienGUI(SessionManager.getMaNguoiDung()).setVisible(true);
-                }
+                ThemeUtils.addExitConfirmation(LichSuMuonTra.this);
             }
         });
     }

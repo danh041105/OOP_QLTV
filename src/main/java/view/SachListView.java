@@ -50,13 +50,8 @@ public class SachListView extends JFrame {
         addWindowListener(new WindowAdapter() {
             @Override
             public void windowClosing(WindowEvent e) {
-                // ✅ THAY ĐỔI:
-                String role = SessionManager.getCurrentRole();
-                if ("admin".equals(role)) {
-                    new AdminGUI(SessionManager.getMaNguoiDung()).setVisible(true);
-                } else {
-                    new LoaiSachView("Thể Loại").doShow();
-                }
+                // Sử dụng xác nhận thoát chung
+                ThemeUtils.addExitConfirmation(SachListView.this);
             }
         });
         setVisible(true);
@@ -72,8 +67,19 @@ public class SachListView extends JFrame {
         mainPanel.setBorder(new EmptyBorder(0, 0, 0, 0));
 
         // Top bar with title and breadcrumb
+        JButton btnBack = ThemeUtils.createSecondaryButton("← Quay lại");
+        btnBack.addActionListener(e -> {
+            dispose();
+            String role = SessionManager.getCurrentRole();
+            if ("admin".equals(role)) {
+                new gui.AdminGUI(SessionManager.getMaNguoiDung()).setVisible(true);
+            } else {
+                new LoaiSachView("Thể Loại").doShow();
+            }
+        });
+
         String breadcrumb = "Trang chủ > Thể loại > " + (tenLoaiSach != null ? tenLoaiSach : "");
-        JPanel topBar = ThemeUtils.createTopBar("DANH MỤC SÁCH", breadcrumb);
+        JPanel topBar = ThemeUtils.createTopBar("DANH MỤC SÁCH", breadcrumb, btnBack);
         mainPanel.add(topBar, BorderLayout.NORTH);
 
         // Toolbar with search field and buttons

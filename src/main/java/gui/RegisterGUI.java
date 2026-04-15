@@ -11,16 +11,16 @@ import java.awt.event.ActionEvent;
 
 public class RegisterGUI extends JFrame {
 
-    private JTextField txtUser, txtEmail;
+    private JTextField txtUser, txtEmail, txtHoTen, txtLop, txtDiaChi, txtSdt;
+    private JComboBox<String> cbGioiTinh;
     private JPasswordField txtPass, txtConfirmPass;
     private UserDAO userDAO = new UserDAO();
 
     public RegisterGUI() {
         setTitle("Đăng Ký Tài Khoản");
-        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        setUndecorated(true);
-        setSize(900, 650);
+        setSize(1000, 800);
         setLocationRelativeTo(null);
+        ThemeUtils.addExitConfirmation(this);
 
         // Full-screen gradient background
         GradientBackgroundPanel mainPanel = new GradientBackgroundPanel();
@@ -59,9 +59,9 @@ public class RegisterGUI extends JFrame {
         };
         card.setOpaque(false);
         card.setLayout(new BoxLayout(card, BoxLayout.Y_AXIS));
-        card.setBorder(new EmptyBorder(35, 45, 35, 45));
-        card.setPreferredSize(new Dimension(420, 560));
-        card.setMaximumSize(new Dimension(420, 560));
+        card.setBorder(new EmptyBorder(25, 45, 25, 45));
+        card.setPreferredSize(new Dimension(650, 720));
+        card.setMaximumSize(new Dimension(650, 720));
 
         // Icon
         JLabel lblIcon = new JLabel("\uD83D\uDCDD");
@@ -87,51 +87,105 @@ public class RegisterGUI extends JFrame {
 
         card.add(Box.createVerticalStrut(20));
 
-        // Tên đăng nhập
-        JLabel lblUser = ThemeUtils.createLabel("Tên đăng nhập");
-        lblUser.setAlignmentX(Component.CENTER_ALIGNMENT);
-        card.add(lblUser);
-        card.add(Box.createVerticalStrut(5));
+        card.add(Box.createVerticalStrut(15));
+
+        // Group 1: Mã SV + Họ tên
+        JPanel row1 = new JPanel(new GridLayout(1, 2, 20, 0));
+        row1.setOpaque(false);
+
+        JPanel pnlMaSV = new JPanel(new BorderLayout());
+        pnlMaSV.setOpaque(false);
+        pnlMaSV.add(ThemeUtils.createLabel("Mã sinh viên (B21DCCN123)"), BorderLayout.NORTH);
         txtUser = ThemeUtils.createTextField(20);
-        txtUser.setMaximumSize(new Dimension(Integer.MAX_VALUE, 38));
-        txtUser.setAlignmentX(Component.CENTER_ALIGNMENT);
-        card.add(txtUser);
+        pnlMaSV.add(txtUser, BorderLayout.CENTER);
 
-        card.add(Box.createVerticalStrut(12));
+        JPanel pnlHoTen = new JPanel(new BorderLayout());
+        pnlHoTen.setOpaque(false);
+        pnlHoTen.add(ThemeUtils.createLabel("Họ và tên"), BorderLayout.NORTH);
+        txtHoTen = ThemeUtils.createTextField(20);
+        pnlHoTen.add(txtHoTen, BorderLayout.CENTER);
 
-        // Email
-        JLabel lblEmail = ThemeUtils.createLabel("Email");
-        lblEmail.setAlignmentX(Component.CENTER_ALIGNMENT);
-        card.add(lblEmail);
-        card.add(Box.createVerticalStrut(5));
+        row1.add(pnlMaSV);
+        row1.add(pnlHoTen);
+        card.add(row1);
+
+        card.add(Box.createVerticalStrut(10));
+
+        // Group 2: Lớp + Email
+        JPanel row2 = new JPanel(new GridLayout(1, 2, 20, 0));
+        row2.setOpaque(false);
+
+        JPanel pnlLop = new JPanel(new BorderLayout());
+        pnlLop.setOpaque(false);
+        pnlLop.add(ThemeUtils.createLabel("Lớp"), BorderLayout.NORTH);
+        txtLop = ThemeUtils.createTextField(20);
+        pnlLop.add(txtLop, BorderLayout.CENTER);
+
+        JPanel pnlEmail = new JPanel(new BorderLayout());
+        pnlEmail.setOpaque(false);
+        pnlEmail.add(ThemeUtils.createLabel("Email"), BorderLayout.NORTH);
         txtEmail = ThemeUtils.createTextField(20);
-        txtEmail.setMaximumSize(new Dimension(Integer.MAX_VALUE, 38));
-        txtEmail.setAlignmentX(Component.CENTER_ALIGNMENT);
-        card.add(txtEmail);
+        pnlEmail.add(txtEmail, BorderLayout.CENTER);
 
-        card.add(Box.createVerticalStrut(12));
+        row2.add(pnlLop);
+        row2.add(pnlEmail);
+        card.add(row2);
 
-        // Mật khẩu
-        JLabel lblPass = ThemeUtils.createLabel("Mật khẩu");
-        lblPass.setAlignmentX(Component.CENTER_ALIGNMENT);
-        card.add(lblPass);
-        card.add(Box.createVerticalStrut(5));
+        card.add(Box.createVerticalStrut(10));
+
+        // Group 3: Giới tính + SĐT
+        JPanel row3 = new JPanel(new GridLayout(1, 2, 20, 0));
+        row3.setOpaque(false);
+
+        JPanel pnlGioiTinh = new JPanel(new BorderLayout());
+        pnlGioiTinh.setOpaque(false);
+        pnlGioiTinh.add(ThemeUtils.createLabel("Giới tính"), BorderLayout.NORTH);
+        cbGioiTinh = new JComboBox<>(new String[] { "Nam", "Nữ", "Khác" });
+        cbGioiTinh.setFont(ThemeUtils.FONT_BODY);
+        cbGioiTinh.setPreferredSize(new Dimension(0, 38));
+        pnlGioiTinh.add(cbGioiTinh, BorderLayout.CENTER);
+
+        JPanel pnlSdt = new JPanel(new BorderLayout());
+        pnlSdt.setOpaque(false);
+        pnlSdt.add(ThemeUtils.createLabel("Số điện thoại"), BorderLayout.NORTH);
+        txtSdt = ThemeUtils.createTextField(20);
+        pnlSdt.add(txtSdt, BorderLayout.CENTER);
+
+        row3.add(pnlGioiTinh);
+        row3.add(pnlSdt);
+        card.add(row3);
+
+        card.add(Box.createVerticalStrut(10));
+
+        // Group 4: Địa chỉ (Full width)
+        JPanel pnlDiaChi = new JPanel(new BorderLayout());
+        pnlDiaChi.setOpaque(false);
+        pnlDiaChi.add(ThemeUtils.createLabel("Địa chỉ hiện tại"), BorderLayout.NORTH);
+        txtDiaChi = ThemeUtils.createTextField(20);
+        pnlDiaChi.add(txtDiaChi, BorderLayout.CENTER);
+        card.add(pnlDiaChi);
+
+        card.add(Box.createVerticalStrut(10));
+
+        // Group 5: Mật khẩu
+        JPanel row5 = new JPanel(new GridLayout(1, 2, 20, 0));
+        row5.setOpaque(false);
+
+        JPanel pnlPass = new JPanel(new BorderLayout());
+        pnlPass.setOpaque(false);
+        pnlPass.add(ThemeUtils.createLabel("Mật khẩu"), BorderLayout.NORTH);
         txtPass = ThemeUtils.createPasswordField(20);
-        txtPass.setMaximumSize(new Dimension(Integer.MAX_VALUE, 38));
-        txtPass.setAlignmentX(Component.CENTER_ALIGNMENT);
-        card.add(txtPass);
+        pnlPass.add(txtPass, BorderLayout.CENTER);
 
-        card.add(Box.createVerticalStrut(12));
-
-        // Nhập lại mật khẩu
-        JLabel lblConfirmPass = ThemeUtils.createLabel("Nhập lại mật khẩu");
-        lblConfirmPass.setAlignmentX(Component.CENTER_ALIGNMENT);
-        card.add(lblConfirmPass);
-        card.add(Box.createVerticalStrut(5));
+        JPanel pnlConfirm = new JPanel(new BorderLayout());
+        pnlConfirm.setOpaque(false);
+        pnlConfirm.add(ThemeUtils.createLabel("Nhập lại mật khẩu"), BorderLayout.NORTH);
         txtConfirmPass = ThemeUtils.createPasswordField(20);
-        txtConfirmPass.setMaximumSize(new Dimension(Integer.MAX_VALUE, 38));
-        txtConfirmPass.setAlignmentX(Component.CENTER_ALIGNMENT);
-        card.add(txtConfirmPass);
+        pnlConfirm.add(txtConfirmPass, BorderLayout.CENTER);
+
+        row5.add(pnlPass);
+        row5.add(pnlConfirm);
+        card.add(row5);
 
         card.add(Box.createVerticalStrut(22));
 
@@ -159,23 +213,54 @@ public class RegisterGUI extends JFrame {
     // ===== Business Logic (preserved) =====
 
     private void handleRegister() {
-        String u = txtUser.getText().trim();
+        String u = txtUser.getText().trim().toUpperCase();
         String e = txtEmail.getText().trim();
+        String hoTen = txtHoTen.getText().trim();
+        String lop = txtLop.getText().trim();
+        String gioiTinh = (String) cbGioiTinh.getSelectedItem();
+        String diaChi = txtDiaChi.getText().trim();
+        String sdt = txtSdt.getText().trim();
         String p = new String(txtPass.getPassword());
         String cp = new String(txtConfirmPass.getPassword());
 
-        if (u.isEmpty() || e.isEmpty() || p.isEmpty()) {
-            JOptionPane.showMessageDialog(this, "Vui lòng nhập đầy đủ thông tin!");
+        if (u.isEmpty() || e.isEmpty() || hoTen.isEmpty() || lop.isEmpty() || diaChi.isEmpty() || sdt.isEmpty()
+                || p.isEmpty()) {
+            JOptionPane.showMessageDialog(this, "Vui lòng nhập đầy đủ tất cả các trường thông tin!");
             return;
         }
-        System.out.println("INSERT INTO user (username, password, email, role) VALUES (?, ?, ?, ?)");
-        System.out.println(u + " - " + e + " - " + p + " - " + cp);
+
+        // Kiểm tra định dạng BxxDCyyzzz (Ví dụ: B21DCCN123)
+        String regex = "^B\\d{2}DC[A-Z]{2}\\d{3}$";
+        if (!u.matches(regex)) {
+            JOptionPane.showMessageDialog(this,
+                    "Mã sinh viên không đúng định dạng!\nVí dụ đúng: B21DCCN123 (B + 2 số + DC + 2 chữ + 3 số)");
+            return;
+        }
+
         if (!p.equals(cp)) {
             JOptionPane.showMessageDialog(this, "Mật khẩu nhập lại không khớp!");
             return;
         }
 
-        boolean result = userDAO.registerUser(u, p, e, 1);
+        // Kiểm tra độ mạnh mật khẩu
+        boolean hasUppercase = !p.equals(p.toLowerCase());
+        boolean hasSpecial = p.matches(".*[!@#$%^&*(),.?\":{}|<>].*");
+        boolean isAllNumbers = p.matches("^[0-9]+$");
+
+        if (isAllNumbers || !hasUppercase || !hasSpecial) {
+            StringBuilder errorMsg = new StringBuilder("Mật khẩu không đạt yêu cầu bảo mật:\n");
+            if (isAllNumbers)
+                errorMsg.append("- Mật khẩu không được chỉ chứa toàn số.\n");
+            if (!hasUppercase)
+                errorMsg.append("- Phải có ít nhất một chữ cái viết hoa.\n");
+            if (!hasSpecial)
+                errorMsg.append("- Phải có ít nhất một ký tự đặc biệt (!@#$%^...).\n");
+
+            JOptionPane.showMessageDialog(this, errorMsg.toString(), "Lỗi bảo mật", JOptionPane.WARNING_MESSAGE);
+            return;
+        }
+
+        boolean result = userDAO.registerUser(u, p, e, 1, hoTen, lop, gioiTinh, diaChi, sdt);
 
         if (result) {
             JOptionPane.showMessageDialog(this, "Đăng ký thành công! Hãy đăng nhập.");
@@ -198,8 +283,7 @@ public class RegisterGUI extends JFrame {
             // Blue-to-indigo gradient
             GradientPaint gp = new GradientPaint(
                     0, 0, ThemeUtils.GRADIENT_PRIMARY[0],
-                    0, getHeight(), ThemeUtils.GRADIENT_PRIMARY[1]
-            );
+                    0, getHeight(), ThemeUtils.GRADIENT_PRIMARY[1]);
             g2.setPaint(gp);
             g2.fillRect(0, 0, getWidth(), getHeight());
 

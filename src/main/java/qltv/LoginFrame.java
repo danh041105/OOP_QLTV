@@ -1,10 +1,12 @@
 package qltv;
 
 import dao.UserDAO;
+import dao.SinhVienDAO;
 import gui.AdminGUI;
 import gui.RegisterGUI;
 import gui.SinhVienGUI;
 import model.User;
+import model.SinhVien;
 import utils.ThemeUtils;
 
 import javax.swing.*;
@@ -21,9 +23,8 @@ public class LoginFrame extends JFrame {
     private JPasswordField txtPassword;
 
     public LoginFrame() {
-        setTitle("Đăng nhập hệ thống");
+        setTitle("Đăng nhập hệ thống quản lý thư viện");
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        setUndecorated(true);
         setSize(900, 600);
         setLocationRelativeTo(null);
 
@@ -35,6 +36,8 @@ public class LoginFrame extends JFrame {
         // Glassmorphism login card
         JPanel loginCard = createLoginCard();
         mainPanel.add(loginCard);
+
+        ThemeUtils.addExitConfirmation(this);
     }
 
     private JPanel createLoginCard() {
@@ -152,7 +155,7 @@ public class LoginFrame extends JFrame {
         btnForgot.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                new QuenMk(LoginFrame.this).setVisible(true);
+                new QuenMk().setVisible(true);
             }
         });
         linkPanel.add(btnForgot);
@@ -188,6 +191,14 @@ public class LoginFrame extends JFrame {
                 new AdminGUI(user.getUsername()).setVisible(true);
             } else {
                 model.SessionManager.setCurrentRole("sinhvien");
+
+                // Lấy ma_sv thực tế từ database dựa trên user_id
+                SinhVienDAO svDAO = new SinhVienDAO();
+                SinhVien sv = svDAO.getByUserId(user.getId());
+                if (sv != null) {
+                    model.SessionManager.currentMaSv = sv.getMasv();
+                }
+
                 new SinhVienGUI(user.getUsername()).setVisible(true);
             }
 
@@ -227,8 +238,7 @@ public class LoginFrame extends JFrame {
             // Paint gradient background (blue-to-indigo)
             GradientPaint gp = new GradientPaint(
                     0, 0, ThemeUtils.GRADIENT_PRIMARY[0],
-                    0, getHeight(), ThemeUtils.GRADIENT_PRIMARY[1]
-            );
+                    0, getHeight(), ThemeUtils.GRADIENT_PRIMARY[1]);
             g2.setPaint(gp);
             g2.fillRect(0, 0, getWidth(), getHeight());
 

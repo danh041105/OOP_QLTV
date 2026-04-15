@@ -38,13 +38,8 @@ public class TacGiaListView extends JFrame {
         addWindowListener(new WindowAdapter() {
             @Override
             public void windowClosing(WindowEvent e) {
-                // ✅ THAY ĐỔI:
-                String role = SessionManager.getCurrentRole();
-                if ("admin".equals(role)) {
-                    new AdminGUI(SessionManager.getMaNguoiDung()).setVisible(true);
-                } else {
-                    new SinhVienGUI(SessionManager.getMaNguoiDung()).setVisible(true);
-                }
+                // Sử dụng xác nhận thoát chung
+                ThemeUtils.addExitConfirmation(TacGiaListView.this);
             }
         });
         setVisible(true);
@@ -60,7 +55,18 @@ public class TacGiaListView extends JFrame {
         mainPanel.setBorder(new EmptyBorder(0, 0, 0, 0));
 
         // Top bar with title and breadcrumb
-        JPanel topBar = ThemeUtils.createTopBar("DANH SÁCH TÁC GIẢ", "Trang chủ > Tác giả");
+        JButton btnBack = ThemeUtils.createSecondaryButton("← Quay lại");
+        btnBack.addActionListener(e -> {
+            dispose();
+            String role = SessionManager.getCurrentRole();
+            if ("admin".equals(role)) {
+                new AdminGUI(SessionManager.getMaNguoiDung()).setVisible(true);
+            } else {
+                new gui.SinhVienGUI(SessionManager.getMaNguoiDung()).setVisible(true);
+            }
+        });
+
+        JPanel topBar = ThemeUtils.createTopBar("DANH SÁCH TÁC GIẢ", "Trang chủ > Tác giả", btnBack);
         mainPanel.add(topBar, BorderLayout.NORTH);
 
         // Content area
