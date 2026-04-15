@@ -8,12 +8,12 @@ import java.util.logging.Logger;
 
 public class Connect {
     private static final Logger logger = Logger.getLogger(Connect.class.getName());
-    private static final String user ="root";
-    private static final String password ="Duyanh9191";
-    private static final String host ="localhost";
-    private static final String port="3306";
-    private static final String dbName ="java_qltv";
-    private static final String url ="jdbc:mysql://"+host+":"+port+"/"+dbName;
+    private static final String user = utils.Env.get("DB_USER", "root");
+    private static final String password = utils.Env.get("DB_PASSWORD", "");
+    private static final String host = utils.Env.get("DB_HOST", "localhost");
+    private static final String port = utils.Env.get("DB_PORT", "3306");
+    private static final String dbName = utils.Env.get("DB_NAME", "java_qltv");
+    private static final String url = "jdbc:mysql://" + host + ":" + port + "/" + dbName;
     public static Connection getConnection(){
         Connection conn = null;
         try{

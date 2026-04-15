@@ -139,6 +139,37 @@ public class UserDAO {
         }
     }
 
+    public boolean checkEmailExists(String email) {
+        String sql = "SELECT COUNT(*) FROM user WHERE email = ?";
+        Connect myConnect = new Connect();
+        try (Connection conn = myConnect.getConnection();
+             PreparedStatement ps = conn.prepareStatement(sql)) {
+            ps.setString(1, email);
+            ResultSet rs = ps.executeQuery();
+            if (rs.next()) {
+                return rs.getInt(1) > 0;
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return false;
+    }
+
+    public boolean updatePasswordByEmail(String email, String clearTextPassword) {
+        String sql = "UPDATE user SET password = ? WHERE email = ?";
+        String hashed = utils.PasswordUtils.hashPassword(clearTextPassword);
+        Connect myConnect = new Connect();
+        try (Connection conn = myConnect.getConnection();
+             PreparedStatement ps = conn.prepareStatement(sql)) {
+            ps.setString(1, hashed);
+            ps.setString(2, email);
+            return ps.executeUpdate() > 0;
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return false;
+    }
+
     public String getPasswordByEmail(String email) {
         String password = null;
         String sql = "SELECT password FROM user WHERE email = ?";

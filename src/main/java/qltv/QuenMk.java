@@ -142,24 +142,47 @@ public class QuenMk extends JFrame {
             return;
         }
 
-        String password = userDAO.getPasswordByEmail(email);
-
-        if (password == null) {
-            JOptionPane.showMessageDialog(this, "Email này chưa được đăng ký!", "Lỗi", JOptionPane.ERROR_MESSAGE);
-        } else {
-            try {
-                this.setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
-
-                EmailSender.sendPassword(email, password);
-                this.setCursor(Cursor.getDefaultCursor());
-                
-                JOptionPane.showMessageDialog(this, "Mật khẩu đã được gửi vào email: " + email);
-                this.dispose(); 
-            } catch (Exception ex) {
-                this.setCursor(Cursor.getDefaultCursor());
-                JOptionPane.showMessageDialog(this, "Lỗi gửi mail: " + ex.getMessage());
-                ex.printStackTrace();
-            }
+        // Kiểm tra email tồn tại
+        if (!userDAO.checkEmailExists(email)) {
+            JOptionPane.showMessageDialog(this, "Email này chưa được đăng ký trong hệ thống!", "Lỗi", JOptionPane.ERROR_MESSAGE);
+            return;
         }
+
+        // Tạo mật khẩu mới ngẫu nhiên (6 ký tự)
+        String newPassword = String.valueOf((int)((Math.random() * 900000) + 100000));
+
+        // Background task to send email and update DB
+        SwingWorker<Boolean, Void> worker = new SwingWorker<>() {
+            @Override
+            protected Boolean doInBackground() throws Exception {
+                // 1. Cập nhật mật khẩu mới vào DB (đã hash)
+                if (userDAO.updatePasswordByEmail(email, newPassword)) {
+                    // 2. Gửi email mật khẩu rõ cho người dùng
+                    EmailSender.sendPassword(email, newPassword);
+                    return true;
+                }
+                return false;
+            }
+
+            @Override
+            protected void done() {
+                setCursor(Cursor.getDefaultCursor());
+                try {
+                    if (get()) {
+                        JOptionPane.showMessageDialog(QuenMk.this, 
+                            "Mật khẩu mới đã được gửi vào email: " + email + "\nVui lòng kiểm tra hộp thư (bao gồm cả thư rác).");
+                        dispose();
+                    } else {
+                        JOptionPane.showMessageDialog(QuenMk.this, "Lỗi: Không thể cập nhật mật khẩu mới!");
+                    }
+                } catch (Exception ex) {
+                    JOptionPane.showMessageDialog(QuenMk.this, "Lỗi gửi mail: " + ex.getCause().getMessage());
+                    ex.printStackTrace();
+                }
+            }
+        };
+
+        setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
+        worker.execute();
     }
 }
