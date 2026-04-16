@@ -15,9 +15,8 @@ public class AdminPanel extends JPanel {
     private DefaultTableModel model;
     private AdminDAO adminDAO = new AdminDAO();
     private JTextField txtMaadmin, txtHoten, txtEmail, txtSdt, txtUsername;
-    private JPasswordField txtPassword;
     private JComboBox<String> cbGioiTinh;
-    private JButton btnThem, btnSua, btnLamMoi;
+    private JButton btnThem, btnSua, btnLamMoi, btnDoiMatKhau;
 
     public AdminPanel() {
         setLayout(new BorderLayout(10, 10));
@@ -109,14 +108,7 @@ public class AdminPanel extends JPanel {
         txtUsername.setBackground(Color.WHITE);
         pnlForm.add(txtUsername, gbc);
 
-        // Row 7: Password
-        gbc.gridy = 7;
-        gbc.gridx = 0;
-        pnlForm.add(ThemeUtils.createLabel("Password:"), gbc);
-        gbc.gridx = 1;
-        txtPassword = ThemeUtils.createPasswordField(15);
-        pnlForm.add(txtPassword, gbc);
-
+        // Password field is removed from form
         pnlFormCard.add(pnlForm, BorderLayout.CENTER);
         pnlCenter.add(pnlFormCard, BorderLayout.WEST);
 
@@ -151,6 +143,9 @@ public class AdminPanel extends JPanel {
         btnLamMoi = ThemeUtils.createSecondaryButton("Làm mới");
         pnlBtn.add(btnLamMoi);
 
+        btnDoiMatKhau = ThemeUtils.createWarningButton("Đổi mật khẩu");
+        pnlBtn.add(btnDoiMatKhau);
+
         add(pnlBtn, BorderLayout.SOUTH);
 
         loadData();
@@ -168,8 +163,6 @@ public class AdminPanel extends JPanel {
                     txtSdt.setText(model.getValueAt(row, 3).toString());
                     txtEmail.setText(model.getValueAt(row, 4).toString());
                     txtUsername.setText(model.getValueAt(row, 5).toString());
-                    txtPassword.setText(""); // Security
-
                     // Lock Maadmin and Username when selecting from table
                     txtMaadmin.setEditable(false);
                     txtMaadmin.setBackground(new Color(240, 240, 240));
@@ -182,48 +175,88 @@ public class AdminPanel extends JPanel {
         btnThem.addActionListener(e -> {
             Admin ad = getForm();
 
-            // 1. Kiểm tra bỏ trống
             if (ad.getMaadmin().isEmpty() || ad.getHoten().isEmpty() || ad.getEmail().isEmpty()
-                    || ad.getSdt().isEmpty() || ad.getUsername().isEmpty() || ad.getPassword().isEmpty()) {
-                JOptionPane.showMessageDialog(this, "Vui lòng nhập đầy đủ tất cả thông tin!", "Cảnh báo",
-                        JOptionPane.WARNING_MESSAGE);
+                    || ad.getSdt().isEmpty() || ad.getUsername().isEmpty()) {
+                JOptionPane.showMessageDialog(this, "Vui lòng nhập đầy đủ tất cả thông tin!", "Cảnh báo", JOptionPane.WARNING_MESSAGE);
                 return;
             }
 
-            // 2. Kiểm tra trùng Username
             if (adminDAO.checkUsernameExists(ad.getUsername())) {
-                JOptionPane.showMessageDialog(this, "Tên đăng nhập (Username) '" + ad.getUsername() + "' đã tồn tại!",
-                        "Lỗi trùng lặp", JOptionPane.ERROR_MESSAGE);
+                JOptionPane.showMessageDialog(this, "Tên đăng nhập (Username) '" + ad.getUsername() + "' đã tồn tại!", "Lỗi trùng lặp", JOptionPane.ERROR_MESSAGE);
                 return;
             }
 
-            // 3. Kiểm tra trùng Mã Admin
             if (adminDAO.checkMaAdminExists(ad.getMaadmin())) {
-                JOptionPane.showMessageDialog(this, "Mã Admin '" + ad.getMaadmin() + "' đã tồn tại!", "Lỗi trùng lặp",
-                        JOptionPane.ERROR_MESSAGE);
+                JOptionPane.showMessageDialog(this, "Mã Admin '" + ad.getMaadmin() + "' đã tồn tại!", "Lỗi trùng lặp", JOptionPane.ERROR_MESSAGE);
                 return;
             }
 
-            if (adminDAO.insert(ad)) {
-                loadData();
-                clearForm();
-                JOptionPane.showMessageDialog(this, "Thêm Admin thành công!");
-            } else {
-                JOptionPane.showMessageDialog(this, "Lỗi khi lưu dữ liệu. Vui lòng thử lại.", "Lỗi hệ thống",
-                        JOptionPane.ERROR_MESSAGE);
+            JPasswordField pf = new JPasswordField();
+            if (JOptionPane.showConfirmDialog(this, pf, "Nhập mật khẩu cho tài khoản mới:", JOptionPane.OK_CANCEL_OPTION, JOptionPane.PLAIN_MESSAGE) == JOptionPane.OK_OPTION) {
+                String pass = new String(pf.getPassword());
+                if(pass.isEmpty()) {
+                    JOptionPane.showMessageDialog(this, "Mật khẩu không được để trống!", "Lỗi", JOptionPane.ERROR_MESSAGE);
+                    return;
+                }
+                ad.setPassword(pass);
+                if (adminDAO.insert(ad)) {
+                    loadData();
+                    clearForm();
+                    JOptionPane.showMessageDialog(this, "Thêm Admin thành công!");
+                } else {
+                    JOptionPane.showMessageDialog(this, "Lỗi khi lưu dữ liệu. Vui lòng thử lại.", "Lỗi hệ thống", JOptionPane.ERROR_MESSAGE);
+                }
             }
         });
 
         btnSua.addActionListener(e -> {
             int row = tblAdmin.getSelectedRow();
-            if (row == -1)
-                return;
-            int id = adminDAO.getAll().get(row).getId();
+            if (row == -1) return;
+            Admin selectedAdmin = adminDAO.getAll().get(row);
+            int id = selectedAdmin.getId();
+            
             Admin ad = getForm();
             ad.setId(id);
+            // Ignore password during normal update
             if (adminDAO.update(ad)) {
                 loadData();
                 JOptionPane.showMessageDialog(this, "Cập nhật thành công!");
+            }
+        });
+
+        btnDoiMatKhau.addActionListener(e -> {
+            int row = tblAdmin.getSelectedRow();
+            if (row == -1) {
+                JOptionPane.showMessageDialog(this, "Vui lòng chọn một tài khoản từ bảng để đổi mật khẩu!");
+                return;
+            }
+            Admin selectedAdmin = adminDAO.getAll().get(row);
+            int id = selectedAdmin.getId();
+            String oldHash = selectedAdmin.getPassword();
+
+            JPasswordField pfOld = new JPasswordField();
+            if (JOptionPane.showConfirmDialog(this, pfOld, "Nhập mật khẩu cũ để xác nhận:", JOptionPane.OK_CANCEL_OPTION, JOptionPane.PLAIN_MESSAGE) == JOptionPane.OK_OPTION) {
+                String oldPassInput = new String(pfOld.getPassword());
+                if (!utils.PasswordUtils.checkPassword(oldPassInput, oldHash)) {
+                    JOptionPane.showMessageDialog(this, "Mật khẩu cũ không chính xác!", "Lỗi", JOptionPane.ERROR_MESSAGE);
+                    return;
+                }
+                
+                JPasswordField pfNew = new JPasswordField();
+                if (JOptionPane.showConfirmDialog(this, pfNew, "Nhập mật khẩu mới:", JOptionPane.OK_CANCEL_OPTION, JOptionPane.PLAIN_MESSAGE) == JOptionPane.OK_OPTION) {
+                    String newPass = new String(pfNew.getPassword());
+                    if(newPass.isEmpty()) {
+                        JOptionPane.showMessageDialog(this, "Mật khẩu mới không được để trống!", "Lỗi", JOptionPane.ERROR_MESSAGE);
+                        return;
+                    }
+                    dao.UserDAO uDao = new dao.UserDAO();
+                    if(uDao.updatePasswordById(id, newPass)) {
+                        JOptionPane.showMessageDialog(this, "Đổi mật khẩu thành công!");
+                        loadData();
+                    } else {
+                        JOptionPane.showMessageDialog(this, "Lỗi khi đổi mật khẩu trên hệ thống!", "Lỗi", JOptionPane.ERROR_MESSAGE);
+                    }
+                }
             }
         });
 
@@ -238,7 +271,6 @@ public class AdminPanel extends JPanel {
         ad.setSdt(txtSdt.getText().trim());
         ad.setEmail(txtEmail.getText().trim());
         ad.setUsername(txtUsername.getText().trim());
-        ad.setPassword(new String(txtPassword.getPassword()));
         return ad;
     }
 
@@ -248,7 +280,6 @@ public class AdminPanel extends JPanel {
         txtSdt.setText("");
         txtEmail.setText("");
         txtUsername.setText("");
-        txtPassword.setText("");
         cbGioiTinh.setSelectedIndex(0);
 
         txtMaadmin.setEditable(true);

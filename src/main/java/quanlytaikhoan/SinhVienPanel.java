@@ -17,9 +17,8 @@ public class SinhVienPanel extends JPanel {
     private SinhVienDAO svDAO = new SinhVienDAO();
 
     private JTextField txtMasv, txtTen, txtLop, txtNgaySinh, txtDiaChi, txtEmail, txtSdt, txtTimkiem, txtUsername;
-    private JPasswordField txtPassword;
     private JComboBox<String> cbGioiTinh;
-    private JButton btnThem, btnSua, btnXoa, btnLamMoi, btnTimkiem;
+    private JButton btnThem, btnSua, btnXoa, btnLamMoi, btnTimkiem, btnDoiMatKhau;
 
     private boolean isProfileMode = false;
     private SinhVien currentSV;
@@ -167,13 +166,7 @@ public class SinhVienPanel extends JPanel {
         txtUsername = ThemeUtils.createTextField(15);
         pnlForm.add(txtUsername, gbc);
 
-        // Row 10: Password
-        gbc.gridy = 10;
-        gbc.gridx = 0;
-        pnlForm.add(ThemeUtils.createLabel("Password:"), gbc);
-        gbc.gridx = 1;
-        txtPassword = ThemeUtils.createPasswordField(15);
-        pnlForm.add(txtPassword, gbc);
+        // Password field is removed from form
 
         JScrollPane formScroll = new JScrollPane(pnlForm);
         formScroll.setBorder(null);
@@ -239,9 +232,15 @@ public class SinhVienPanel extends JPanel {
 
             btnLamMoi = ThemeUtils.createSecondaryButton("Làm mới");
             pnlSouth.add(btnLamMoi);
+            
+            btnDoiMatKhau = ThemeUtils.createWarningButton("Đổi mật khẩu");
+            pnlSouth.add(btnDoiMatKhau);
         } else {
             btnSua = ThemeUtils.createSuccessButton("Lưu thay đổi");
             pnlSouth.add(btnSua);
+            
+            btnDoiMatKhau = ThemeUtils.createWarningButton("Đổi mật khẩu");
+            pnlSouth.add(btnDoiMatKhau);
 
             JLabel lblInfo = ThemeUtils.createLabel("(Mã SV và Username không được phép thay đổi)");
             lblInfo.setFont(ThemeUtils.FONT_SMALL);
@@ -278,7 +277,6 @@ public class SinhVienPanel extends JPanel {
                             txtUsername.setText(model.getValueAt(row, 8).toString());
                             txtUsername.setEditable(false);
                             txtUsername.setBackground(new Color(240, 240, 240));
-                            txtPassword.setText(""); // Không hiển thị mật khẩu đã băm (security)
                         } catch (Exception ex) {
                         }
                     }
@@ -287,10 +285,21 @@ public class SinhVienPanel extends JPanel {
 
             btnThem.addActionListener(e -> {
                 SinhVien sv = getForm();
-                if (svDAO.insert(sv, txtUsername.getText().trim(), txtPassword.getText().trim())) {
-                    loadData();
-                    clearForm();
-                    JOptionPane.showMessageDialog(this, "Thêm thành công!");
+                
+                JPasswordField pf = new JPasswordField();
+                if (JOptionPane.showConfirmDialog(this, pf, "Nhập mật khẩu cho tài khoản sinh viên mới:", JOptionPane.OK_CANCEL_OPTION, JOptionPane.PLAIN_MESSAGE) == JOptionPane.OK_OPTION) {
+                    String pass = new String(pf.getPassword());
+                    if(pass.isEmpty()) {
+                        JOptionPane.showMessageDialog(this, "Mật khẩu không được để trống!", "Lỗi", JOptionPane.ERROR_MESSAGE);
+                        return;
+                    }
+                    if (svDAO.insert(sv, txtUsername.getText().trim(), pass)) {
+                        loadData();
+                        clearForm();
+                        JOptionPane.showMessageDialog(this, "Thêm thành công!");
+                    } else {
+                        JOptionPane.showMessageDialog(this, "Thêm thất bại!");
+                    }
                 }
             });
 
@@ -317,14 +326,66 @@ public class SinhVienPanel extends JPanel {
                 int row = tblSV.getSelectedRow();
                 if (row == -1)
                     return;
-                id = svDAO.getAll().get(row).getId();
+                SinhVien selectedSV = svDAO.getAll().get(row);
+                id = selectedSV.getId();
             }
+            
             SinhVien sv = getForm();
             sv.setId(id);
             if (svDAO.update(sv)) {
-                if (!isProfileMode)
+                if (!isProfileMode) {
                     loadData();
+                } else {
+                    currentSV = svDAO.getByUserId(id);
+                }
                 JOptionPane.showMessageDialog(this, "Cập nhật thành công!");
+            }
+        });
+
+        btnDoiMatKhau.addActionListener(e -> {
+            int id;
+            String oldHash = null;
+            if (isProfileMode) {
+                id = currentSV.getId();
+                oldHash = currentSV.getPassword();
+            } else {
+                int row = tblSV.getSelectedRow();
+                if (row == -1) {
+                    JOptionPane.showMessageDialog(this, "Vui lòng chọn một tài khoản từ bảng để đổi mật khẩu!");
+                    return;
+                }
+                SinhVien selectedSV = svDAO.getAll().get(row);
+                id = selectedSV.getId();
+                oldHash = selectedSV.getPassword();
+            }
+
+            JPasswordField pfOld = new JPasswordField();
+            if (JOptionPane.showConfirmDialog(this, pfOld, "Nhập mật khẩu cũ để xác nhận:", JOptionPane.OK_CANCEL_OPTION, JOptionPane.PLAIN_MESSAGE) == JOptionPane.OK_OPTION) {
+                String oldPassInput = new String(pfOld.getPassword());
+                if (!utils.PasswordUtils.checkPassword(oldPassInput, oldHash)) {
+                    JOptionPane.showMessageDialog(this, "Mật khẩu cũ không chính xác!", "Lỗi", JOptionPane.ERROR_MESSAGE);
+                    return;
+                }
+                
+                JPasswordField pfNew = new JPasswordField();
+                if (JOptionPane.showConfirmDialog(this, pfNew, "Nhập mật khẩu mới:", JOptionPane.OK_CANCEL_OPTION, JOptionPane.PLAIN_MESSAGE) == JOptionPane.OK_OPTION) {
+                    String newPass = new String(pfNew.getPassword());
+                    if(newPass.isEmpty()) {
+                        JOptionPane.showMessageDialog(this, "Mật khẩu mới không được để trống!", "Lỗi", JOptionPane.ERROR_MESSAGE);
+                        return;
+                    }
+                    dao.UserDAO uDao = new dao.UserDAO();
+                    if(uDao.updatePasswordById(id, newPass)) {
+                        JOptionPane.showMessageDialog(this, "Đổi mật khẩu thành công!");
+                        if (!isProfileMode) {
+                            loadData();
+                        } else {
+                            currentSV = svDAO.getByUserId(id);
+                        }
+                    } else {
+                        JOptionPane.showMessageDialog(this, "Lỗi khi đổi mật khẩu trên hệ thống!", "Lỗi", JOptionPane.ERROR_MESSAGE);
+                    }
+                }
             }
         });
     }
@@ -344,7 +405,6 @@ public class SinhVienPanel extends JPanel {
         txtUsername.setText(sv.getUsername());
         txtUsername.setEditable(false);
         txtUsername.setBackground(new Color(240, 240, 240));
-        txtPassword.setText(""); // Security: Không hiển thị ngược lại mật khẩu đã mã hóa
     }
 
     private SinhVien getForm() {
@@ -371,7 +431,6 @@ public class SinhVienPanel extends JPanel {
                     txtEmail.getText().trim(),
                     txtSdt.getText().trim());
             sv.setUsername(txtUsername.getText().trim());
-            sv.setPassword(new String(txtPassword.getPassword()));
             return sv;
         } catch (Exception e) {
             return null;
@@ -391,7 +450,6 @@ public class SinhVienPanel extends JPanel {
         txtUsername.setText("");
         txtUsername.setEditable(true);
         txtUsername.setBackground(Color.WHITE);
-        txtPassword.setText("");
         tblSV.clearSelection();
     }
 

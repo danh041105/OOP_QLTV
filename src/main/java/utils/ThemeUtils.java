@@ -129,6 +129,10 @@ public final class ThemeUtils {
         return btn;
     }
 
+    public static JButton createWarningButton(String text) {
+        return createStyledButton(text, WARNING, TEXT_WHITE, 38, 10);
+    }
+
     public static JButton createSmallButton(String text, Color bg, Color fg) {
         return createStyledButton(text, bg, fg, 32, 8);
     }
